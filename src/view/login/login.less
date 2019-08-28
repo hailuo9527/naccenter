@@ -1,0 +1,149 @@
+.login{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(33, 33, 33, 0.8));
+  &-bg{
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/images/bj.jpg');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    z-index: -1;
+  }
+  &-con{
+      position: absolute;
+      right: 160px;
+      top: 50%;
+      transform: translateY(-60%);
+      width: 300px;
+      &-header{
+          font-size: 16px;
+          font-weight: 300;
+          text-align: center;
+          padding: 30px 0;
+      }
+      .form-con{
+          padding: 10px 0 0;
+      }
+      .forget{
+        padding: 0 5px;
+        text-align: right;
+        a{
+          font-size: 12px;
+        }
+      }
+      .other{
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span{
+          font-size: 12px;
+          color: #999;
+        }
+        .iconfont{
+          cursor: pointer;
+          color: #999!important;
+          &:hover{
+            color: #1296db!important;
+          }
+        }
+      }
+  }
+
+  .vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ivu-modal{
+      top: 0;
+    }
+  }
+
+
+}
+
+.qrcode{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*img{
+    display: inline-block!important;
+  }*/
+}
+#qrcode{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ivu-modal-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-box{
+  width: 500px;
+ .select-panel{
+   display: flex;
+   flex-direction: column;
+
+   .title{
+      text-align: center;
+   }
+   .item{
+     margin: 20px 0;
+     padding: 20px;
+     border: 1px solid #00a4ff;
+     background: #f7f8fa;
+     cursor: pointer;
+     position: relative;
+
+     width: 100%;
+     box-sizing: border-box;
+     transition: all .3s;
+     h3{
+       font-size: 14px;
+       color: #00a4ff;
+     }
+     p{
+       color: #666;
+     }
+     .arrow{
+       position: absolute;
+       top: -1px;
+       left: -1px;
+       right: -1px;
+       bottom: -1px;
+       background: rgba(0,0,0,0);
+       transition: all .3s;
+       display: flex;
+       padding: 20px;
+       justify-content: flex-end;
+       align-items: center;
+       visibility: hidden;
+      .iconfont{
+        transition: all .3s;
+        visibility: hidden;
+        color: #fff!important;
+      }
+     }
+     &:hover{
+        //border: none;
+       .arrow{
+         background: rgba(0,0,0,.7);
+         visibility: visible;
+         .iconfont{
+           visibility: visible;
+           color: #00a4ff!important;
+         }
+       }
+     }
+   }
+ }
+
+
+}

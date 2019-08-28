@@ -1,0 +1,34 @@
+.view-content{
+  padding: 30px;
+  height: 100%;
+  overflow-y: auto;
+  .title{
+    font-size: 20px;
+    color: #656565;
+    span{
+      color: #bbb;
+      font-size: 12px;
+      border-left: 1px solid #bbb;
+      padding-left: 10px;
+      margin-left: 10px;
+    }
+  }
+  .info-list{
+    background: #fff;
+    min-height: 500px;
+    padding-bottom: 30px;
+    margin-top: 20px;
+    .table-container{
+      /deep/.ivu-table:before,/deep/.ivu-table:after{
+        display: none;
+      }
+      /deep/.ivu-table-wrapper{
+        border: none;
+      }
+      /deep/.ivu-table td{
+        border-bottom: none;
+      }
+    }
+  }
+
+}
