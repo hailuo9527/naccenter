@@ -11,22 +11,22 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://192.168.1.239:8070',
-    // dev: 'http://app.wingsbro.com:8070',
+    // dev: 'http://192.168.1.239:8070',
+    dev: 'http://app.wingsbro.com:8070',
     // dev: 'http://wingsbro.mynetgear.com:8070',
     // pro: 'http://wingsbro.mynetgear.com:8070',
     pro: 'http://app.wingsbro.com:8070'
   },
-  /*微信配置*/
+  /* 微信配置 */
   wxConfig: {
-    self_redirect:false,
-    id:'qrcode',
-    appid:'wx243ad0422689c414',
-    scope:'snsapi_login',
-    redirect_uri: window.location.href +'?code=CODE&state=STATE',
-    state:'1211111',
-    style:'black',
-    href:'',
+    self_redirect: false,
+    id: 'qrcode',
+    appid: 'wx243ad0422689c414',
+    scope: 'snsapi_login',
+    redirect_uri: window.location.href + '?code=CODE&state=STATE',
+    state: '1211111',
+    style: 'black',
+    href: ''
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home

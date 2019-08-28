@@ -16,11 +16,11 @@ const resolve = dir => {
 const TEST_URL = process.env.NODE_ENV === 'production'
   ? 'http://wingsbro.mynetgear.com:8081'
   : '/'
-/*const BASE_URL = process.env.NODE_ENV === 'production'
+/* const BASE_URL = process.env.NODE_ENV === 'production'
   ? 'http://nc.wingsbro.com'
-  : '/'*/
+  : '/' */
 const BASE_URL = process.env.NODE_ENV === 'production'
-  ? ''
+  ? 'http://nc.wingsbro.com'
   : '/'
 module.exports = {
   // Project deployment base
@@ -41,7 +41,7 @@ module.exports = {
       .set('_c', resolve('src/components'))
       .set('~', resolve('public'))
 
-   /* config.module.rule('compile')
+    /* config.module.rule('compile')
       .test(/\.js$/)
       .include
       .add(resolve('src'))
@@ -55,8 +55,7 @@ module.exports = {
             modules: false
           }]
         ]
-      });*/
-
+      }); */
   },
   // 设为false打包时不生成.map文件
   productionSourceMap: false,
@@ -73,7 +72,7 @@ module.exports = {
   //   }
   // }
   devServer: {
-   // https: true
+    // https: true
   },
   // 构建时开启多进程处理 babel 编译
   parallel: require('os').cpus().length > 1,
@@ -84,23 +83,22 @@ module.exports = {
   ],
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
-
       return {
         performance: {
-          hints:'warning',
-          //入口起点的最大体积 整数类型（以字节为单位）
+          hints: 'warning',
+          // 入口起点的最大体积 整数类型（以字节为单位）
           maxEntrypointSize: 100000000,
-          //生成文件的最大体积 整数类型（以字节为单位 300k）
+          // 生成文件的最大体积 整数类型（以字节为单位 300k）
           maxAssetSize: 30000000,
-          //只给出 js 文件的性能提示
-          assetFilter: function(assetFilename) {
-            return assetFilename.endsWith('.js');
-          },
+          // 只给出 js 文件的性能提示
+          assetFilter: function (assetFilename) {
+            return assetFilename.endsWith('.js')
+          }
 
         },
         optimization: {
-          runtimeChunk: 'single',
-          splitChunks: {
+          runtimeChunk: 'single'
+          /* splitChunks: {
             chunks: 'all',
             maxInitialRequests: Infinity,
             minSize: 20000,
@@ -116,18 +114,18 @@ module.exports = {
                 }
               }
             }
-          },
+          }, */
         },
         plugins: [
           new CompressionPlugin({
             test: /\.js$|\.html$|\.css/,
             threshold: 10240, // 对超过10kb的数据压缩
-            deleteOriginalAssets: false //是否删除原文件
+            deleteOriginalAssets: false // 是否删除原文件
           }),
           new UglifyPlugin({
             uglifyOptions: {
               compress: {
-                //warnings: false,
+                // warnings: false,
                 drop_console: true, // console
                 drop_debugger: false,
                 pure_funcs: ['console.log'] // 移除console

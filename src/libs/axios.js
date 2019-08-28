@@ -15,9 +15,9 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        //'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        AUTHORIZATION: getToken(),
-       // 'Accept-Encoding': 'gzip'
+        // 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        AUTHORIZATION: getToken()
+        // 'Accept-Encoding': 'gzip'
       }
     }
     return config
@@ -60,6 +60,8 @@ class HttpRequest {
             return error.response.data
           }
           break
+        case 404:
+          window.location.href = '/404'
       }
       this.destroy(url)
       let errorInfo = error.response

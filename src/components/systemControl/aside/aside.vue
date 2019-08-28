@@ -1,7 +1,7 @@
 <template>
   <div class="aside-wrap">
     <div class="aside-list">
-      <div class="aside-item " v-for="(item, index) in menu" :class="path === item.path ? 'active' : ''"  @click="changeItem(item.path)">
+      <div class="aside-item " v-for="(item, index) in menu" :class="name === item.name ? 'active' : ''"  @click="changeItem(item.name)">
         <div class="title">
           <Icon :type="item.meta.icon" class="icon"/>
           {{ item.meta.title }}
@@ -19,7 +19,7 @@ export default {
   name: 'controlerAside',
   data () {
     return {
-      path: '',
+      name: '',
       menu: []
     }
   },
@@ -32,24 +32,24 @@ export default {
   watch: {
     $route: {
       handler (newVal, old) {
-        //console.log(newVal)
-        this.path = newVal.path
+        console.log(newVal)
+        this.name = newVal.name
       },
       deep: true
     }
   },
   methods: {
-   // ...mapActions(['getApplyCount']),
-    changeItem (path) {
-      this.$router.push({ path: path })
-      this.path = path
+    // ...mapActions(['getApplyCount']),
+    changeItem (name) {
+      this.$router.push({ name: name })
+      this.path = name
     },
-    /*async selNewMessage () {
+    /* async selNewMessage () {
       let res = await selNewMessage()
       if (res.data.code === 'success') {
         this.count = res.data.result
       }
-    },*/
+    }, */
     getMenu: function () {
       if (this.userInfo.roleId === 2 || this.userInfo.roleId === 1) {
         this.menu = systemChild
@@ -66,9 +66,9 @@ export default {
   },
   mounted () {
     this.getMenu()
-    this.$router.push({ path: this.menu[0].path })
-    this.path = this.$route.path
-    //this.getApplyCount()
+    this.$router.push({ name: this.menu[0].name })
+    this.name = this.$route.name
+    // this.getApplyCount()
   }
 }
 </script>

@@ -158,7 +158,7 @@ let appRouters = [
 ]
 export const systemChild = [
   {
-    path: '/system/userManage',
+    path: 'userManage',
     name: 'userManage',
     meta: {
       access: 1,
@@ -168,7 +168,7 @@ export const systemChild = [
     component: () => import('@/view/system/userManage/userManage.vue')
   },
   {
-    path: '/system/roleManage',
+    path: 'roleManage',
     name: 'roleManage',
     meta: {
       access: 1,
@@ -178,7 +178,7 @@ export const systemChild = [
     component: () => import('@/view/system/roleManage/roleManage.vue')
   },
   {
-    path: '/system/groupManage',
+    path: 'groupManage',
     name: 'groupManage',
     meta: {
       icon: 'md-contacts',
@@ -187,7 +187,7 @@ export const systemChild = [
     component: () => import('@/view/system/groupManage/groupManage.vue')
   },
   {
-    path: '/system/applyManage',
+    path: 'applyManage',
     name: 'applyManage',
     meta: {
       icon: 'md-text',
@@ -196,7 +196,7 @@ export const systemChild = [
     component: () => import('@/view/system/bind-apply/bindApply.vue')
   },
   {
-    path: '/system/userInfo',
+    path: 'userInfo',
     name: 'userInfo',
     meta: {
       icon: 'ios-build',
@@ -214,7 +214,7 @@ let accessRouters = [
       title: '设置'
     },
     component: Controler,
-    //redirect: '/system/userManage',
+    // redirect: '/system/userManage',
     children: [...systemChild]
   }
 ]
