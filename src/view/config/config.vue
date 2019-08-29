@@ -139,7 +139,7 @@
                 </span>
             </template>
             <template slot-scope="{ row, index }" slot="action">
-              <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
+              <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row.id, index)"/>
             </template>
           </Table>
         </Row>
@@ -230,7 +230,7 @@
 
             </template>
             <template slot-scope="{ row, index }" slot="action">
-              <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
+              <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row.id, index)"/>
             </template>
           </Table>
         </Row>
@@ -406,8 +406,7 @@ export default {
       }
       if (!this.file && !value) {
         callback(new Error('请填写MAC地址或者导入excel表格批量处理！'))
-      }
-      else if (this.file && !value) {
+      } else if (this.file && !value) {
         callback()
       }
     }
@@ -422,8 +421,7 @@ export default {
       }
       if (!this.file && !value) {
         callback(new Error('请填写MAC地址或者导入excel表格批量处理！'))
-      }
-      else if (this.file && !value) {
+      } else if (this.file && !value) {
         callback()
       }
     }
@@ -431,8 +429,8 @@ export default {
       editName: false,
       editNameForm: {
       },
-      download:{
-       // url: 'http://app.wingbro.com:8070/名单导入模板.xls',
+      download: {
+        // url: 'http://app.wingbro.com:8070/名单导入模板.xls',
         name: '名单导入模板.xls'
       },
       baseUrl: '',
@@ -453,7 +451,7 @@ export default {
         },
         {
           title: 'Mac地址',
-          slot: 'macAddress',
+          slot: 'macAddress'
           // width: 350
         },
         {
@@ -484,8 +482,8 @@ export default {
         },
         {
           title: 'Mac地址',
-          slot: 'mac',
-         // width: 350
+          slot: 'mac'
+          // width: 350
         },
         {
           title: '主机名',
@@ -518,7 +516,7 @@ export default {
       addWhiteForm: {
         macAdress: '',
         ipAdress: '',
-        userName: '',
+        userName: ''
       },
       whiteFormRules: {
         macAdress: [
@@ -533,15 +531,15 @@ export default {
       addIgnoreForm: {
         macAdress: '',
         userName: ''
-        /*ipAdress: ''*/
+        /* ipAdress: '' */
       },
       ignoreFormRules: {
         macAdress: [
           { validator: macAddressRules, trigger: 'blur' }
-        ],
-       /* ipAdress: [
+        ]
+        /* ipAdress: [
           { validator: ipAddress, trigger: 'blur' }
-        ]*/
+        ] */
       },
       uploadLoading: false,
       progressPercent: 0,
@@ -576,8 +574,8 @@ export default {
         },
         {
           title: 'Mac地址',
-          slot: 'mac',
-          //width: 350
+          slot: 'mac'
+          // width: 350
         },
         {
           title: 'Ip地址',
@@ -615,7 +613,7 @@ export default {
       },
       // 深度观察监听
       deep: true
-    },
+    }
 
   },
   methods: {
@@ -720,7 +718,7 @@ export default {
       this.loading = true
       let res = await getMasterInfo({ nbCode: this.activeNb.nbCode, type: 3 })
       this.loading = false
-     // console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.blockList = res.data.result || []
       }
@@ -760,7 +758,7 @@ export default {
         loading: true,
         onOk: () => {
           uptBlockRoster({ nbCode: this.activeNb.nbCode }).then(res => {
-            //console.log(res)
+            // console.log(res)
             this.$Modal.remove()
             if (res.data.code === 'success') {
               this.$Message.success('操作成功！')
@@ -779,13 +777,13 @@ export default {
         if (valid) {
           this.addIp()
         } else {
-          //this.$Message.error('请输入名单信息或者上传文件!')
+          // this.$Message.error('请输入名单信息或者上传文件!')
         }
       })
     },
     // 修改别名
     async updNameListById () {
-      let res = await updNameListById({...this.editNameForm})
+      let res = await updNameListById({ ...this.editNameForm })
       let type = this.activeNav + 2
       if (res.data.code === 'success') {
         this.$Message.success('修改成功！')
