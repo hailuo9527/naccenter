@@ -157,7 +157,6 @@ export default {
       userList: [],
       roleNameList: [], // 角色名称列表
       insUserForm: {
-
       },
       insUserFormValidate: {
         userNo: [
@@ -222,7 +221,7 @@ export default {
       }
     },
     /* 新增用户 */
-    async insUser () {
+    /* async insUser () {
       let json = {
         userNo: this.insUserForm.userNo,
         userName: this.insUserForm.userName,
@@ -241,7 +240,7 @@ export default {
         this.$Message.error('保存失败')
       }
       console.log(res)
-    },
+    }, */
     /* 获取角色列表 */
     async selRoleInfo () {
       let res = await selRoleInfo()
@@ -258,8 +257,9 @@ export default {
         parentId: this.activeUserInfo.parentId,
         activation: this.activeUserInfo.activation,
         roleId: this.activeUserInfo.roleId,
-        userId: this.insUserForm.userId
+        userId: this.activeUserInfo.userId
       }
+      console.log(json)
       let res = await updateUser(json)
       if (res.data.code === 'success') {
         this.$Message.success('操作成功')
@@ -273,7 +273,7 @@ export default {
         userNo: this.activeUserInfo.userNo,
         activation: this.activeUserInfo.activation
       })
-      //console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.$Message.success(res.data.result)
         this.selUserInfo()
@@ -282,7 +282,7 @@ export default {
     /* 请求转让 */
     async roleTransfer () {
       let res = await roleTransfer({ userId: this.accessForm.activeUserId })
-     // console.log(res)
+      // console.log(res)
     },
     userChange (data) {
       this.$Message.success(data)
@@ -294,7 +294,7 @@ export default {
         content: '</p>转让后将不能继续使用权限，确定要转让您的权限吗？</p>',
         onOk: () => {
           this.accessModal = true
-        },
+        }
       })
     },
     submitAccessChange () {
@@ -315,7 +315,7 @@ export default {
           this.$Message.error('操作失败，请检查输入信息格式是否正确!')
         }
       })
-    },
+    }
   },
   mounted () {
     this.selUserInfo()

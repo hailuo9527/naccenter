@@ -5,11 +5,11 @@
         <h3>DHCP:</h3>
       </Col>
       <Col span="2">
-        <i-switch type="small" v-model="dhcp">
+        <i-switch type="small" v-model="dscp">
         </i-switch>
       </Col>
     </Row>
-    <div v-show="dhcp">
+    <div v-show="dscp">
       <div style="margin-top: 20px;">
         <Row :gutter="30" type="flex" align="middle">
           <Col  style="font-size: 14px;font-weight: bold">
@@ -129,7 +129,6 @@
         </div>
       </div>
 
-
     </div>
     <!--修改ip-->
     <Modal v-model="editIp" width="360">
@@ -187,208 +186,216 @@
 </template>
 
 <script>
-  import {
-    deleteNbList,
-    addIp,
-    updNameListById
-  } from '../../../api/nbConfig'
-  import { getNameListByType, insIpParam, uptIpManage } from '../../../api/ipManage'
-  import { uploadFile } from '../../../api/upload'
-  export default {
-    name: 'config',
-    data () {
-      const ipaddressRules = (rule, value, callback) => {
-        if (!value) callback()
-        let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-        if (!reg.test(value)) {
-          callback(new Error('请检查IP地址格式！'))
-        }
-        callback()
+import {
+  addIp
+} from '../../../api/nbConfig'
+import { getNameListByType, insIpParam, uptIpManage, getIpParam } from '../../../api/ipManage'
+export default {
+  name: 'config',
+  data () {
+    const ipaddressRules = (rule, value, callback) => {
+      if (!value) callback()
+      let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+      if (!reg.test(value)) {
+        callback(new Error('请检查IP地址格式！'))
       }
-      const macAddressRules = (rule, value, callback) => {
-        if (!value) callback()
-        let reg = /^[a-fA-F0-9]{2}([:-][a-fA-F0-9]{2}){5}$/
-        if (!reg.test(value)) {
-          callback(new Error('请检查MAC地址格式！'))
-        }
-        callback()
+      callback()
+    }
+    const macAddressRules = (rule, value, callback) => {
+      if (!value) callback()
+      let reg = /^[a-fA-F0-9]{2}([:-][a-fA-F0-9]{2}){5}$/
+      if (!reg.test(value)) {
+        callback(new Error('请检查MAC地址格式！'))
       }
-      const dnsserRules = (rule, value, callback) => {
-        if (!value) callback()
-        let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
-        if (!reg.test(value)) {
-          callback(new Error('请检查DNS地址格式！'))
-        }
-        callback()
+      callback()
+    }
+    const dnsserRules = (rule, value, callback) => {
+      if (!value) callback()
+      let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
+      if (!reg.test(value)) {
+        callback(new Error('请检查DNS地址格式！'))
       }
-      const gatewayRules = (rule, value, callback) => {
-        if (!value) callback()
-        let reg = /^192\.168(\.(\d|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))){2}$/
-        if (!reg.test(value)) {
-          callback(new Error('请检查网关格式！'))
-        }
-        callback()
+      callback()
+    }
+    const gatewayRules = (rule, value, callback) => {
+      if (!value) callback()
+      let reg = /^192\.168(\.(\d|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))){2}$/
+      if (!reg.test(value)) {
+        callback(new Error('请检查网关格式！'))
       }
-      return {
-        dhcp: false,
-        ipConfig: false,
-        //editName: false,
-       //editNameForm: {},
-        editIp: false,
-        editIpForm: {},
-        editIpFormRules: {
-          ipAddress: [
-            { validator: ipaddressRules, trigger: 'blur' }
-          ]
-        },
-
-        download:{
-          // url: 'http://app.wingbro.com:8070/名单导入模板.xls',
-          name: '名单导入模板.xls'
-        },
-        loading: false,
-        white: [
-          {
-            type: 'index',
-            width: 60,
-          },
-          {
-            title: 'Mac地址',
-            slot: 'macAddress',
-            // width: 350
-          },
-          {
-            title: 'Ip地址',
-            slot: 'ipAddress'
-          },
-         /* {
-            title: '主机名',
-            slot: 'hostName'
-          },
-          {
-            title: '别名',
-            slot: 'userName'
-          },*/
-          {
-            title: '操作',
-            slot: 'action',
-            width: 150,
-          }
-        ],
-        whiteList: [],
-        liveIp: [
-          {
-            type: 'index',
-            width: 60,
-          },
-          {
-            title: 'Mac地址',
-            slot: 'macAddress',
-            // width: 350
-          },
-          /*{
-            title: 'Ip地址',
-            slot: 'ipAddress'
-          },*/
-          /*{
-            title: '主机名',
-            slot: 'hostName'
-          },
-          {
-            title: '别名',
-            slot: 'userName'
-          },*/
-          /*{
-            title: '操作',
-            slot: 'action',
-            width: 150,
-          }*/
-        ],
-        liveIpList: [],
-        addWhiteModel: false,
-        addWhiteLoading: false,
-        addWhiteForm: {
-        },
-        whiteFormRules: {
-          macAddress: [
-            { validator: macAddressRules, trigger: 'blur' }
-          ],
-          ipAddress: [
-            { validator: ipaddressRules, trigger: 'blur' }
-          ]
-        },
-        netConfig: {
-        },
-        netConfigRules: {
-          ipStart: [
-            { validator: ipaddressRules, trigger: 'blur' }
-          ],
-          ipEnd: [
-            { validator: ipaddressRules, trigger: 'blur' }
-          ],
-          dnsServer: [
-            { validator: dnsserRules, trigger: 'blur' }
-          ],
-          gateway: [
-            { validator: gatewayRules, trigger: 'blur' }
-          ]
-        },
-      }
-    },
-    props: {
-      nbCode: {
-        type: String,
-        default: ''
-      }
-    },
-    watch: {
-      nbCode () {
-        this.getNameList(0)
-        this.getNameList(1)
-      }
-    },
-    methods: {
-
-      saveNetInfoHandle () {
-        this.$refs['netConfigForm'].validate((valid) => {
-          if (valid) {
-            console.log('保存')
-            this.insIpParam()
-          } else {
-            this.$Message.error('请检查输入格式是否正确!')
-          }
-        })
+      callback()
+    }
+    return {
+      dscp: false,
+      ipConfig: false,
+      // editName: false,
+      // editNameForm: {},
+      editIp: false,
+      editIpForm: {},
+      editIpFormRules: {
+        ipAddress: [
+          { validator: ipaddressRules, trigger: 'blur' }
+        ]
       },
-      // 保存ip段
-      async insIpParam () {
 
-        let res = await insIpParam(this.netConfig)
-        console.log(res)
-        if (res.data.code === 'success') {
-          this.$Message.success('保存成功!')
+      download: {
+        // url: 'http://app.wingbro.com:8070/名单导入模板.xls',
+        name: '名单导入模板.xls'
+      },
+      loading: false,
+      white: [
+        {
+          type: 'index',
+          width: 60
+        },
+        {
+          title: 'Mac地址',
+          slot: 'macAddress'
+          // width: 350
+        },
+        {
+          title: 'Ip地址',
+          slot: 'ipAddress'
+        },
+        /* {
+            title: '主机名',
+            slot: 'hostName'
+          },
+          {
+            title: '别名',
+            slot: 'userName'
+          }, */
+        {
+          title: '操作',
+          slot: 'action',
+          width: 150
+        }
+      ],
+      whiteList: [],
+      liveIp: [
+        {
+          type: 'index',
+          width: 60
+        },
+        {
+          title: 'Mac地址',
+          slot: 'macAddress'
+          // width: 350
+        }
+        /* {
+            title: 'Ip地址',
+            slot: 'ipAddress'
+          }, */
+        /* {
+            title: '主机名',
+            slot: 'hostName'
+          },
+          {
+            title: '别名',
+            slot: 'userName'
+          }, */
+        /* {
+            title: '操作',
+            slot: 'action',
+            width: 150,
+          } */
+      ],
+      liveIpList: [],
+      addWhiteModel: false,
+      addWhiteLoading: false,
+      addWhiteForm: {
+      },
+      whiteFormRules: {
+        macAddress: [
+          { validator: macAddressRules, trigger: 'blur' }
+        ],
+        ipAddress: [
+          { validator: ipaddressRules, trigger: 'blur' }
+        ]
+      },
+      netConfig: {
+      },
+      netConfigRules: {
+        ipStart: [
+          { validator: ipaddressRules, trigger: 'blur' }
+        ],
+        ipEnd: [
+          { validator: ipaddressRules, trigger: 'blur' }
+        ],
+        dnsServer: [
+          { validator: dnsserRules, trigger: 'blur' }
+        ],
+        gateway: [
+          { validator: gatewayRules, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  props: {
+    nbCode: {
+      type: String,
+      default: ''
+    }
+  },
+  watch: {
+    nbCode () {
+      this.getIpParam()
+      this.getNameList(0)
+      this.getNameList(1)
+    }
+  },
+  methods: {
+
+    saveNetInfoHandle () {
+      this.$refs['netConfigForm'].validate((valid) => {
+        if (valid) {
+          console.log('保存')
+          this.insIpParam()
         } else {
-          this.$Message.error(res.data.result)
+          this.$Message.error('请检查输入格式是否正确!')
         }
-      },
-      /* 获取名单 */
-      async getNameList (type) {
-        this.loading = true
-        let res = await getNameListByType({ nbCode: this.nbCode, type: type })
-        this.loading = false
-        if (res.data.code === 'success') {
-          type ? this.liveIpList = res.data.result || [] : this.whiteList = res.data.result || []
+      })
+    },
+    // 获取配置信息
+    async getIpParam () {
+      let res = await getIpParam({ nbCode: this.nbCode, type: 0 })
+      console.log(res)
+      if (res.data.code === 'success') {
+        this.netConfig = res.data.result || {}
+        this.dscp = this.netConfig.dscp === 'on'
+      }
+    },
+    // 保存ip段
+    async insIpParam () {
+      this.netConfig.nbCode = this.nbCode
+      this.netConfig.dscp = this.dscp ? 'on' : 'off'
+      let res = await insIpParam(this.netConfig)
+      console.log(res)
+      if (res.data.code === 'success') {
+        this.$Message.success('保存成功!')
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
+    /* 获取名单 */
+    async getNameList (type) {
+      this.loading = true
+      let res = await getNameListByType({ nbCode: this.nbCode, type: type })
+      this.loading = false
+      if (res.data.code === 'success') {
+        type ? this.liveIpList = res.data.result || [] : this.whiteList = res.data.result || []
+      }
+    },
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.addIp()
+        } else {
+          // this.$Message.error('请输入名单信息或者上传文件!')
         }
-      },
-      handleSubmit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.addIp()
-          } else {
-            //this.$Message.error('请输入名单信息或者上传文件!')
-          }
-        })
-      },
-     /* // 修改别名
+      })
+    },
+    /* // 修改别名
       async updNameListById () {
         let res = await updNameListById({...this.editNameForm})
         this.editName = false
@@ -400,37 +407,36 @@
         } else {
           this.$Message.error(res.data.result)
         }
-      },*/
-      // 修改IP
-      modifyIp () {
-        this.$refs['editIpForm'].validate(async (valid) => {
-          if (valid) {
-            let res = await uptIpManage(this.editIpForm)
-            //console.log(res)
-            if (res.data.code === 'success') {
-              this.editIp = false
-              this.$Message.success('修改成功！')
-              this.editIpForm.ipAddress = ''
-              this.getNameList(0)
-              this.getNameList(1)
-            } else {
-              this.$Message.error(res.data.result)
-            }
+      }, */
+    // 修改IP
+    modifyIp () {
+      this.$refs['editIpForm'].validate(async (valid) => {
+        if (valid) {
+          let res = await uptIpManage(this.editIpForm)
+          // console.log(res)
+          if (res.data.code === 'success') {
+            this.editIp = false
+            this.$Message.success('修改成功！')
+            this.editIpForm.ipAddress = ''
+            this.getNameList(0)
+            this.getNameList(1)
           } else {
-            this.$Message.error('请检查输入格式是否正确!')
+            this.$Message.error(res.data.result)
           }
-        })
-
-      },
-      changeIp (obj) {
-        this.editIp = true
-        this.editIpForm = obj
-      },
-      /*changeName (id) {
+        } else {
+          this.$Message.error('请检查输入格式是否正确!')
+        }
+      })
+    },
+    changeIp (obj) {
+      this.editIp = true
+      this.editIpForm = obj
+    },
+    /* changeName (id) {
         this.editName = true
         this.editNameForm.id = id
 
-      },*/
+      }, */
     /*  async upload (type) {
         if (!this.file) return
         let fileFormData = new FormData()
@@ -447,69 +453,70 @@
         } else {
           this.$Message.error('上传失败！')
         }
-      },*/
-      /* 添加名单 */
-      async addIp () {
-        let type = ''
-        type = 4
-       /* if (this.addWhiteForm.ipAdress === '' && this.addWhiteForm.macAdress === '') {
+      }, */
+    /* 添加名单 */
+    async addIp () {
+      let type = ''
+      type = 4
+      /* if (this.addWhiteForm.ipAdress === '' && this.addWhiteForm.macAdress === '') {
           this.upload(type)
           return
-        }*/
+        } */
 
-        this.addWhiteLoading = true
-        let json = {
-          nbCode: this.nbCode,
-          type: type,
-          ipAddress: this.addWhiteForm.ipAddress,
-          macAddress: this.addWhiteForm.macAddress,
-         // userName: this.addWhiteForm.userName
-        }
-        let res = await addIp(json)
-        console.log(res)
-        this.addWhiteLoading = false
-        this.addWhiteModel = false
-        if (res.data.code === 'success') {
-          this.$Message.success('添加成功')
-          this.getNameList(0)
-        } else {
-          this.$Message.error(res.data.result)
-        }
-      },
-      /* 删除列表 */
-      removeList (item, index) {
-        this.$Modal.confirm({
-          title: '提示',
-          content: '<p>确定要删除这条列表吗？</p>',
-          loading: true,
-          onOk: async () => {
-            let json = {
-              id: item.id,
-              macAddress: item.macAddress,
-              ipAddress: null,
-              nbCode: this.nbCode
-            }
-            let res = await uptIpManage(json)
-            console.log(res)
-            if (res.data.code === 'success') {
-              this.$Modal.remove()
-              this.$Message.info(res.data.result)
-              this.getNameList(0)
-              this.getNameList(1)
-            } else {
-              this.$Modal.remove()
-              this.$Message.error(res.data.result)
-            }
+      this.addWhiteLoading = true
+      let json = {
+        nbCode: this.nbCode,
+        type: type,
+        ipAddress: this.addWhiteForm.ipAddress,
+        macAddress: this.addWhiteForm.macAddress
+        // userName: this.addWhiteForm.userName
+      }
+      let res = await addIp(json)
+      console.log(res)
+      this.addWhiteLoading = false
+      this.addWhiteModel = false
+      if (res.data.code === 'success') {
+        this.$Message.success('添加成功')
+        this.getNameList(0)
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
+    /* 删除列表 */
+    removeList (item, index) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定要删除这条列表吗？</p>',
+        loading: true,
+        onOk: async () => {
+          let json = {
+            id: item.id,
+            macAddress: item.macAddress,
+            ipAddress: null,
+            nbCode: this.nbCode
           }
-        })
-      },
+          let res = await uptIpManage(json)
+          console.log(res)
+          if (res.data.code === 'success') {
+            this.$Modal.remove()
+            this.$Message.info(res.data.result)
+            this.getNameList(0)
+            this.getNameList(1)
+          } else {
+            this.$Modal.remove()
+            this.$Message.error(res.data.result)
+          }
+        }
+      })
+    }
 
-    },
-    mounted () {
-      this.getNameList(0)
-      this.getNameList(1)
-    },
+  },
+  mounted () {
+    this.getIpParam()
+    this.getNameList(0)
+    this.getNameList(1)
   }
+}
 </script>
 <style lang="less" scoped>
   @import "../../config/config.less";
