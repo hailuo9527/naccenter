@@ -18,16 +18,20 @@
             </div>
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="form">
               <FormItem label="" prop="name">
-                <Input v-model="formValidate.name" placeholder="用户名"></Input>
+                用户名：
+                <Input v-model="formValidate.name" placeholder="用户名" ></Input>
               </FormItem>
               <FormItem label="" prop="phone">
+                手机号：
                 <Input v-model="formValidate.phone" placeholder="手机号"></Input>
               </FormItem>
               <FormItem label="" prop="code">
-                <div style="display: flex; align-items: center;justify-content: center">
-                  <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
+                <!-- <div style="display: flex; align-items: center;justify-content: center"> -->
+                   验证码：
+                  <div>
+                 <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
                   </Input>
-                  <Button style="flex: 1;margin-left: 20px;" @click="getCode">{{this.content}}</Button>
+                  <Button style="flex: 1;margin-left: 70px;" @click="getCode" >{{this.content}}</Button>
                 </div>
               </FormItem>
               <FormItem>
@@ -210,4 +214,6 @@ export default {
 </script>
 <style lang="less" scoped>
   @import "visitor-login";
+  
+
 </style>
