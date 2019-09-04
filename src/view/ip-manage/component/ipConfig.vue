@@ -53,7 +53,7 @@
       </div>
       <div v-show="ipConfig">
         <!--固定ip-->
-        <div class="nav-content2" style="padding: 0 20px;">
+        <div>
 
           <Row class="list-head" type="flex" justify="space-between" align="top">
             <Col span="6"><h3>固定IP列表:</h3></Col>
@@ -83,7 +83,7 @@
                 </span>
               </template>-->
               <template slot-scope="{ row, index }" slot="action">
-                <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row, index)"/>
+                <Icon type="ios-trash" size="24" color="#00e9bc" style="cursor: pointer" @click="removeList(row, index)"/>
               </template>
             </Table>
           </Row>
@@ -97,7 +97,7 @@
 
         </div>
         <!--自由分配-->
-        <div class="nav-content2" style="padding: 0 20px;">
+        <div>
 
           <Row class="list-head" type="flex" justify="space-between" align="top">
             <Col span="6"><h3>动态IP列表:</h3></Col>
@@ -120,12 +120,16 @@
                   <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeName(row.id)"/>
                 </span>
               </template>
-              <!--<template slot-scope="{ row, index }" slot="action">
-                <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
-              </template>-->
+              <template slot-scope="{ row, index }" slot="action">
+                <Icon type="ios-trash" size="24" color="#00e9bc" style="cursor: pointer" @click="reBack(row, index)" />
+              </template>
             </Table>
           </Row>
-
+          <div class="opera">
+            <div class="btn-group" style="text-align: right">
+              <span @click="saveIpManage">保存</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -182,18 +186,28 @@
         <Button type="info" size="large" long  @click="updNameListById">确认</Button>
       </div>
     </Modal>-->
+    <!--撤回固定ip-->
+    <Modal v-model="reBackIpModel" width="360">
+      <p slot="header" style="color:#333;text-align:center">
+        <span>Ip地址</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="editIpForm"  label-position="left" ref="editIpForm" :rules="editIpFormRules">
+          <FormItem label="IP地址" prop="ipAddress">
+            <Input v-model.trim="editIpForm.ipAddress" placeholder="请输入ip地址"></Input>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+        <Button type="info" size="large" long  @click="reBackIP">确认</Button>
+      </div>
+    </Modal>
   </div>
 
 </template>
 
 <script>
-  import {
-    deleteNbList,
-    addIp,
-    updNameListById
-  } from '../../../api/nbConfig'
-  import { getNameListByType, insIpParam, uptIpManage } from '../../../api/ipManage'
-  import { uploadFile } from '../../../api/upload'
+  import { getNameListByType, insIpParam, insRosterTemp,uptRosterTemp, saveIpManage } from '../../../api/ipManage'
   export default {
     name: 'config',
     data () {
@@ -298,11 +312,11 @@
             title: '别名',
             slot: 'userName'
           },*/
-          /*{
+          {
             title: '操作',
             slot: 'action',
             width: 150,
-          }*/
+          }
         ],
         liveIpList: [],
         addWhiteModel: false,
@@ -333,6 +347,7 @@
             { validator: gatewayRules, trigger: 'blur' }
           ]
         },
+        reBackIpModel: false
       }
     },
     props: {
@@ -348,7 +363,6 @@
       }
     },
     methods: {
-
       saveNetInfoHandle () {
         this.$refs['netConfigForm'].validate((valid) => {
           if (valid) {
@@ -361,7 +375,6 @@
       },
       // 保存ip段
       async insIpParam () {
-
         let res = await insIpParam(this.netConfig)
         console.log(res)
         if (res.data.code === 'success') {
@@ -377,6 +390,16 @@
         this.loading = false
         if (res.data.code === 'success') {
           type ? this.liveIpList = res.data.result || [] : this.whiteList = res.data.result || []
+        }
+      },
+      // 保存修改
+      async saveIpManage () {
+        let res = await saveIpManage({ nbCode: this.nbCode })
+        console.log(res)
+        if (res.data.code === 'success') {
+          this.$Message.success('保存成功！')
+        } else {
+          this.$Message.error(res.data.result)
         }
       },
       handleSubmit (name) {
@@ -405,14 +428,13 @@
       modifyIp () {
         this.$refs['editIpForm'].validate(async (valid) => {
           if (valid) {
-            let res = await uptIpManage(this.editIpForm)
+            let res = await uptRosterTemp(this.editIpForm)
             //console.log(res)
             if (res.data.code === 'success') {
               this.editIp = false
               this.$Message.success('修改成功！')
-              this.editIpForm.ipAddress = ''
-              this.getNameList(0)
-              this.getNameList(1)
+              //this.getNameList(0)
+              //this.getNameList(1)
             } else {
               this.$Message.error(res.data.result)
             }
@@ -465,13 +487,14 @@
           macAddress: this.addWhiteForm.macAddress,
          // userName: this.addWhiteForm.userName
         }
-        let res = await addIp(json)
-        console.log(res)
+        let res = await insRosterTemp(json)
+        // console.log(res)
         this.addWhiteLoading = false
         this.addWhiteModel = false
         if (res.data.code === 'success') {
           this.$Message.success('添加成功')
-          this.getNameList(0)
+          this.whiteList.push(json)
+          //this.getNameList(0)
         } else {
           this.$Message.error(res.data.result)
         }
@@ -489,13 +512,15 @@
               ipAddress: null,
               nbCode: this.nbCode
             }
-            let res = await uptIpManage(json)
-            console.log(res)
+            let res = await uptRosterTemp(json)
+            // console.log(res)
             if (res.data.code === 'success') {
               this.$Modal.remove()
               this.$Message.info(res.data.result)
-              this.getNameList(0)
-              this.getNameList(1)
+              this.whiteList.splice(index,1)
+              this.liveIpList.push(item)
+              //this.getNameList(0)
+              //this.getNameList(1)
             } else {
               this.$Modal.remove()
               this.$Message.error(res.data.result)
@@ -504,6 +529,44 @@
         })
       },
 
+      // 撤回动态IP
+      async reBackIP () {
+        let json = {
+          id: this.editIpForm.id,
+          macAddress: this.editIpForm.macAddress,
+          ipAddress: this.editIpForm.ipAddress,
+          nbCode: this.nbCode
+        }
+        // console.log(json)
+        this.loading = true
+        let res = await uptRosterTemp(json)
+        this.loading = false
+        // console.log(res)
+        if (res.data.code === 'success') {
+          this.reBackIpModel = false
+          this.$Message.info(res.data.result)
+          this.liveIpList.splice(this.editIpForm.index,1)
+          this.whiteList.push(this.editIpForm)
+          //this.getNameList(0)
+          //this.getNameList(1)
+        } else {
+
+          this.$Message.error(res.data.result)
+        }
+      },
+      async reBack (item, index) {
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>确定要撤回这条动态Ip吗？</p>',
+          loading: true,
+          onOk: () => {
+            this.reBackIpModel = true
+            this.$Modal.remove()
+            this.editIpForm = item
+            this.editIpForm.index = index
+          }
+        })
+      }
     },
     mounted () {
       this.getNameList(0)

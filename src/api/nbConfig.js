@@ -109,6 +109,18 @@ export const getNameList = ({ nbCode, type }) => {
   })
 }
 /*
+*  获取动态名单信息
+* */
+export const getAllNameListAuto = ({ nbCode, type }) => {
+  return axios.request({
+    url: '/getAllNameListAuto',
+    method: 'post',
+    params: {
+      nbCode, type
+    }
+  })
+}
+/*
 *  修改名单使用者名称
 * */
 export const updNameListById = ({ id, userName }) => {

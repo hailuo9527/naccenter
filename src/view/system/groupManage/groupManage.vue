@@ -31,7 +31,7 @@
                     <Input v-model="addGroupForm.groupName" placeholder="请输入分组名"></Input>
                   </FormItem>
                   <FormItem label="备注">
-                    <Input v-model="addGroupForm.remarks" placeholder="请输入分组名"></Input>
+                    <Input v-model="addGroupForm.remarks" placeholder="请输入备注"></Input>
                   </FormItem>
                 </Form>
               </Modal>

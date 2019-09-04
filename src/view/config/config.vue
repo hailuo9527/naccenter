@@ -121,7 +121,36 @@
           </Col>-->
         </Row>
         <Row class="table-container">
-          <Table :columns="white" :data="whiteList" :loading="loading" height="300" stripe
+          <Table :columns="white" :data="whiteList" :loading="loading" max-height="300" stripe
+                 size="small">
+            <template slot-scope="{ row }" slot="macAddress">
+              <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
+            </template>
+            <template slot-scope="{ row }" slot="ipAddress">
+              <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.ipAddress }}</span></span>
+            </template>
+            <template slot-scope="{ row }" slot="hostName">
+              <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.hostName || 'unknow' }}</span></span>
+            </template>
+            <template slot-scope="{ row, index }" slot="userName">
+                <span style="font-size: 12px;color: #666; display: flex;align-items: center">
+                  <span style="color: #00e9bc;">{{ row.userName || '未命名' }}</span>
+                  <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeName(row.id)"/>
+                </span>
+            </template>
+            <template slot-scope="{ row, index }" slot="action">
+              <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
+            </template>
+          </Table>
+        </Row>
+        <Row class="list-head" type="flex" justify="space-between" align="top" style="margin-top: 20px;">
+          <Col span="6"><h3>动态IP列表:</h3></Col>
+          <!--<Col span="6">
+            <Input suffix="ios-search" placeholder="Enter text" />
+          </Col>-->
+        </Row>
+        <Row class="table-container">
+          <Table :columns="white" :data="whiteAutoList" :loading="loading" max-height="300" stripe
                  size="small">
             <template slot-scope="{ row }" slot="macAddress">
               <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
@@ -326,6 +355,15 @@
           </Col>
         </Row>
       </div>
+      <!--固定ip-->
+      <div class="nav-content2" v-if="activeNav === 5">
+        <ip-config :nb-code="activeNb.nbCode"></ip-config>
+      </div>
+      <!--ip管理-->
+      <div class="nav-content2" v-if="activeNav === 6">
+        <ip-recovery :nb-code="activeNb.nbCode"></ip-recovery>
+        <!--<ip-param :nb-code="activeNb.nbCode"></ip-param>-->
+      </div>
     </div>
 
     <!--修改别名-->
@@ -353,6 +391,7 @@ import {
   changeNbConfig,
   updateNetWork,
   getNameList,
+  getAllNameListAuto,
   deleteNbList,
   deleteNbLists,
   addIp,
@@ -360,8 +399,13 @@ import {
 } from '../../api/nbConfig'
 import { getMasterInfo, uptBlockRoster } from '../../api/chart'
 import { uploadFile } from '../../api/upload'
+import ipConfig from '../ip-manage/component/ipConfig.vue'
+import ipRecovery from '../ip-manage/component/ipRecovery.vue'
 export default {
   name: 'config',
+  components: {
+    ipConfig, ipRecovery
+  },
   data () {
     const ipaddressRules = (rule, value, callback) => {
       if (!value) callback()
@@ -442,7 +486,9 @@ export default {
         '网络配置',
         '白名单',
         '忽略名单',
-        '入侵名单'
+        '入侵名单',
+        'DHCP配置',
+        'IP回收'
       ],
       loading: false,
       white: [
@@ -476,6 +522,7 @@ export default {
         }
       ],
       whiteList: [],
+      whiteAutoList: [],
       ignore: [
         {
           type: 'index',
@@ -628,6 +675,7 @@ export default {
           break
         case 2:
           this.getNameList(4)
+          this.getAllNameListAuto()
           break
         case 3:
           this.getNameList(5)
@@ -715,6 +763,14 @@ export default {
         }
       }
     },
+    async getAllNameListAuto () {
+      this.loading = true
+      let res = await getAllNameListAuto({ nbCode: this.activeNb.nbCode, type: 4 })
+      this.loading = false
+      if (res.data.code === 'success') {
+        this.whiteAutoList = res.data.result || []
+      }
+    } ,
     // 入侵名单
     async getMasterInfo () {
       this.loading = true
@@ -790,6 +846,9 @@ export default {
       if (res.data.code === 'success') {
         this.$Message.success('修改成功！')
         this.getNameList(type)
+        if (type === 4) {
+          this.getAllNameListAuto()
+        }
         this.editName = false
       } else {
         this.$Message.error(res.data.result)
@@ -813,6 +872,7 @@ export default {
       if (res.data.code === 'success') {
         this.$Message.success('上传成功！')
         this.getNameList(type)
+
       } else {
         this.$Message.error('上传失败！')
       }
@@ -842,6 +902,7 @@ export default {
         if (res.data.code === 'success') {
           this.$Message.success('添加成功')
           this.getNameList(4)
+          this.getAllNameListAuto()
         } else {
           this.$Message.error(res.data.result)
         }
@@ -887,9 +948,12 @@ export default {
             this.$Modal.remove()
             this.$Message.info(res.data.result)
             if (this.activeNav === 2) {
-              this.whiteList.splice(index, 1)
+              this.getNameList(4)
+              this.getAllNameListAuto()
+              // this.whiteList.splice(index, 1)
             } else if (this.activeNav === 3) {
-              this.ignoreList.splice(index, 1)
+              // this.ignoreList.splice(index, 1)
+              this.getNameList(5)
             }
           } else {
             this.$Modal.remove()
@@ -912,6 +976,7 @@ export default {
             this.$Message.info('删除成功')
             if (this.activeNav === 2) {
               this.whiteList = []
+              this.whiteAutoList = []
             } else if (this.activeNav === 3) {
               this.ignoreList = []
             }

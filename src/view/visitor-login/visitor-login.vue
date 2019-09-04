@@ -8,47 +8,51 @@
       </template>
     </Alert>
     <Divider>选择登录方式</Divider>
-    <div class="con">
-      <Card :bordered="false" dis-hover style="width: 400px;height: 80%">
-        <div class="login-wrap">
-          <div class="tab tab1" v-show="tab === 'tab1'">
-            <div class="title">
-              <span>雇员登录</span>
-              <span @click="visitorLogin">访客登录</span>
-            </div>
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="form">
-              <FormItem label="" prop="name">
-                用户名：
-                <Input v-model="formValidate.name" placeholder="用户名" ></Input>
-              </FormItem>
-              <FormItem label="" prop="phone">
-                手机号：
-                <Input v-model="formValidate.phone" placeholder="手机号"></Input>
-              </FormItem>
-              <FormItem label="" prop="code">
-                <!-- <div style="display: flex; align-items: center;justify-content: center"> -->
-                   验证码：
-                  <div>
-                 <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
-                  </Input>
-                  <Button style="flex: 1;margin-left: 70px;" @click="getCode" >{{this.content}}</Button>
-                </div>
-              </FormItem>
-              <FormItem>
-                <Button type="primary" long @click="handleSubmit('formValidate')">登录</Button>
-              </FormItem>
-            </Form>
-          </div>
-          <div class=" tab tab2" v-show="tab === 'tab2'">
-            <div class="title">
-              <span>访客登录</span>
-              <span @click="tab = 'tab1'">雇员登录</span>
-            </div>
-            <div id="qrcode"></div>
-          </div>
-        </div>
 
-      </Card>
+    <div class="con">
+      <div style="width: 400px">
+        <Card :bordered="false" dis-hover >
+          <div class="login-wrap">
+            <div class="tab tab1" v-show="tab === 'tab1'">
+              <div class="title">
+                <span>雇员登录</span>
+                <span @click="visitorLogin">访客登录</span>
+              </div>
+              <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="form">
+                <FormItem label="" prop="name">
+                  用户名：
+                  <Input v-model="formValidate.name" placeholder="用户名" ></Input>
+                </FormItem>
+                <FormItem label="" prop="phone">
+                  手机号：
+                  <Input v-model="formValidate.phone" placeholder="手机号"></Input>
+                </FormItem>
+                <FormItem label="" prop="code">
+                  <!-- <div style="display: flex; align-items: center;justify-content: center"> -->
+                  验证码：
+                  <div>
+                    <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
+                    </Input>
+                    <Button style="flex: 1;margin-left: 70px;" @click="getCode" >{{this.content}}</Button>
+                  </div>
+                </FormItem>
+                <FormItem>
+                  <Button type="primary" long @click="handleSubmit('formValidate')">登录</Button>
+                </FormItem>
+              </Form>
+            </div>
+            <div class=" tab tab2" v-show="tab === 'tab2'">
+              <div class="title">
+                <span>访客登录</span>
+                <span @click="tab = 'tab1'">雇员登录</span>
+              </div>
+              <div id="qrcode"></div>
+            </div>
+          </div>
+
+        </Card>
+      </div>
+
     </div>
 
     <div class="footer">
@@ -147,7 +151,7 @@ export default {
     async checkWxLogin () {
       if (this.$route.query.code || this.$route.query.nbCode){
         // 存储参数
-        if (this.$route.query.nbCode) {
+        if (this.$route.query.ip) {
           let visitorParams = JSON.stringify(this.$route.query)
           sessionStorage.setItem('visitorParams', visitorParams)
         }
@@ -159,9 +163,7 @@ export default {
             code : this.$route.query.code[1],
             ...visitorParams
           }
-
           let res = await wxUserLogin(json)
-           // console.log(res)
           if (res.data.code === 'success') {
             this.$Notice.success({
               title: '提示',
@@ -214,6 +216,6 @@ export default {
 </script>
 <style lang="less" scoped>
   @import "visitor-login";
-  
+
 
 </style>

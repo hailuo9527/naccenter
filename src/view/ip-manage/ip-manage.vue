@@ -51,7 +51,6 @@
         handler (newVal, old) {
           this.reload = false
           this.$nextTick(() => {
-
             this.reload = true
           })
         },

@@ -137,5 +137,5 @@
   }
 </script>
 <style lang="less" scoped>
-  @import "../ip-manage";
+  @import "../../config/config.less";
 </style>

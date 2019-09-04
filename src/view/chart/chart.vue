@@ -3,188 +3,203 @@
     <div class="title">
       {{activeNb.nbName}} <span>{{activeNb.nbCode}}</span>
     </div>
-    <div class="info-list">
-      <Row type="flex" :gutter="10" style="flex-wrap: wrap" class="info-item-wrap">
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13">
-          <div class="info-item">
-            <div class="item-title">
-              网络信息
-            </div>
-            <div class="item-content" v-if="networkInfo">
-              <div class="list-item">
-                <span class="name">IP地址</span>：
-                <span class="value">{{networkInfo.ipAddress}}</span>
+    <div class="nav-box">
+      <div class="nav-bar">
+        <div class="nav-item" v-for="(item,index) in navList" :class="activeNav === index ? 'active' : ''"
+             @click="changeNav(index)">{{item}}
+        </div>
+      </div>
+      <!--固定ip-->
+      <div class="nav-content" v-if="activeNav === 0">
+        <div class="info-list">
+          <Row type="flex" :gutter="10" style="flex-wrap: wrap" class="info-item-wrap">
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13">
+              <div class="info-item">
+                <div class="item-title">
+                  网络信息
+                </div>
+                <div class="item-content" v-if="networkInfo">
+                  <div class="list-item">
+                    <span class="name">IP地址</span>：
+                    <span class="value">{{networkInfo.ipAddress}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">IP子网</span>：
+                    <span class="value">{{networkInfo.ipSubnet}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">网关</span>：
+                    <span class="value">{{networkInfo.gateway}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">DNS服务器</span>：
+                    <span class="value">{{networkInfo.serverAddress}}</span>
+                  </div>
+                </div>
+                <div class="item-content" v-if="!networkInfo" style="text-align: center">暂无数据</div>
               </div>
-              <div class="list-item">
-                <span class="name">IP子网</span>：
-                <span class="value">{{networkInfo.ipSubnet}}</span>
+            </Col>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  系统现状
+                </div>
+                <div class="item-content" v-if="system">
+                  <div class="list-item">
+                    <span class="name">系统负载</span>：
+                    <span class="value">{{system.systemLoad}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">运行时长</span>：
+                    <span class="value">{{system.squadLeader !== '' ? system.squadLeader : '未开始运行'}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">在线主机</span>：
+                    <span class="value">{{system.liveHost}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">白名单</span>：
+                    <span class="value">{{system.nameList}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">忽略名单</span>：
+                    <span class="value">{{system.ignoreHost}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">入侵主机</span>：
+                    <span class="value">{{system.blockingHost}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">阻挡进程</span>：
+                    <span class="value">{{system.runningBlk}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">学习时长</span>：
+                    <span class="value">{{system.le_time ? system.le_time : '未开启学习模式'}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">nb序列号</span>：
+                    <span class="value">{{system.nbCode}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">版本号</span>：
+                    <span class="value">{{system.version}}</span>
+                  </div>
+                </div>
+                <div class="item-content" v-if="!system" style="text-align: center">暂无数据</div>
               </div>
-              <div class="list-item">
-                <span class="name">网关</span>：
-                <span class="value">{{networkInfo.gateway}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">DNS服务器</span>：
-                <span class="value">{{networkInfo.serverAddress}}</span>
-              </div>
-            </div>
-            <div class="item-content" v-if="!networkInfo" style="text-align: center">暂无数据</div>
-          </div>
-        </Col>
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              系统现状
-            </div>
-            <div class="item-content" v-if="system">
-              <div class="list-item">
-                <span class="name">系统负载</span>：
-                <span class="value">{{system.systemLoad}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">运行时长</span>：
-                <span class="value">{{system.squadLeader !== '' ? system.squadLeader : '未开始运行'}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">在线主机</span>：
-                <span class="value">{{system.liveHost}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">白名单</span>：
-                <span class="value">{{system.nameList}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">忽略名单</span>：
-                <span class="value">{{system.ignoreHost}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">入侵主机</span>：
-                <span class="value">{{system.blockingHost}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">阻挡进程</span>：
-                <span class="value">{{system.runningBlk}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">学习时长</span>：
-                <span class="value">{{system.le_time ? system.le_time : '未开启学习模式'}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">nb序列号</span>：
-                <span class="value">{{system.nbCode}}</span>
-              </div>
-              <div class="list-item">
-                <span class="name">版本号</span>：
-                <span class="value">{{system.version}}</span>
-              </div>
-            </div>
-            <div class="item-content" v-if="!system" style="text-align: center">暂无数据</div>
-          </div>
-        </Col>
+            </Col>
 
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13">
-          <div class="info-item">
-            <div class="item-title">
-              白名单
-            </div>
-            <div style="text-align: center" class="item-content" v-if="!whiteList.length ">暂无数据</div>
-            <div class="item-content" v-if="whiteList.length">
-              <div class="list-item2" v-for="(item, index) in whiteList">
-                <span><span style="padding-right: 10px">{{index+1}}</span> {{item.ipAddress}}</span>
-                <span>{{item.macAddress}}</span>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13">
+              <div class="info-item">
+                <div class="item-title">
+                  白名单
+                </div>
+                <div style="text-align: center" class="item-content" v-if="!whiteList.length ">暂无数据</div>
+                <div class="item-content" v-if="whiteList.length">
+                  <div class="list-item2" v-for="(item, index) in whiteList">
+                    <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
+                    <span>{{item.ipAddress}}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </Col>
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              忽略名单
-            </div>
-            <div class="item-content">
-              <div style="text-align: center" v-if="!ignoreList.length">暂无数据</div>
-              <div class="list-item2" v-for="(item, index) in ignoreList" v-if="ignoreList.length">
-                <span><span style="padding-right: 10px">{{index+1}}</span>{{item.ipAddress}}</span>
-                <span>{{item.macAddress}}</span>
+            </Col>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  忽略名单
+                </div>
+                <div class="item-content">
+                  <div style="text-align: center" v-if="!ignoreList.length">暂无数据</div>
+                  <div class="list-item2" v-for="(item, index) in ignoreList" v-if="ignoreList.length">
+                    <span><span style="padding-right: 10px">{{index+1}}</span>{{item.ipAddress}}</span>
+                    <span>{{item.macAddress}}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </Col>
+            </Col>
 
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              在线主机列表
-            </div>
-            <div class="item-content">
-              <div style="text-align: center" v-if="!onlineMasteList.length">暂无数据</div>
-              <div class="list-item2" v-for="(item, index) in onlineMasteList" v-if="onlineMasteList.length">
-                <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
-                <span>{{item.ipAddress}}</span>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  在线主机列表
+                </div>
+                <div class="item-content">
+                  <div style="text-align: center" v-if="!onlineMasteList.length">暂无数据</div>
+                  <div class="list-item2" v-for="(item, index) in onlineMasteList" v-if="onlineMasteList.length">
+                    <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
+                    <span>{{item.ipAddress}}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </Col>
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              入侵主机列表
-            </div>
-            <div class="item-content">
-              <div style="text-align: center" v-if="!blockingHost.length">暂无数据</div>
-              <div class="list-item2" v-for="(item, index) in blockingHost" v-if="blockingHost.length">
-                <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
-                <span>{{item.ipAddress}}</span>
+            </Col>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  入侵主机列表
+                </div>
+                <div class="item-content">
+                  <div style="text-align: center" v-if="!blockingHost.length">暂无数据</div>
+                  <div class="list-item2" v-for="(item, index) in blockingHost" v-if="blockingHost.length">
+                    <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
+                    <span>{{item.ipAddress}}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </Col>
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              活跃主机列表
-            </div>
-            <div class="item-content">
-              <div style="text-align: center" v-if="!liveMasteList.length">暂无数据</div>
-              <div class="list-item2" v-for="(item, index) in liveMasteList" v-if="liveMasteList.length">
-                <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
-                <span>{{item.ipAddress}}</span>
+            </Col>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  活跃主机列表
+                </div>
+                <div class="item-content">
+                  <div style="text-align: center" v-if="!liveMasteList.length">暂无数据</div>
+                  <div class="list-item2" v-for="(item, index) in liveMasteList" v-if="liveMasteList.length">
+                    <span><span style="padding-right: 10px">{{index+1}}</span>{{item.macAddress}}</span>
+                    <span>{{item.ipAddress}}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </Col>
-        <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
-          <div class="info-item">
-            <div class="item-title">
-              模式设置
-            </div>
-            <div class="item-content" v-if="system" >
-              <div class="list-item" >
-                <span class="name">单向模式</span>：
-                <span class="value">{{system.single}}</span>
+            </Col>
+            <Col :xxl="6" :xl="8" :lg="12" :xs="13" :sm="13" :md="13" >
+              <div class="info-item">
+                <div class="item-title">
+                  模式设置
+                </div>
+                <div class="item-content" v-if="system" >
+                  <div class="list-item" >
+                    <span class="name">单向模式</span>：
+                    <span class="value">{{system.single}}</span>
+                  </div>
+                  <div class="list-item" >
+                    <span class="name">学习模式</span>：
+                    <span class="value">{{system.studyMode}}</span>
+                  </div>
+                  <div class="list-item" >
+                    <span class="name">btime</span>：
+                    <span class="value">{{system.ctime}}</span>
+                  </div>
+                  <div class="list-item" >
+                    <span class="name">ctime</span>：
+                    <span class="value">{{system.btime}}</span>
+                  </div>
+                  <div class="list-item" >
+                    <span class="name">ltime</span>：
+                    <span class="value">{{system.ltime}}</span>
+                  </div>
+                </div>
+                <div class="item-content" v-if="!system" style="text-align: center">暂无数据</div>
               </div>
-              <div class="list-item" >
-                <span class="name">学习模式</span>：
-                <span class="value">{{system.studyMode}}</span>
-              </div>
-              <div class="list-item" >
-                <span class="name">btime</span>：
-                <span class="value">{{system.ctime}}</span>
-              </div>
-              <div class="list-item" >
-                <span class="name">ctime</span>：
-                <span class="value">{{system.btime}}</span>
-              </div>
-              <div class="list-item" >
-                <span class="name">ltime</span>：
-                <span class="value">{{system.ltime}}</span>
-              </div>
-            </div>
-            <div class="item-content" v-if="!system" style="text-align: center">暂无数据</div>
-          </div>
-        </Col>
-      </Row>
+            </Col>
+          </Row>
+        </div>
+      </div>
+      <!--ip管理-->
+      <div class="nav-content" v-if="activeNav === 1">
+         132
+      </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -195,6 +210,11 @@ export default {
   name: 'chart',
   data () {
     return {
+      activeNav: 0,
+      navList: [
+        '基础信息',
+        'DHCP配置'
+      ],
       timer: null,
       networkInfo: {}, // 网络信息
       modeSet: {}, // 模式
@@ -211,6 +231,10 @@ export default {
     ...mapActions([
       'getAsideList'
     ]),
+    /* 切换tab */
+    changeNav (index) {
+      this.activeNav = index
+    },
     /* 网络信息 */
     async getNetworkInfo (nbCode) {
       let res = await getNetworkInfo({ nbCode: nbCode })
@@ -301,7 +325,9 @@ export default {
     $route: {
       handler (newVal, old) {
         this.$Loading.start()
+        this.activeNav = 0
         this.funHandle()
+
         this.$Loading.finish()
       }
     }
