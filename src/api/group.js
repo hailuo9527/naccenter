@@ -3,12 +3,12 @@ import axios from '@/libs/api.request'
 /*
 *  新建NB机器分组
 * */
-export const addGroup = ({ groupName, remarks }) => {
+export const addGroup = ({ groupName, remarks, ipTotal }) => {
   return axios.request({
     url: `/groups/add`,
     method: 'post',
     params: {
-      groupName, remarks
+      groupName, remarks, ipTotal
     }
   })
 }
@@ -83,12 +83,11 @@ export const getNbCodeInfoByGroupId = ({ groupId }) => {
 /*
 *  名单管理分组新增
 * */
-export const insGroupRoster = ( groupRoster ) => {
+export const insGroupRoster = (groupRoster) => {
   return axios.request({
     url: `/groups/insGroupRoster`,
     method: 'post',
     data: groupRoster
-
 
   })
 }

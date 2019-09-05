@@ -64,7 +64,7 @@
 import { wxUserLogin, getSmsCode, addStaffNetworking } from '../../api/login'
 export default {
   data () {
-    const  validatePhone = (rule, value, callback) => {
+    const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('手机号不能为空'))
       } else if (!/^1[34578]\d{9}$/.test(value)) {
@@ -93,7 +93,7 @@ export default {
         ]
       },
       content: '获取验证码', // 按钮内容
-      totalTime: 60,  // 倒计时
+      totalTime: 60, // 倒计时
       canClick: true // 是否可点击
     }
   },
@@ -117,21 +117,20 @@ export default {
         nbCode: this.$route.query.nbCode
       }
       let res = await addStaffNetworking(json)
-      //console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.$Notice.success({
           title: '提示',
           desc: res.data.result,
           duration: 0
-        });
+        })
       } else {
         this.$Notice.error({
           title: '提示',
           desc: res.data.result,
           duration: 0
-        });
+        })
       }
-
     },
     // 访客登录
     visitorLogin () {
@@ -145,11 +144,11 @@ export default {
     createWxQrcode () {
       let json = this.$route.query
       console.log(json)
-      var obj=new WxLogin(this.$config.wxConfig)
+      var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录
     async checkWxLogin () {
-      if (this.$route.query.code || this.$route.query.nbCode){
+      if (this.$route.query.code || this.$route.query.nbCode) {
         // 存储参数
         if (this.$route.query.ip) {
           let visitorParams = JSON.stringify(this.$route.query)
@@ -160,7 +159,7 @@ export default {
           let visitorParams = JSON.parse(sessionStorage.getItem('visitorParams'))
           if (!visitorParams) return
           let json = {
-            code : this.$route.query.code[1],
+            code: this.$route.query.code,
             ...visitorParams
           }
           let res = await wxUserLogin(json)
@@ -169,23 +168,22 @@ export default {
               title: '提示',
               desc: res.data.result,
               duration: 0
-            });
+            })
           } else {
             this.$Notice.error({
               title: '提示',
               desc: res.data.result,
               duration: 0
-            });
+            })
           }
         }
       } else {
         this.$router.push({ path: '/404' })
       }
-
     },
     async getCode () {
-      if (!this.canClick) return  // 不可重复点击
-      if (this.formValidate.phone === ''){
+      if (!this.canClick) return // 不可重复点击
+      if (this.formValidate.phone === '') {
         this.$Message.error('请填写手机号')
         return
       }
@@ -216,6 +214,5 @@ export default {
 </script>
 <style lang="less" scoped>
   @import "visitor-login";
-
 
 </style>
