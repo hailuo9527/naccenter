@@ -7,7 +7,7 @@ import axios from '@/libs/api.request'
 export const getIpAutoMode = () => {
   return axios.request({
     url: '/getIpAutoMode',
-    method: 'post',
+    method: 'post'
   })
 }
 
@@ -24,4 +24,3 @@ export const setIpAutoMode = ({ mask, groupId }) => {
     }
   })
 }
-

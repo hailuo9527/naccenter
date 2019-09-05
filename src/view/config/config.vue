@@ -139,7 +139,7 @@
                 </span>
             </template>
             <template slot-scope="{ row, index }" slot="action">
-              <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
+              <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row.id, index)"/>
             </template>
           </Table>
         </Row>
@@ -259,7 +259,7 @@
 
             </template>
             <template slot-scope="{ row, index }" slot="action">
-              <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
+              <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row.id, index)"/>
             </template>
           </Table>
         </Row>

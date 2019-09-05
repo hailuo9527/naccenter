@@ -39,13 +39,12 @@ Vue.prototype.$config = config
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)
 
-
 /**
  * 生成常用方法
  */
 Object.keys(vueExpand).forEach(key => {
   Vue.prototype[key] = vueExpand[key]
-});
+})
 
 /* eslint-disable no-new */
 new Vue({

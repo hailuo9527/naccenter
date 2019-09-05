@@ -85,7 +85,7 @@ module.exports = {
     if (process.env.NODE_ENV === 'production') {
       return {
         performance: {
-          hints: 'warning',
+          // hints: 'warning',
           // 入口起点的最大体积 整数类型（以字节为单位）
           maxEntrypointSize: 100000000,
           // 生成文件的最大体积 整数类型（以字节为单位 300k）

@@ -29,7 +29,7 @@ export const deleteNbList = ({ id }) => {
 * 批量删除名单
 * ids: array
 * */
-/*export const deleteNbLists = ({ ids }) => {
+/* export const deleteNbLists = ({ ids }) => {
   return axios.request({
     url: `/nb/run/delents`,
     method: 'delete',
@@ -37,7 +37,7 @@ export const deleteNbList = ({ id }) => {
       ids
     }
   })
-}*/
+} */
 export const deleteNbLists = ({ nbCode, type }) => {
   return axios.request({
     url: `/nb/run/delentname`,
