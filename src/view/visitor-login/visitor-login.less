@@ -1,20 +1,28 @@
-.welcome{
+ .welcome{
   background: #f2f2f2;
   height: 100%;
 
   .con{
-    width: 996px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    min-height: 500px;
+    position: relative;
+    //width: 996px;
+    // margin: 0 480px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    height: 550px;
+    &>div{
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .ivu-card{
+
+    }
     .login-wrap{
       padding: 20px;
       .title{
-        display: flex;
-        justify-content: space-between;
+        // display: flex;
+        // justify-content: space-between;
         margin-bottom: 20px;
         span{
           &:first-child{
@@ -24,15 +32,15 @@
             cursor: pointer;
             font-size: 14px;
             color: #00a4ff;
+            float: right;
           }
         }
       }
       .form{
-        margin-top: 80px;
+        // margin-top: 80px;
       }
       #qrcode{
-        display: flex;
-        justify-content: center;
+       text-align: center;
       }
     }
   }
@@ -43,8 +51,5 @@
     text-align: center;
     padding: 20px 0;
   }
-
-}
-#qrcode{
 
 }

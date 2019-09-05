@@ -30,8 +30,13 @@
                   <FormItem label="分组名" prop="groupName">
                     <Input v-model="addGroupForm.groupName" placeholder="请输入分组名"></Input>
                   </FormItem>
+                  <FormItem label="IP自动分配数量" prop="ipTotal">
+                    <Select v-model="addGroupForm.ipTotal">
+                      <Option :value="item" v-for="(item, index) in ipTotalList">{{item}}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="备注">
-                    <Input v-model="addGroupForm.remarks" placeholder="请输入分组名"></Input>
+                    <Input v-model="addGroupForm.remarks" placeholder="请输入备注"></Input>
                   </FormItem>
                 </Form>
               </Modal>
@@ -223,7 +228,7 @@
           title="修改分组"
           :loading="groupLoading"
           @on-ok="modifyHandler('addGroupForm')">
-          <Form ref="addGroupForm" :model="addGroupForm" :rules="addGroupRule" :label-width="80">
+          <Form ref="addGroupForm" :model="addGroupForm"  :rules="addGroupRule" label-position="top">
             <FormItem label="分组名" prop="groupName">
               <Input v-model="addGroupForm.groupName" placeholder="请输入分组名"></Input>
             </FormItem>
@@ -292,19 +297,23 @@ export default {
       groupLoading: false,
       addModal: false,
       modifyModal: false,
-      addGroupForm: {},
+      addGroupForm: {
+        ipTotal: 256
+      },
       addGroupRule: {
         groupName: [
           { required: true, validator: validategroupName, trigger: 'blur' }
         ]
+
       },
+      ipTotalList: [ 256, 128, 64, 32, 16, 8, 4 ],
       activeModifyGroupId: null,
       activeNav: 'supTab1',
       loading: false,
       white: [
         {
           title: 'Mac地址',
-          slot: 'macAddress',
+          slot: 'macAddress'
         },
         {
           title: 'Ip地址',
@@ -322,7 +331,7 @@ export default {
       ignore: [
         {
           title: 'Mac地址',
-          slot: 'mac',
+          slot: 'mac'
         },
         {
           title: 'Ip地址',
@@ -376,22 +385,22 @@ export default {
   },
   computed: {
     ...mapState({
-      userInfo: state => state.login.userInfo,
-      //nbList: state => state.app.asideList
+      userInfo: state => state.login.userInfo
+      // nbList: state => state.app.asideList
     })
   },
   methods: {
     /* 获取所有分组 */
     async getAllGroup () {
       let res = await getAllGroup()
-      //console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.groupList = res.data.result
         if (this.groupList[0] !== undefined) {
           this.changeGroup(this.groupList[0].groupId || '', 0)
         }
       } else {
-       // console.log(res.data.result)
+        // console.log(res.data.result)
       }
     },
     /* 根据id获取菜单 */
@@ -414,7 +423,9 @@ export default {
       if (res.data.code === 'success') {
         this.$Message.success('新增分组成功')
         this.loading = false
-        this.addGroupForm = {}
+        this.addGroupForm = {
+          ipTotal: 256
+        }
         this.getAllGroup()
       } else {
         this.$Message.error(res.data.result)

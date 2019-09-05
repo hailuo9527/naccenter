@@ -29,7 +29,7 @@ export const deleteNbList = ({ id }) => {
 * 批量删除名单
 * ids: array
 * */
-/*export const deleteNbLists = ({ ids }) => {
+/* export const deleteNbLists = ({ ids }) => {
   return axios.request({
     url: `/nb/run/delents`,
     method: 'delete',
@@ -37,7 +37,7 @@ export const deleteNbList = ({ id }) => {
       ids
     }
   })
-}*/
+} */
 export const deleteNbLists = ({ nbCode, type }) => {
   return axios.request({
     url: `/nb/run/delentname`,
@@ -102,6 +102,18 @@ export const updateNetWork = ({ nbCode, ipaddress, dnsser, ipsubnet, gateway }) 
 export const getNameList = ({ nbCode, type }) => {
   return axios.request({
     url: '/getAllNameList',
+    method: 'post',
+    params: {
+      nbCode, type
+    }
+  })
+}
+/*
+*  获取动态名单信息
+* */
+export const getAllNameListAuto = ({ nbCode, type }) => {
+  return axios.request({
+    url: '/getAllNameListAuto',
     method: 'post',
     params: {
       nbCode, type

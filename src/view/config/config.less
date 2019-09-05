@@ -135,6 +135,80 @@
     /deep/.ivu-input{
       border-radius: 16px;
     }
+    .form-group{
+      margin-top: 50px;
+      margin-bottom: 40px;
+      .form-item{
+        padding: 20px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        .my-label{
+          display: block;
+          font-size: 18px;
+          color: #333;
+          width: 130px!important;
+
+        }
+        .my-input{
+          flex: 1;
+          margin-left: 10px;
+          font-size: 14px;
+          padding: 0 10px;
+          border: none;
+          &:focus{
+            outline:none;
+            box-shadow: none
+          }
+
+        }
+        .error{
+          width: 130px;
+
+          color: #999;
+        }
+        /deep/.ivu-switch-checked{
+          border-color: #00e9bc;
+          background-color: #00e9bc;
+        }
+      }
+      /deep/.ivu-input,/deep/.ivu-form-item-error .ivu-input{
+        border: none;
+        font-size: 14px;
+        &:hover{
+          border: none;
+        }
+        &:focus{
+          outline: none;
+          box-shadow: none;
+        }
+      }
+      /deep/.ivu-form .ivu-form-item-label{
+        font-size: 18px;
+        color: #333;
+        //width: 130px;
+      }
+      /deep/.ivu-form-item{
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+      /deep/.ivu-form-item-error-tip{
+        top: 50px;
+      }
+    }
+    .save{
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 30px;
+      span{
+        display: inline-block;
+        background: #00e9bc;
+        font-size: 16px;
+        color: #fff;
+        padding: 5px 25px;
+        cursor: pointer;
+      }
+    }
     .table-container{
       margin-top: 20px;
       /deep/.ivu-table:before,/deep/.ivu-table:after{

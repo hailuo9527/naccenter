@@ -8,43 +8,51 @@
       </template>
     </Alert>
     <Divider>选择登录方式</Divider>
-    <div class="con">
-      <Card :bordered="false" dis-hover style="width: 400px;height: 80%">
-        <div class="login-wrap">
-          <div class="tab tab1" v-show="tab === 'tab1'">
-            <div class="title">
-              <span>雇员登录</span>
-              <span @click="visitorLogin">访客登录</span>
-            </div>
-            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="form">
-              <FormItem label="" prop="name">
-                <Input v-model="formValidate.name" placeholder="用户名"></Input>
-              </FormItem>
-              <FormItem label="" prop="phone">
-                <Input v-model="formValidate.phone" placeholder="手机号"></Input>
-              </FormItem>
-              <FormItem label="" prop="code">
-                <div style="display: flex; align-items: center;justify-content: center">
-                  <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
-                  </Input>
-                  <Button style="flex: 1;margin-left: 20px;" @click="getCode">{{this.content}}</Button>
-                </div>
-              </FormItem>
-              <FormItem>
-                <Button type="primary" long @click="handleSubmit('formValidate')">登录</Button>
-              </FormItem>
-            </Form>
-          </div>
-          <div class=" tab tab2" v-show="tab === 'tab2'">
-            <div class="title">
-              <span>访客登录</span>
-              <span @click="tab = 'tab1'">雇员登录</span>
-            </div>
-            <div id="qrcode"></div>
-          </div>
-        </div>
 
-      </Card>
+    <div class="con">
+      <div style="width: 400px">
+        <Card :bordered="false" dis-hover >
+          <div class="login-wrap">
+            <div class="tab tab1" v-show="tab === 'tab1'">
+              <div class="title">
+                <span>雇员登录</span>
+                <span @click="visitorLogin">访客登录</span>
+              </div>
+              <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="form">
+                <FormItem label="" prop="name">
+                  用户名：
+                  <Input v-model="formValidate.name" placeholder="用户名" ></Input>
+                </FormItem>
+                <FormItem label="" prop="phone">
+                  手机号：
+                  <Input v-model="formValidate.phone" placeholder="手机号"></Input>
+                </FormItem>
+                <FormItem label="" prop="code">
+                  <!-- <div style="display: flex; align-items: center;justify-content: center"> -->
+                  验证码：
+                  <div>
+                    <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
+                    </Input>
+                    <Button style="flex: 1;margin-left: 70px;" @click="getCode" >{{this.content}}</Button>
+                  </div>
+                </FormItem>
+                <FormItem>
+                  <Button type="primary" long @click="handleSubmit('formValidate')">登录</Button>
+                </FormItem>
+              </Form>
+            </div>
+            <div class=" tab tab2" v-show="tab === 'tab2'">
+              <div class="title">
+                <span>访客登录</span>
+                <span @click="tab = 'tab1'">雇员登录</span>
+              </div>
+              <div id="qrcode"></div>
+            </div>
+          </div>
+
+        </Card>
+      </div>
+
     </div>
 
     <div class="footer">
@@ -56,7 +64,7 @@
 import { wxUserLogin, getSmsCode, addStaffNetworking } from '../../api/login'
 export default {
   data () {
-    const  validatePhone = (rule, value, callback) => {
+    const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('手机号不能为空'))
       } else if (!/^1[34578]\d{9}$/.test(value)) {
@@ -85,7 +93,7 @@ export default {
         ]
       },
       content: '获取验证码', // 按钮内容
-      totalTime: 60,  // 倒计时
+      totalTime: 60, // 倒计时
       canClick: true // 是否可点击
     }
   },
@@ -109,21 +117,20 @@ export default {
         nbCode: this.$route.query.nbCode
       }
       let res = await addStaffNetworking(json)
-      //console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.$Notice.success({
           title: '提示',
           desc: res.data.result,
           duration: 0
-        });
+        })
       } else {
         this.$Notice.error({
           title: '提示',
           desc: res.data.result,
           duration: 0
-        });
+        })
       }
-
     },
     // 访客登录
     visitorLogin () {
@@ -137,13 +144,13 @@ export default {
     createWxQrcode () {
       let json = this.$route.query
       console.log(json)
-      var obj=new WxLogin(this.$config.wxConfig)
+      var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录
     async checkWxLogin () {
-      if (this.$route.query.code || this.$route.query.nbCode){
+      if (this.$route.query.code || this.$route.query.nbCode) {
         // 存储参数
-        if (this.$route.query.nbCode) {
+        if (this.$route.query.ip) {
           let visitorParams = JSON.stringify(this.$route.query)
           sessionStorage.setItem('visitorParams', visitorParams)
         }
@@ -152,34 +159,31 @@ export default {
           let visitorParams = JSON.parse(sessionStorage.getItem('visitorParams'))
           if (!visitorParams) return
           let json = {
-            code : this.$route.query.code[1],
+            code: this.$route.query.code,
             ...visitorParams
           }
-
           let res = await wxUserLogin(json)
-           // console.log(res)
           if (res.data.code === 'success') {
             this.$Notice.success({
               title: '提示',
               desc: res.data.result,
               duration: 0
-            });
+            })
           } else {
             this.$Notice.error({
               title: '提示',
               desc: res.data.result,
               duration: 0
-            });
+            })
           }
         }
       } else {
         this.$router.push({ path: '/404' })
       }
-
     },
     async getCode () {
-      if (!this.canClick) return  // 不可重复点击
-      if (this.formValidate.phone === ''){
+      if (!this.canClick) return // 不可重复点击
+      if (this.formValidate.phone === '') {
         this.$Message.error('请填写手机号')
         return
       }
@@ -210,4 +214,5 @@ export default {
 </script>
 <style lang="less" scoped>
   @import "visitor-login";
+
 </style>

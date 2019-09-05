@@ -1,6 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-// import '@babel/polyfill'
+import '@babel/polyfill'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -39,13 +39,12 @@ Vue.prototype.$config = config
 importDirective(Vue)
 Vue.directive('clickOutside', clickOutside)
 
-
 /**
  * 生成常用方法
  */
 Object.keys(vueExpand).forEach(key => {
   Vue.prototype[key] = vueExpand[key]
-});
+})
 
 /* eslint-disable no-new */
 new Vue({

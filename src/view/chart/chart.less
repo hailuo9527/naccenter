@@ -14,7 +14,6 @@
     }
   }
   .info-list{
-
     .info-item{
       margin-top: 10px;
       background: #fff;
@@ -24,7 +23,7 @@
       display: flex;
       flex-direction: column;
       .item-title{
-        font-size: 16px;
+        font-size: 14px;
         padding: 10px 0;
         border-bottom: 1px solid #ebebeb;
         color: #333;
@@ -62,6 +61,78 @@
             background: #f6fdfd;
           }
         }
+      }
+    }
+  }
+  .nav-box{
+    margin-top: 10px;
+    background: #fff;
+    min-height: 570px;
+    .nav-bar{
+      display: flex;
+      background: #00e9bc;
+      .nav-item{
+        padding: 10px 30px;
+        font-size: 16px;
+        cursor: pointer;
+        color: #fff;
+        position: relative;
+        &:last-child{
+          &::after{
+            display: none;
+          }
+        }
+        &::after{
+          content: '';
+          display: block;
+          width: 1px;
+          height: 15px;
+          background: #fff;
+          position: absolute;
+          top: 14px;
+          right: -1px;
+        }
+        &.active{
+          background: #fff;
+          color: #00e9bc;
+          &::after{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .nav-content{
+    padding: 20px;
+    background: #f9f9f9;
+    /deep/.ivu-input{
+      border-radius: 16px;
+    }
+    .table-container{
+      margin-top: 20px;
+      /deep/.ivu-table:before,/deep/.ivu-table:after{
+        display: none;
+      }
+      /deep/.ivu-table-wrapper{
+        border: none;
+      }
+      /deep/.ivu-table td{
+        border-bottom: none;
+      }
+    }
+    .opera{
+      margin-top: 50px;
+    }
+    .btn-group{
+      span{
+        display: inline-block;
+        background: #00e9bc;
+        font-size: 14px;
+        color: #fff;
+        padding: 5px 25px;
+        cursor: pointer;
+        margin-left: 20px;
       }
     }
   }

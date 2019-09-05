@@ -187,6 +187,15 @@ export const systemChild = [
     component: () => import('@/view/system/groupManage/groupManage.vue')
   },
   {
+    path: 'ipAutoConfig',
+    name: 'ipAutoConfig',
+    meta: {
+      icon: 'md-ionitron',
+      title: 'IP自动分配'
+    },
+    component: () => import('@/view/system/ipAutoConfig/ipAutoConfig.vue')
+  },
+  {
     path: 'applyManage',
     name: 'applyManage',
     meta: {

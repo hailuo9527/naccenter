@@ -15,7 +15,19 @@ export const getNameListByType = ({ nbCode, type }) => {
   })
 }
 
+/*
+* 新增固定IP信息
+* */
 
+export const insRosterTemp = ({ id, nbCode, type, ipAddress, macAddress, userName }) => {
+  return axios.request({
+    url: '/insRosterTemp',
+    method: 'post',
+    params: {
+      id, nbCode, type, ipAddress, macAddress, userName
+    }
+  })
+}
 /*
 * 根据类型查询IP段信息
 * */
@@ -36,7 +48,7 @@ export const getIpParam = ({ nbCode, type }) => {
 
 export const getIpRecovery = ({ nbCode }) => {
   return axios.request({
-    url: '/ipmanage/getIpRecovery',
+    url: '/selIpRecovery',
     method: 'post',
     params: {
       nbCode
@@ -62,7 +74,7 @@ export const insIpManage = ({ ipManage }) => {
 * 添加ip段设置
 * */
 
-export const insIpParam = ( ipParam ) => {
+export const insIpParam = (ipParam) => {
   return axios.request({
     url: '/insIpParam',
     method: 'post',
@@ -75,13 +87,11 @@ export const insIpParam = ( ipParam ) => {
 * 插入需要回收的IP
 * */
 
-export const insIpRecovery = ({ nbCode, ipAddress }) => {
+export const insIpRecovery = (ipRecovery) => {
   return axios.request({
     url: '/insIpRecovery',
     method: 'post',
-    params: {
-      nbCode, ipAddress
-    }
+    data: ipRecovery
   })
 }
 
@@ -137,6 +147,34 @@ export const uptIpParam = ({ id, ipStart, ipEnd, type, nbCode }) => {
     method: 'post',
     params: {
       id, ipStart, ipEnd, type, nbCode
+    }
+  })
+}
+
+/*
+* 修改固定IP信息
+* */
+
+export const uptRosterTemp = ({ id, nbCode, type, ipAddress, macAddress, userName }) => {
+  return axios.request({
+    url: '/uptRosterTemp',
+    method: 'post',
+    params: {
+      id, nbCode, type, ipAddress, macAddress, userName
+    }
+  })
+}
+
+/*
+* 保存修改信息
+* */
+
+export const saveIpManage = ({ nbCode }) => {
+  return axios.request({
+    url: '/saveIpManage',
+    method: 'get',
+    params: {
+      nbCode
     }
   })
 }
