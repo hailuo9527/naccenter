@@ -212,3 +212,31 @@ export const uptBlockRoster = ({ nbCode }) => {
     }
   })
 }
+
+/*
+*  修改入侵名单信息
+* */
+
+export const getDHCPInfo = ({ nbCode }) => {
+  return axios.request({
+    url: '/getDHCPInfo',
+    method: 'get',
+    params: {
+      nbCode
+    }
+  })
+}
+
+/*
+*  修改入侵名单信息
+* */
+
+export const getVistorInfo = ({ nbCode }) => {
+  return axios.request({
+    url: '/getVistorInfo',
+    method: 'get',
+    params: {
+      nbCode
+    }
+  })
+}

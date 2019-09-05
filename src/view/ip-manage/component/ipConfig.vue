@@ -57,9 +57,6 @@
 
           <Row class="list-head" type="flex" justify="space-between" align="top">
             <Col span="6"><h3>固定IP列表:</h3></Col>
-            <!--<Col span="6">
-              <Input suffix="ios-search" placeholder="Enter text" />
-            </Col>-->
           </Row>
           <Row class="table-container">
             <Table :columns="white" :data="whiteList" :loading="loading" height="300" stripe
@@ -73,15 +70,6 @@
                   <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeIp(row)"/>
                 </span>
               </template>
-           <!--   <template slot-scope="{ row }" slot="hostName">
-                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.hostName || 'unknow' }}</span></span>
-              </template>-->
-            <!--  <template slot-scope="{ row, index }" slot="userName">
-                <span style="font-size: 12px;color: #666; display: flex;align-items: center">
-                  <span style="color: #00e9bc;">{{ row.userName || '未命名' }}</span>
-                  <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeName(row.id)"/>
-                </span>
-              </template>-->
               <template slot-scope="{ row, index }" slot="action">
                 <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row, index)"/>
               </template>
@@ -432,37 +420,10 @@ export default {
       this.editIp = true
       this.editIpForm = obj
     },
-    /* changeName (id) {
-        this.editName = true
-        this.editNameForm.id = id
 
-      }, */
-    /*  async upload (type) {
-        if (!this.file) return
-        let fileFormData = new FormData()
-        fileFormData.append('file', this.file)
-        let res = await uploadFile({ file: fileFormData, nbCode: this.nbCode })
-        if (type === 4) {
-          this.addWhiteModel = false
-        } else {
-          this.addIgnoreModel = false
-        }
-        if (res.data.code === 'success') {
-          this.$Message.success('上传成功！')
-          this.getNameList(0)
-        } else {
-          this.$Message.error('上传失败！')
-        }
-      }, */
     /* 添加名单 */
     async addIp () {
-      let type = ''
-      type = 4
-      /* if (this.addWhiteForm.ipAdress === '' && this.addWhiteForm.macAdress === '') {
-          this.upload(type)
-          return
-        } */
-
+      let type = 4
       this.addWhiteLoading = true
       let json = {
         nbCode: this.nbCode,

@@ -9,7 +9,7 @@
              @click="changeNav(index)">{{item}}
         </div>
       </div>
-      <!--固定ip-->
+      <!--基础信息-->
       <div class="nav-content" v-if="activeNav === 0">
         <div class="info-list">
           <Row type="flex" :gutter="10" style="flex-wrap: wrap" class="info-item-wrap">
@@ -194,9 +194,13 @@
           </Row>
         </div>
       </div>
-      <!--ip管理-->
-      <div class="nav-content" v-if="activeNav === 1">
-         132
+      <!--dhcp配置-->
+      <div class="nav-content2" v-if="activeNav === 1">
+        <dhcp-config :nb-code="activeNb.nbCode"></dhcp-config>
+      </div>
+      <!--游客信息-->
+      <div class="nav-content2" v-if="activeNav === 2">
+        <visitor-info :nb-code="activeNb.nbCode"></visitor-info>
       </div>
     </div>
 
@@ -204,16 +208,21 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { getNetworkInfo, getStudyMode, getMasterInfo, getSystemStatus } from '../../api/chart'
-
+import { getNetworkInfo, getMasterInfo, getSystemStatus } from '../../api/chart'
+import dhcpConfig from './components/dhcpConfig'
+import visitorInfo from './components/vistorInfo'
 export default {
   name: 'chart',
+  components: {
+    dhcpConfig, visitorInfo
+  },
   data () {
     return {
       activeNav: 0,
       navList: [
         '基础信息',
-        'DHCP配置'
+        'DHCP配置',
+        '访客信息 '
       ],
       timer: null,
       networkInfo: {}, // 网络信息
