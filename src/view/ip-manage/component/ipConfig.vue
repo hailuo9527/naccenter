@@ -5,7 +5,7 @@
         <h3>DHCP:</h3>
       </Col>
       <Col span="2">
-        <i-switch type="small" v-model="dscp">
+        <i-switch type="small" v-model="dscp" :loading="changeDhcp" @on-change="uptIpParamStatus">
         </i-switch>
       </Col>
     </Row>
@@ -177,7 +177,7 @@
 import {
   addIp
 } from '../../../api/nbConfig'
-import { getNameListByType, insIpParam, uptIpManage, getIpParam } from '../../../api/ipManage'
+import { getNameListByType, insIpParam, uptIpManage, getIpParam, uptIpParamStatus } from '../../../api/ipManage'
 export default {
   name: 'config',
   data () {
@@ -215,6 +215,7 @@ export default {
     }
     return {
       dscp: false,
+      changeDhcp: false,
       ipConfig: false,
       // editName: false,
       // editNameForm: {},
@@ -353,7 +354,7 @@ export default {
         this.dscp = this.netConfig.dscp === 'on'
       }
     },
-    // 保存ip段
+    // 保存dsch配置
     async insIpParam () {
       this.netConfig.nbCode = this.nbCode
       this.netConfig.dscp = this.dscp ? 'on' : 'off'
@@ -365,6 +366,31 @@ export default {
         this.$Message.error(res.data.result)
       }
     },
+    // 修改dhcp配置
+    uptIpParamStatus (data) {
+      if (!data) {
+        this.changeDhcp = true
+        this.$Modal.confirm({
+          title: '提示',
+          content: '确定要关闭DHCP配置吗？',
+          onOk: async () => {
+            let res = await uptIpParamStatus({ nbCode: this.nbCode })
+
+            if (res.data.code) {
+              this.$Message.success('DHCP配置已关闭！')
+              this.changeDhcp = false
+            } else {
+              this.$Message.error(res.data.result)
+            }
+          },
+          onCancel: () => {
+            this.dscp = true
+            this.changeDhcp = false
+          }
+        })
+      }
+    },
+
     /* 获取名单 */
     async getNameList (type) {
       this.loading = true
@@ -470,7 +496,6 @@ export default {
         }
       })
     }
-
   },
   mounted () {
     this.getIpParam()

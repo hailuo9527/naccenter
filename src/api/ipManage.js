@@ -178,3 +178,17 @@ export const saveIpManage = ({ nbCode }) => {
     }
   })
 }
+
+/*
+* 保存修改信息
+* */
+
+export const uptIpParamStatus = ({ nbCode }) => {
+  return axios.request({
+    url: '/uptIpParamStatus',
+    method: 'get',
+    params: {
+      nbCode
+    }
+  })
+}
