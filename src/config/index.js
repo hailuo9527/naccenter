@@ -23,7 +23,7 @@ export default {
     id: 'qrcode',
     appid: 'wx243ad0422689c414',
     scope: 'snsapi_login',
-    redirect_uri: window.location.href + '?code=CODE&state=STATE',
+    redirect_uri: process.env.NODE_ENV === 'development' ? 'http://nc.wingsbro.com?code=CODE&state=STATE' : window.location.href + '?code=CODE&state=STATE',
     state: '1211111',
     style: 'black',
     href: ''

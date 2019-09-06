@@ -111,12 +111,13 @@ export default {
     },
     /* weixin */
     createWxQrcode () {
+      this.$config.wxConfig.redirect_uri = 'http://nc.wingsbro.com/login?code=CODE&state=STATE'
       var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录
     async checkWxLogin () {
       if (this.$route.query.code) {
-        // console.log('已扫码')
+        console.log('已扫码')
         let json = {
           code: this.$route.query.code[1]
         }
@@ -138,6 +139,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$route.query.code)
     console.log(this.$config.wxConfig.redirect_uri)
     this.checkWxLogin()
   },
