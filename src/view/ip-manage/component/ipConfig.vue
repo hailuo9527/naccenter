@@ -5,22 +5,12 @@
         <h3>DHCP:</h3>
       </Col>
       <Col span="2">
-        <i-switch type="small" v-model="dscp" :loading="changeDhcp" @on-change="uptIpParamStatus">
+        <i-switch type="small" v-model="dhcp" :loading="changeDhcp" @on-change="uptIpParamStatus">
         </i-switch>
       </Col>
     </Row>
-    <div v-show="dscp">
+    <div v-show="dhcp">
       <div style="margin-top: 20px;">
-        <Row :gutter="30" type="flex" align="middle">
-          <Col  style="font-size: 14px;font-weight: bold">
-            固定IP:
-          </Col>
-          <Col span="2">
-            <i-switch type="small" v-model="ipConfig">
-            </i-switch>
-          </Col>
-
-        </Row>
         <div class="form-group">
           <Form ref="netConfigForm" :model="netConfig" :rules="netConfigRules" :label-width="130" label-position="left">
 
@@ -51,133 +41,14 @@
         </div>
 
       </div>
-      <div v-show="ipConfig">
-        <!--固定ip-->
-        <div class="nav-content2" style="padding: 0 20px;">
-
-          <Row class="list-head" type="flex" justify="space-between" align="top">
-            <Col span="6"><h3>固定IP列表:</h3></Col>
-          </Row>
-          <Row class="table-container">
-            <Table :columns="white" :data="whiteList" :loading="loading" height="300" stripe
-                   size="small">
-              <template slot-scope="{ row }" slot="macAddress">
-                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
-              </template>
-              <template slot-scope="{ row }" slot="ipAddress">
-                <span style="font-size: 12px;color: #666">
-                  <span style="color: #00e9bc;">{{ row.ipAddress }}</span>
-                  <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeIp(row)"/>
-                </span>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row, index)"/>
-              </template>
-            </Table>
-          </Row>
-          <Row type="flex" justify="space-between" class="opera">
-            <Col>
-            </Col>
-            <Col class="btn-group">
-              <span @click="addWhiteModel = true">添加</span>
-            </Col>
-          </Row>
-
-        </div>
-        <!--自由分配-->
-        <div class="nav-content2" style="padding: 0 20px;">
-
-          <Row class="list-head" type="flex" justify="space-between" align="top">
-            <Col span="6"><h3>动态IP列表:</h3></Col>
-          </Row>
-          <Row class="table-container">
-            <Table :columns="liveIp" :data="liveIpList" :loading="loading" height="300" stripe
-                   size="small">
-              <template slot-scope="{ row }" slot="macAddress">
-                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
-              </template>
-              <template slot-scope="{ row }" slot="ipAddress">
-                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.ipAddress }}</span></span>
-              </template>
-              <template slot-scope="{ row }" slot="hostName">
-                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.hostName || 'unknow' }}</span></span>
-              </template>
-              <template slot-scope="{ row, index }" slot="userName">
-                <span style="font-size: 12px;color: #666; display: flex;align-items: center">
-                  <span style="color: #00e9bc;">{{ row.userName || '未命名' }}</span>
-                  <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeName(row.id)"/>
-                </span>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <Icon type="md-arrow-round-up" size="24" color="#00e9bc" style="cursor: pointer" @click="reBack(row, index)" />
-              </template>
-            </Table>
-          </Row>
-
-        </div>
-      </div>
 
     </div>
-    <!--修改ip-->
-    <Modal v-model="editIp" width="360">
-      <p slot="header" style="color:#333;text-align:center">
-        <span>修改Ip</span>
-      </p>
-      <div style="text-align:center">
-        <Form :model="editIpForm"  label-position="left" ref="editIpForm" :rules="editIpFormRules">
-          <FormItem label="IP地址" prop="ipAddress">
-            <Input v-model.trim="editIpForm.ipAddress" placeholder="请输入ip地址"></Input>
-          </FormItem>
-        </Form>
-      </div>
-      <div slot="footer">
-        <Button type="info" size="large" long  @click="modifyIp">确认</Button>
-      </div>
-    </Modal>
-    <!--添加名单-->
-    <Modal v-model="addWhiteModel" width="360">
-      <p slot="header" style="color:#333;text-align:center">
-        <span>添加白名单</span>
-      </p>
-      <div style="text-align:center">
-        <Form :model="addWhiteForm"  label-position="left" ref="whiteFormValidate" :rules="whiteFormRules">
-          <FormItem label="mac地址" prop="macAddress">
-            <Input v-model.trim="addWhiteForm.macAddress" placeholder="请输入mac地址"></Input>
-          </FormItem>
-          <FormItem label="ip地址" prop="ipAdress">
-            <Input v-model.trim="addWhiteForm.ipAddress" placeholder="请输入ip地址"></Input>
-          </FormItem>
-        </Form>
-      </div>
-      <div slot="footer">
-        <Button type="info" size="large" long :loading="addWhiteLoading" @click="handleSubmit('whiteFormValidate')">确认添加</Button>
-      </div>
-    </Modal>
-   <!-- &lt;!&ndash;修改别名&ndash;&gt;
-    <Modal v-model="editName" width="360">
-      <p slot="header" style="color:#333;text-align:center">
-        <span>修改别名</span>
-      </p>
-      <div style="text-align:center">
-        <Form :model="editNameForm"  label-position="left">
-          <FormItem label="别名">
-            <Input v-model.trim="editNameForm.userName" placeholder="可以输入自定义别名"></Input>
-          </FormItem>
-        </Form>
-      </div>
-      <div slot="footer">
-        <Button type="info" size="large" long  @click="updNameListById">确认</Button>
-      </div>
-    </Modal>-->
   </div>
 
 </template>
 
 <script>
-import {
-  addIp
-} from '../../../api/nbConfig'
-import { getNameListByType, insIpParam, uptIpManage, getIpParam, uptIpParamStatus } from '../../../api/ipManage'
+import { getNameListByType, insIpParam, getIpParam, insRosterTemp, uptRosterTemp, saveIpManage, uptIpParamStatus } from '../../../api/ipManage'
 export default {
   name: 'config',
   data () {
@@ -190,7 +61,6 @@ export default {
       callback()
     }
     const macAddressRules = (rule, value, callback) => {
-      if (!value) callback()
       let reg = /^[a-fA-F0-9]{2}([:-][a-fA-F0-9]{2}){5}$/
       if (!reg.test(value)) {
         callback(new Error('请检查MAC地址格式！'))
@@ -214,7 +84,7 @@ export default {
       callback()
     }
     return {
-      dscp: false,
+      dhcp: false,
       changeDhcp: false,
       ipConfig: false,
       // editName: false,
@@ -226,82 +96,7 @@ export default {
           { validator: ipaddressRules, trigger: 'blur' }
         ]
       },
-
-      download: {
-        // url: 'http://app.wingbro.com:8070/名单导入模板.xls',
-        name: '名单导入模板.xls'
-      },
       loading: false,
-      white: [
-        {
-          type: 'index',
-          width: 60
-        },
-        {
-          title: 'Mac地址',
-          slot: 'macAddress'
-          // width: 350
-        },
-        {
-          title: 'Ip地址',
-          slot: 'ipAddress'
-        },
-        /* {
-            title: '主机名',
-            slot: 'hostName'
-          },
-          {
-            title: '别名',
-            slot: 'userName'
-          }, */
-        {
-          title: '操作',
-          slot: 'action',
-          width: 150
-        }
-      ],
-      whiteList: [],
-      liveIp: [
-        {
-          type: 'index',
-          width: 60
-        },
-        {
-          title: 'Mac地址',
-          slot: 'macAddress'
-          // width: 350
-        },
-        {
-          title: 'Ip地址',
-          slot: 'ipAddress'
-        }
-        /* {
-            title: '主机名',
-            slot: 'hostName'
-          },
-          {
-            title: '别名',
-            slot: 'userName'
-          }, */
-        /* {
-            title: '操作',
-            slot: 'action',
-            width: 150,
-          } */
-      ],
-      liveIpList: [],
-      addWhiteModel: false,
-      addWhiteLoading: false,
-      addWhiteForm: {
-      },
-      whiteFormRules: {
-        macAddress: [
-          { validator: macAddressRules, trigger: 'blur' }
-        ],
-        ipAddress: [
-          { validator: ipaddressRules, trigger: 'blur' }
-        ]
-      },
       netConfig: {
       },
       netConfigRules: {
@@ -317,7 +112,8 @@ export default {
         gateway: [
           { validator: gatewayRules, trigger: 'blur' }
         ]
-      }
+      },
+      reBackIpModel: false
     }
   },
   props: {
@@ -326,15 +122,8 @@ export default {
       default: ''
     }
   },
-  watch: {
-    nbCode () {
-      this.getIpParam()
-      this.getNameList(0)
-      this.getNameList(1)
-    }
-  },
-  methods: {
 
+  methods: {
     saveNetInfoHandle () {
       this.$refs['netConfigForm'].validate((valid) => {
         if (valid) {
@@ -345,25 +134,13 @@ export default {
         }
       })
     },
-    // 获取配置信息
+    // 获取默认配置
     async getIpParam () {
       let res = await getIpParam({ nbCode: this.nbCode, type: 0 })
       console.log(res)
       if (res.data.code === 'success') {
         this.netConfig = res.data.result || {}
-        this.dscp = this.netConfig.dscp === 'on'
-      }
-    },
-    // 保存dsch配置
-    async insIpParam () {
-      this.netConfig.nbCode = this.nbCode
-      this.netConfig.dscp = this.dscp ? 'on' : 'off'
-      let res = await insIpParam(this.netConfig)
-      console.log(res)
-      if (res.data.code === 'success') {
-        this.$Message.success('保存成功!')
-      } else {
-        this.$Message.error(res.data.result)
+        this.dhcp = res.data.result.dscp === 'on'
       }
     },
     // 修改dhcp配置
@@ -384,123 +161,27 @@ export default {
             }
           },
           onCancel: () => {
-            this.dscp = true
+            this.dhcp = true
             this.changeDhcp = false
           }
         })
       }
     },
-
-    /* 获取名单 */
-    async getNameList (type) {
-      this.loading = true
-      let res = await getNameListByType({ nbCode: this.nbCode, type: type })
-      this.loading = false
-      if (res.data.code === 'success') {
-        type ? this.liveIpList = res.data.result || [] : this.whiteList = res.data.result || []
-      }
-    },
-    handleSubmit (name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.addIp()
-        } else {
-          // this.$Message.error('请输入名单信息或者上传文件!')
-        }
-      })
-    },
-    /* // 修改别名
-      async updNameListById () {
-        let res = await updNameListById({...this.editNameForm})
-        this.editName = false
-        if (res.data.code === 'success') {
-          this.$Message.success('修改成功！')
-          this.getNameList(0)
-          this.getNameList(1)
-          this.editNameForm.userName = ''
-        } else {
-          this.$Message.error(res.data.result)
-        }
-      }, */
-    // 修改IP
-    modifyIp () {
-      this.$refs['editIpForm'].validate(async (valid) => {
-        if (valid) {
-          let res = await uptIpManage(this.editIpForm)
-          // console.log(res)
-          if (res.data.code === 'success') {
-            this.editIp = false
-            this.$Message.success('修改成功！')
-            this.editIpForm.ipAddress = ''
-            this.getNameList(0)
-            this.getNameList(1)
-          } else {
-            this.$Message.error(res.data.result)
-          }
-        } else {
-          this.$Message.error('请检查输入格式是否正确!')
-        }
-      })
-    },
-    changeIp (obj) {
-      this.editIp = true
-      this.editIpForm = obj
-    },
-
-    /* 添加名单 */
-    async addIp () {
-      let type = 4
-      this.addWhiteLoading = true
-      let json = {
-        nbCode: this.nbCode,
-        type: type,
-        ipAddress: this.addWhiteForm.ipAddress,
-        macAddress: this.addWhiteForm.macAddress
-        // userName: this.addWhiteForm.userName
-      }
-      let res = await addIp(json)
+    // 保存dsch配置
+    async insIpParam () {
+      this.netConfig.nbCode = this.nbCode
+      this.netConfig.dscp = this.dhcp ? 'on' : 'off'
+      let res = await insIpParam(this.netConfig)
       console.log(res)
-      this.addWhiteLoading = false
-      this.addWhiteModel = false
       if (res.data.code === 'success') {
-        this.$Message.success('添加成功')
-        this.getNameList(0)
+        this.$Message.success('保存成功!')
       } else {
         this.$Message.error(res.data.result)
       }
-    },
-    /* 删除列表 */
-    removeList (item, index) {
-      this.$Modal.confirm({
-        title: '提示',
-        content: '<p>确定要删除这条列表吗？</p>',
-        loading: true,
-        onOk: async () => {
-          let json = {
-            id: item.id,
-            macAddress: item.macAddress,
-            ipAddress: null,
-            nbCode: this.nbCode
-          }
-          let res = await uptIpManage(json)
-          console.log(res)
-          if (res.data.code === 'success') {
-            this.$Modal.remove()
-            this.$Message.info(res.data.result)
-            this.getNameList(0)
-            this.getNameList(1)
-          } else {
-            this.$Modal.remove()
-            this.$Message.error(res.data.result)
-          }
-        }
-      })
     }
   },
   mounted () {
     this.getIpParam()
-    this.getNameList(0)
-    this.getNameList(1)
   }
 }
 </script>
