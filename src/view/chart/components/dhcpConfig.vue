@@ -1,57 +1,54 @@
 <template>
   <div style="padding: 20px">
     <!--固定ip-->
-    <div class="nav-content">
-      <div class="form-group">
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-          <label for="" class="my-label">系统状态:</label>
-          <i-switch v-model="statusList.dhcp"/>
-        </div>
-      </Col>
-      <Col span="12">
+    <div class="form-group">
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+            <label for="" class="my-label">系统状态:</label>
+            <i-switch v-model="statusList.dhcp"/>
+          </div>
+        </Col>
+        <Col span="12">
 
-      </Col>
-    </Row>
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-          网关地址: <span>{{statusList.dhcpGateway}}</span>
-        </div>
-      </Col>
-      <Col span="12">
-        <div class="form-item">
-          DNS服务地址: <span>{{statusList.dhcpDnsServer}}</span>
-        </div>
-      </Col>
-    </Row>
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-          起始ip: <span>{{statusList.ipStart}}</span>
-        </div>
-      </Col>
-      <Col span="12">
-        <div class="form-item">
-          结束ip: <span>{{statusList.ipEnd}}</span>
-        </div>
-      </Col>
-    </Row>
-      </div>
+        </Col>
+      </Row>
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+            网关地址: <span>{{statusList.dhcpGateway}}</span>
+          </div>
+        </Col>
+        <Col span="12">
+          <div class="form-item">
+            DNS服务地址: <span>{{statusList.dhcpDnsServer}}</span>
+          </div>
+        </Col>
+      </Row>
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+            起始ip: <span>{{statusList.ipStart}}</span>
+          </div>
+        </Col>
+        <Col span="12">
+          <div class="form-item">
+            结束ip: <span>{{statusList.ipEnd}}</span>
+          </div>
+        </Col>
+      </Row>
     </div>
-
-      <Row class="list-head" type="flex" justify="space-between" align="top">
-        <Col span="6"><h3>租约信息列表:</h3></Col>
-      </Row>
-      <Row class="table-container">
-        <Table :columns="table" :data="tableList" :loading="loading" height="300" stripe
-               size="small">
-       <!--   <template slot-scope="{ row }" slot="dhcpIp">
-            <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.dhcpIp }}</span></span>
-          </template>-->
-        </Table>
-      </Row>
+    <Row class="list-head" type="flex" justify="space-between" align="top">
+      <Col span="6"><h3>租约信息列表:</h3></Col>
+    </Row>
+    <Row class="table-container">
+      <Table :columns="table" :data="tableList" :loading="loading" height="300" stripe
+             size="small">
+        <!--   <template slot-scope="{ row }" slot="dhcpIp">
+             <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.dhcpIp }}</span></span>
+           </template>-->
+      </Table>
+    </Row>
   </div>
 
 </template>
@@ -87,8 +84,7 @@ export default {
         }
       ],
       tableList: [],
-	      statusList: {
-	        }
+      statusList: {}
     }
   },
   props: {
@@ -107,13 +103,13 @@ export default {
         this.tableList = res.data.result || []
       }
     },
-	    // 获取系统状态
-	    async getSystemStatus () {
-		    let res = await getSystemStatus({ nbCode: this.nbCode })
-		    if (res.data.code === 'success') {
-			    this.statusList = res.data.result || []
-		    }
-	    }
+    // 获取系统状态
+    async getSystemStatus () {
+      let res = await getSystemStatus({ nbCode: this.nbCode })
+      if (res.data.code === 'success') {
+        this.statusList = res.data.result || []
+      }
+    }
   },
   mounted () {
     this.getDHCPInfo(),
