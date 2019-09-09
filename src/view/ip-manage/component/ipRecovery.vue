@@ -106,7 +106,7 @@ export default {
           width: 60
         },
         {
-          title: 'Ip地址',
+          title: 'IP地址',
           slot: 'ipAddress'
         }
       ],
