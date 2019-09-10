@@ -1,11 +1,14 @@
 <template>
   <div style="padding: 20px">
     <!--固定ip-->
+    <div class="form-group">
     <Row :gutter="30">
       <Col span="12">
         <div class="form-item">
-          <label for="" class="my-label">vistor:</label>
-          <i-switch disabled v-model="vistorList.dhcp"/>
+         访客状态:
+          <!--<i-switch  v-model="vistorList.dhcp"/>-->
+          <span class="ivu-switch ivu-switch-default" v-if="vistorList.visitor == 'off'"></span>
+          <span class="ivu-switch ivu-switch-checked ivu-switch-default" v-else-if="vistorList.visitor == 'on'"></span>
         </div>
       </Col>
       <Col span="12">
@@ -17,18 +20,19 @@
     <Row :gutter="30">
       <Col span="12">
         <div class="form-item">
-          dhcpGateway: <span>{{vistorList.visitDuration}}</span>
+          DNS服务地址: <span>{{vistorList.visitDuration != null ? vistorList.visitDuration : 'unknow'}}</span>
         </div>
       </Col>
       <Col span="12">
+
         <div class="form-item">
-          dhcpDnsServer: <span>{{vistorList.visitCount}}</span>
+          DNS服务地址: <span>{{vistorList.visitCount != null ? vistorList.visitCount:'unknow'}}</span>
         </div>
       </Col>
     </Row>
 
     <Row class="list-head" type="flex" justify="space-between" align="top">
-      <Col span="6"><h3>DHCP信息列表:</h3></Col>
+      <Col span="6"><h3>租约信息列表:</h3></Col>
     </Row>
     <Row class="table-container">
       <Table :columns="table" :data="tableList" :loading="loading" height="300" stripe
@@ -38,6 +42,7 @@
            </template>-->
       </Table>
     </Row>
+  </div>
   </div>
 
 </template>
@@ -81,7 +86,7 @@ export default {
 	    async getSystemStatus () {
 		    let res = await getSystemStatus({ nbCode: this.nbCode })
 		    if (res.data.code === 'success') {
-			    this.vistorList = res.data.result || []
+			    this.vistorList = res.data.result || {}
 		    }
 	    }
   },
@@ -93,4 +98,12 @@ export default {
 </script>
 <style lang="less" scoped>
   @import "../../config/config.less";
+  .view-content .nav-content2 .form-group .form-item{
+    font-size: 16px;
+    border: none;
+    padding: 10px;
+  }
+  .ivu-row-flex-top{
+    margin-top: 20px;
+  }
 </style>
