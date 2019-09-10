@@ -24,12 +24,12 @@
       <Row :gutter="30">
         <Col span="12">
           <div class="form-item">
-            DNS服务地址: <span>{{vistorList.visitDuration != null ? vistorList.visitDuration : 'unknow'}}</span>
+            时长: <span>{{vistorList.visitDuration != null ? vistorList.visitDuration : 'unknow'}}</span>
           </div>
         </Col>
         <Col span="12">
           <div class="form-item">
-            DNS服务地址: <span>{{vistorList.visitCount != null ? vistorList.visitCount:'unknow'}}</span>
+            访问次数: <span>{{vistorList.visitCount != null ? vistorList.visitCount:'unknow'}}</span>
           </div>
         </Col>
       </Row>
