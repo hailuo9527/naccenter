@@ -60,7 +60,6 @@ export default {
           type: 'index',
           width: 60
         }
-
       ],
       tableList: [],
 	      vistorList: []
