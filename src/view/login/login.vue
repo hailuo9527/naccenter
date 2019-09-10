@@ -9,19 +9,18 @@
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-         <div class="help-container">
-           <div class="other">
-             <div>
-               <span>其他登录方式：</span>
-               <Icons type="icon-yooxi" @click.native="weChatLogin"></Icons>
-             </div>
-           </div>
-           <div class="forget">
-             <router-link to="/forgotPassword">忘记密码?</router-link>
-             <router-link to="/register" style=" font-size: 12px;">注册</router-link>
-           </div>
-
-         </div>
+          <div class="help-contain">
+            <div class="other">
+              <div>
+                <span>其他登录方式：</span>
+                <Icons type="icon-yooxi" @click.native="weChatLogin"></Icons>
+              </div>
+            </div>
+            <div class="forget">
+              <router-link to="/forgotPassword">忘记密码?</router-link>
+              <router-link to="/register" style=" font-size: 12px;">注册</router-link>
+            </div>
+          </div>
         </div>
       </Card>
     </div>
@@ -111,13 +110,12 @@ export default {
     },
     /* weixin */
     createWxQrcode () {
-      this.$config.wxConfig.redirect_uri = window.location.href + '?code=CODE&state=STATE'
       var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录
     async checkWxLogin () {
       if (this.$route.query.code) {
-        console.log('已扫码')
+        // console.log('已扫码')
         let json = {
           code: this.$route.query.code[1]
         }
@@ -139,6 +137,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.$config.wxConfig.redirect_uri)
     this.checkWxLogin()
   },
   destroyed () {
