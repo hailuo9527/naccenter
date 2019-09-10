@@ -67,11 +67,11 @@ export default {
         },
         {
           title: '访客IP',
-          key: 'visitorIp'
+          key: 'visitorip'
         },
         {
           title: '访客MAC',
-          key: 'visitorMac'
+          key: 'visitormac'
         },
         {
           title: '到期时间',
@@ -79,7 +79,7 @@ export default {
         },
         {
           title: '主机名',
-          key: 'hostName'
+          key: 'hostname'
         }
       ],
       tableList: [],
