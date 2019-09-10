@@ -1,50 +1,53 @@
 <template>
   <div style="padding: 20px">
-    <!--固定ip-->
-      <div class="form-group">
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-         系统状态:
-         <!-- <i-switch v-model="statusList.dhcp"/>-->
-          <span class="ivu-switch ivu-switch-default" v-if="statusList.dhcp == 'off'"></span>
-          <span class="ivu-switch ivu-switch-checked ivu-switch-default" v-else-if="statusList.dhcp == 'on'"></span>
-        </div>
-      </Col>
-      <Col span="12">
+    <!--信息面板-->
+    <Row class="list-head" type="flex" justify="space-between" align="top">
+      <Col span="6"><h3>租约基础信息:</h3></Col>
+    </Row>
+    <div class="form-group" style="margin: 20px 0">
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+           系统状态:
+           <!-- <i-switch v-model="statusList.dhcp"/>-->
+            <span class="ivu-switch ivu-switch-default" v-if="statusList.dhcp == 'off'"></span>
+            <span class="ivu-switch ivu-switch-checked ivu-switch-default" v-else-if="statusList.dhcp == 'on'"></span>
+          </div>
+        </Col>
+        <Col span="12">
 
-      </Col>
-    </Row>
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-          网关地址: <span>{{statusList.dhcpGateway != null ? statusList.dhcpGateway:'unknow'}}</span>
-        </div>
-      </Col>
-      <Col span="12">
-        <div class="form-item">
-          DNS服务地址: <span>{{statusList.dhcpDnsServer != null ? statusList.dhcpDnsServer:'unknow'}}</span>
-        </div>
-      </Col>
-    </Row>
-    <Row :gutter="30">
-      <Col span="12">
-        <div class="form-item">
-          起始IP: <span>{{statusList.ipStart != null ? statusList.ipStart:'unknow'}}</span>
-        </div>
-      </Col>
-      <Col span="12">
-        <div class="form-item">
-          结束IP: <span>{{statusList.ipEnd != null ? statusList.ipEnd:'unknow'}}</span>
-        </div>
-      </Col>
-    </Row>
-      </div>
-
-      <Row class="list-head" type="flex" justify="space-between" align="top">
-        <Col span="6"><h3>租约信息列表:</h3></Col>
+        </Col>
       </Row>
-      <Row class="table-container">
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+            网关地址: <span>{{statusList.dhcpGateway != null ? statusList.dhcpGateway:'unknow'}}</span>
+          </div>
+        </Col>
+        <Col span="12">
+          <div class="form-item">
+            DNS服务地址: <span>{{statusList.dhcpDnsServer != null ? statusList.dhcpDnsServer:'unknow'}}</span>
+          </div>
+        </Col>
+      </Row>
+      <Row :gutter="30">
+        <Col span="12">
+          <div class="form-item">
+            起始IP: <span>{{statusList.ipStart != null ? statusList.ipStart:'unknow'}}</span>
+          </div>
+        </Col>
+        <Col span="12">
+          <div class="form-item">
+            结束IP: <span>{{statusList.ipEnd != null ? statusList.ipEnd:'unknow'}}</span>
+          </div>
+        </Col>
+      </Row>
+    </div>
+
+    <Row class="list-head" type="flex" justify="space-between" align="top">
+      <Col span="6"><h3>租约信息列表:</h3></Col>
+    </Row>
+    <Row class="table-container">
         <Table :columns="table" :data="tableList" :loading="loading" height="300" stripe
                size="small">
        <!--   <template slot-scope="{ row }" slot="dhcpIp">

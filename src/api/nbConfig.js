@@ -38,12 +38,15 @@ export const deleteNbList = ({ id }) => {
     }
   })
 } */
-export const deleteNbLists = ({ nbCode, type }) => {
+/*
+* status: 1 静态， 0 动态
+* */
+export const deleteNbLists = ({ nbCode, type, status }) => {
   return axios.request({
     url: `/nb/run/delentname`,
     method: 'delete',
     params: {
-      nbCode, type
+      nbCode, type, status
     }
   })
 }

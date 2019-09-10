@@ -34,7 +34,7 @@
       </Col>
       <Col class="btn-group">
         <span @click="addWhiteModel = true">添加</span>
-        <span @click="removeAll" v-if="whiteList.length>0">清空列表</span>
+        <span @click="removeAll(1)" v-if="whiteList.length>0">清空列表</span>
       </Col>
     </Row>
     <Row class="list-head" type="flex" justify="space-between" align="top" style="margin-top: 20px;">
@@ -69,7 +69,14 @@
         </template>
       </Table>
     </Row>
-
+    <!-- 清除动态名单 -->
+    <Row type="flex" justify="space-between" class="opera">
+      <Col>
+      </Col>
+      <Col class="btn-group">
+        <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空列表</span>
+      </Col>
+    </Row>
     <Modal v-model="addWhiteModel" width="360">
       <p slot="header" style="color:#333;text-align:center">
         <span>添加白名单</span>
@@ -355,7 +362,7 @@ export default {
         this.showRemoveFile = true
       }
     },
-    /* 获取名单 */
+    /* 获取静态白名单 */
     async getNameList (type) {
       this.loading = true
       let res = await getNameList({ nbCode: this.nbCode, type: type })
@@ -368,6 +375,7 @@ export default {
         }
       }
     },
+    /* 获取动态白名单 */
     async getAllNameListAuto () {
       this.loading = true
       let res = await getAllNameListAuto({ nbCode: this.nbCode, type: 4 })
@@ -396,17 +404,18 @@ export default {
       })
     },
     /* 清空列表 */
-    removeAll () {
+    removeAll (status) {
       this.$Modal.confirm({
         title: '提示',
         content: '<p>确定清空当前列表吗？</p>',
         loading: true,
         onOk: async () => {
-          let res = await deleteNbLists({ nbCode: this.nbCode, type: 4 })
+          let res = await deleteNbLists({ nbCode: this.nbCode, type: 4 , status: status})
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info('删除成功')
-            this.getNameList(4)
+            status ? this.getNameList(4) : this.getAllNameListAuto()
+
           } else {
             this.$Modal.remove()
             this.$Message.error('删除失败')
