@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 20px">
     <!--访客基础信息-->
-    <Row class="list-head" type="flex" justify="space-between" align="top">
+    <Row class="list-head" style="margin-top: 0;" type="flex" justify="space-between" align="top">
       <Col span="6"><h3>访客基础信息:</h3></Col>
     </Row>
     <div class="form-group" style="margin: 20px 0">
@@ -53,69 +53,69 @@
 </template>
 
 <script>
-import { getVistorInfo, getSystemStatus } from '../../../api/chart'
+  import {getVistorInfo, getSystemStatus} from '../../../api/chart'
 
-export default {
-  name: 'dhcpConfig',
-  data () {
-    return {
-      loading: false,
-      table: [
-        {
-          type: 'index',
-          width: 60
-        },
-        {
-          title: '访客IP',
-          key: 'visitorIp'
-        },
-        {
-          title: '访客MAC',
-          key: 'visitorMac'
-        },
-        {
-          title: '到期时间',
-          key: 'useTime'
-        },
-        {
-          title: '主机名',
-          key: 'hostName'
-        }
-      ],
-      tableList: [],
-      vistorList: []
-    }
-  },
-  props: {
-    nbCode: {
-      type: String,
-      default: ''
-    }
-  },
-  methods: {
-    // 获取配置信息
-    async getVistorInfo () {
-      this.loading = true
-      let res = await getVistorInfo({ nbCode: this.nbCode })
-      console.log(res)
-      this.loading = false
-      if (res.data.code === 'success') {
-        this.tableList = res.data.result || []
+  export default {
+    name: 'dhcpConfig',
+    data() {
+      return {
+        loading: false,
+        table: [
+          {
+            type: 'index',
+            width: 60
+          },
+          {
+            title: '访客IP',
+            key: 'visitorIp'
+          },
+          {
+            title: '访客MAC',
+            key: 'visitorMac'
+          },
+          {
+            title: '到期时间',
+            key: 'hostName'
+          },
+          {
+            title: '主机名',
+            key: 'hostname'
+          },
+        ],
+        tableList: [],
+        vistorList: []
       }
     },
-    // 获取系统状态
-    async getSystemStatus () {
-      let res = await getSystemStatus({ nbCode: this.nbCode })
-      if (res.data.code === 'success') {
-        this.vistorList = res.data.result || {}
+    props: {
+      nbCode: {
+        type: String,
+        default: ''
       }
+    },
+    methods: {
+      // 获取配置信息
+      async getVistorInfo() {
+        this.loading = true
+        let res = await getVistorInfo({nbCode: this.nbCode})
+        console.log(res)
+        this.loading = false
+        if (res.data.code === 'success') {
+          this.tableList = res.data.result || []
+        }
+      },
+      // 获取系统状态
+      async getSystemStatus() {
+        let res = await getSystemStatus({nbCode: this.nbCode})
+        if (res.data.code === 'success') {
+          this.vistorList = res.data.result || {}
+        }
+      }
+    },
+    mounted() {
+      this.getVistorInfo(),
+        this.getSystemStatus()
     }
-  },
-  mounted () {
-    this.getVistorInfo(),
-    this.getSystemStatus()
   }
-}
 </script>
 <style lang="less" scoped>
   @import "../../config/config.less";

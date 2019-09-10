@@ -2,7 +2,7 @@
   <div style="padding: 20px">
     <!--信息面板-->
     <Row class="list-head" type="flex" justify="space-between" align="top">
-      <Col span="6"><h3>租约基础信息:</h3></Col>
+      <Col span="6"><h3>DHCP运行信息:</h3></Col>
     </Row>
     <div class="form-group" style="margin: 20px 0">
       <Row :gutter="30">

@@ -221,7 +221,7 @@ export default {
       activeNav: 0,
       navList: [
         '基础信息',
-        '租约信息',
+        'DHCP信息',
         '访客信息 '
       ],
       timer: null,

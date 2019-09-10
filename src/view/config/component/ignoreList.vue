@@ -10,16 +10,16 @@
       <Table :columns="ignore" height="300" :data="ignoreList" :loading="loading" stripe
              size="small">
         <template slot-scope="{ row }" slot="mac">
-          <span style="font-size: 12px;color: #666">MAC地址：<span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
+          <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.macAddress }}</span></span>
         </template>
         <!--<template slot-scope="{ row }" slot="ip">
           <span style="font-size: 12px;color: #666">IP地址：<span style="color: #00e9bc;">{{ row.ipAddress }}</span></span>
         </template>-->
         <template slot-scope="{ row }" slot="hostName">
-          <span style="font-size: 12px;color: #666">主机名：<span style="color: #00e9bc;">{{ row.hostName || 'unknow' }}</span></span>
+          <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.hostName || 'unknow' }}</span></span>
         </template>
         <template slot-scope="{ row }" slot="userName">
-              <span style="font-size: 12px;color: #666; display: flex;align-items: center">别名：
+              <span style="font-size: 12px;color: #666; display: flex;align-items: center">
                 <span style="color: #00e9bc;" contenteditable="true">{{ row.userName || '未命名' }}</span>
                 <Icon style="cursor: pointer" type="ios-create-outline" size="16" @click="changeName(row.id)"/>
               </span>

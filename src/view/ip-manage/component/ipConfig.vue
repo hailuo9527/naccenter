@@ -16,12 +16,12 @@
 
             <Row :gutter="30" style="margin-top: 20px;" type="flex" align="middle">
               <Col span="12">
-                <FormItem label="起始ip：" prop="ipStart">
+                <FormItem label="起始IP：" prop="ipStart">
                   <Input type="text" v-model.trim="netConfig.ipStart" placeholder="请输入起始IP地址"></Input>
                 </FormItem>
               </Col>
               <Col span="12">
-                <FormItem label="结束ip：" prop="ipEnd">
+                <FormItem label="结束IP：" prop="ipEnd">
                   <Input type="text" v-model.trim="netConfig.ipEnd" placeholder="请输入结束IP"></Input>
                 </FormItem>
               </Col>
