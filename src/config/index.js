@@ -14,8 +14,8 @@ export default {
    //  dev: 'http://192.168.1.186:8070',
      dev: 'http://app.wingsbro.com:8070',
     // dev: 'http://wingsbro.mynetgear.com:8070',
-    //pro: 'http://wingsbro.mynetgear.com:8070'
-     pro: 'http://app.wingsbro.com:8070'
+    // pro: 'http://wingsbro.mynetgear.com:8070'
+    pro: 'http://app.wingsbro.com:8070'
   },
   /* 微信配置 */
   wxConfig: {

@@ -110,6 +110,7 @@ export default {
     },
     /* weixin */
     createWxQrcode () {
+      this.$config.wxConfig.redirect_uri = window.location.href + '?code=CODE&state=STATE'
       var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录

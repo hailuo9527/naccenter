@@ -462,8 +462,7 @@ export default {
       this.addWhiteModel = false
       if (res.data.code === 'success') {
         this.$Message.success('添加成功')
-        this.getNameList(4)
-        this.getAllNameListAuto()
+       this.getDefaultList()
       } else {
         this.$Message.error(res.data.result)
       }
@@ -482,7 +481,7 @@ export default {
     changeIpStatus (item, index) {
       this.$Modal.confirm({
         title: '提示',
-        content: '<p>确定要把此条固定IP修改成动态IP吗？</p>',
+        content: '<p>确定要把此MAC地址修改位动态分配吗？</p>',
         loading: true,
         onOk: async () => {
           let json = {
@@ -496,8 +495,8 @@ export default {
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info(res.data.result)
-            this.whiteList.splice(index, 1)
-            this.getAllNameListAuto()
+            //this.whiteList.splice(index, 1)
+            this.getDefaultList()
           } else {
             this.$Modal.remove()
             this.$Message.error(res.data.result)
@@ -529,7 +528,7 @@ export default {
     async reBack (item, index) {
       this.$Modal.confirm({
         title: '提示',
-        content: '<p>确定要撤回这条动态Ip吗？</p>',
+        content: '<p>确定要把此MAC地址修改成固定模式吗？</p>',
         loading: true,
         onOk: () => {
           this.reBackIpModel = true

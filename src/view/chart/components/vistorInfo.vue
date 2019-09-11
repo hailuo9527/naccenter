@@ -66,6 +66,14 @@
             width: 60
           },
           {
+            title: '微信ID',
+            key: 'openid'
+          },
+          {
+            title: '微信昵称',
+            key: 'nickName'
+          },
+          {
             title: '访客IP',
             key: 'visitorIp'
           },
@@ -79,7 +87,7 @@
           },
           {
             title: '主机名',
-            key: 'hostname'
+            key: 'hostName'
           },
         ],
         tableList: [],
