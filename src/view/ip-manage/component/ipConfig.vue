@@ -35,6 +35,11 @@
                   <Input type="text" v-model.trim="netConfig.gateway" placeholder="请输入网关地址"></Input>
                 </FormItem>
               </Col>
+              <Col span="12">
+                <FormItem label="租约时长：" prop="dhcpDuration">
+                  <Input type="text" v-model.trim="netConfig.dhcpDuration" placeholder="请输入租约时长"></Input>
+                </FormItem>
+              </Col>
             </Row>
             <div class="save"><span style="font-size: 14px" @click="saveNetInfoHandle">保存</span></div>
           </Form>
@@ -83,6 +88,14 @@ export default {
       }
       callback()
     }
+    const dhcpDurationRules = (rule, value, callback) => {
+      if (!value) callback()
+      let reg = /^[0-9]*$/
+      if (!reg.test(value)) {
+        callback(new Error('请输入数字！'))
+      }
+      callback()
+    }
     return {
       dhcp: false,
       changeDhcp: false,
@@ -111,6 +124,9 @@ export default {
         ],
         gateway: [
           { validator: gatewayRules, trigger: 'blur' }
+        ],
+        dhcpDuration: [
+          { validator: dhcpDurationRules, trigger: 'blur' }
         ]
       },
       reBackIpModel: false

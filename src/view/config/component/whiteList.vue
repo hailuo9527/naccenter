@@ -74,6 +74,7 @@
       <Col>
       </Col>
       <Col class="btn-group">
+        <span @click="addLiveModel = true">添加</span>
         <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空列表</span>
       </Col>
     </Row>
@@ -161,6 +162,22 @@
         <Button type="info" size="large" long  @click="reBackIP">确认</Button>
       </div>
     </Modal>
+    <!--添加动态名单-->
+    <Modal v-model="addLiveModel" width="360">
+      <p slot="header" style="color:#333;text-align:center">
+        <span>添加动态名单</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="addLiveListForm" ref="addLiveList" :rules="addLiveListRules">
+          <FormItem label="MAC地址" prop="macAddress">
+            <Input v-model.trim="addLiveListForm.macAddress" placeholder="请输入MAC地址"></Input>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+        <Button type="info" size="large" long @click="addLiveListCheck('addLiveList')">确认</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -194,6 +211,16 @@ export default {
         callback(new Error('请填写MAC地址或者导入excel表格批量处理！'))
       } else if (this.file && !value) {
         callback()
+      }
+    }
+    const macAddress = (rule, value, callback) => {
+      if (value) {
+        let reg = /^[a-fA-F0-9]{2}([:-][a-fA-F0-9]{2}){5}$/
+        if (!reg.test(value)) {
+          callback(new Error('请检查MAC地址格式！'))
+        } else {
+          callback()
+        }
       }
     }
     const ipAddress = (rule, value, callback) => {
@@ -285,6 +312,13 @@ export default {
       editIpFormRules: {
         ipAddress: [
           { validator: ipaddressRules, trigger: 'blur' }
+        ]
+      },
+      addLiveModel: false,
+      addLiveListForm: {},
+      addLiveListRules: {
+        macAddress: [
+          { required: true, message: '请输入MAC地址！', validator: macAddress, trigger: 'blur' }
         ]
       }
     }
@@ -462,18 +496,43 @@ export default {
       this.addWhiteModel = false
       if (res.data.code === 'success') {
         this.$Message.success('添加成功')
-       this.getDefaultList()
+        this.getDefaultList()
       } else {
         this.$Message.error(res.data.result)
       }
       this.upload(type)
+    },
+
+    /* 添加动态名单 */
+    addLiveListCheck (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.addLiveList()
+        } else {
+          this.$Message.error('请输入名单信息或者上传文件!')
+        }
+      })
+    },
+    async addLiveList () {
+      let json = {
+        macAddress: this.addLiveListForm.macAddress,
+        nbCode: this.nbCode
+      }
+      let res = await uptRosterTemp(json)
+      if (res.data.code === 'success') {
+        this.$Message.success('添加成功！')
+        this.addLiveModel = false
+        this.getDefaultList()
+      } else {
+        this.$Message.error(res.data.result)
+      }
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.addIp()
         } else {
-          // this.$Message.error('请输入名单信息或者上传文件!')
+          this.$Message.error('请输入名单信息或者上传文件!')
         }
       })
     },
@@ -495,7 +554,7 @@ export default {
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info(res.data.result)
-            //this.whiteList.splice(index, 1)
+            // this.whiteList.splice(index, 1)
             this.getDefaultList()
           } else {
             this.$Modal.remove()

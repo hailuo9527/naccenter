@@ -15,7 +15,9 @@
           </div>
         </Col>
         <Col span="12">
-
+          <div class="form-item">
+            租约时长: <span>{{statusList.dhcpDuration != null ? statusList.dhcpDuration:'unknow'}}</span>
+          </div>
         </Col>
       </Row>
       <Row :gutter="30">
