@@ -118,10 +118,10 @@
                     <Row class="table-container">
                       <Table :columns="white" :data="whiteList" :loading="loading"  height="300" :show-header="false" stripe
                              size="small">
-                        <template slot-scope="{ row }" slot="macAdress">
+                        <template slot-scope="{ row }" slot="macAddress">
                           <span style="font-size: 12px;color: #666">MAC地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.macAddress }}</span></span>
                         </template>
-                        <template slot-scope="{ row }" slot="ipAdress">
+                        <template slot-scope="{ row }" slot="ipAddress">
                           <span style="font-size: 12px;color: #666">IP地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.ipAddress }}</span></span>
                         </template>
                         <template slot-scope="{ row, index }" slot="action">
@@ -165,9 +165,9 @@
                         <template slot-scope="{ row }" slot="mac">
                           <span style="font-size: 12px;color: #666">MAC地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.macAddress }}</span></span>
                         </template>
-                        <template slot-scope="{ row }" slot="ip">
+                      <!--  <template slot-scope="{ row }" slot="ip">
                           <span style="font-size: 12px;color: #666">IP地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.ipAddress }}</span></span>
-                        </template>
+                        </template>-->
                         <template slot-scope="{ row, index }" slot="action">
                           <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
                         </template>
@@ -188,12 +188,12 @@
                       </p>
                       <div style="text-align:center">
                         <Form :model="addIgnoreForm" label-position="left" ref="ignoreFormRules" :rules="ignoreFormRules">
-                          <FormItem label="mac地址" prop="macAdress">
-                            <Input v-model.trim="addIgnoreForm.macAdress" placeholder="请输入mac地址"></Input>
+                          <FormItem label="MAC地址" prop="macAdress">
+                            <Input v-model.trim="addIgnoreForm.macAdress" placeholder="请输入MAC地址"></Input>
                           </FormItem>
-                          <FormItem label="ip地址" prop="ipAdress">
-                            <Input v-model.trim="addIgnoreForm.ipAdress" placeholder="请输入ip地址"></Input>
-                          </FormItem>
+                         <!-- <FormItem label="IP地址" prop="ipAdress">
+                            <Input v-model.trim="addIgnoreForm.ipAdress" placeholder="请输入IP地址"></Input>
+                          </FormItem>-->
                         </Form>
                       </div>
                       <div slot="footer">
@@ -270,7 +270,7 @@ export default {
       } else {
         let reg = /[A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}/
         if (!reg.test(value)) {
-          callback(new Error('请检查IP地址格式！'))
+          callback(new Error('请检查MAC地址格式！'))
         }
       }
       callback()
@@ -333,10 +333,10 @@ export default {
           title: 'Mac地址',
           slot: 'mac'
         },
-        {
+       /* {
           title: 'Ip地址',
           slot: 'ip'
-        },
+        },*/
 
         {
           title: 'Action',
@@ -377,9 +377,9 @@ export default {
         macAdress: [
           { required: true, validator: macAddressRules, trigger: 'blur' }
         ],
-        ipAdress: [
+        /*ipAdress: [
           { required: true, validator: ipAddress, trigger: 'blur' }
-        ]
+        ]*/
       }
     }
   },
@@ -487,6 +487,7 @@ export default {
     /* 获取名单 */
     async getList () {
       let res = await getGroupRoster({ groupId: this.activeGroupId })
+      console.log(res)
       if (res.data.code === 'success') {
         if (res.data.result.length) {
           let arrWhite = []

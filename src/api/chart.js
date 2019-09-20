@@ -240,3 +240,17 @@ export const getVistorInfo = ({ nbCode }) => {
     }
   })
 }
+
+/*
+*  删除访客信息（强DEL制访客下线）
+* */
+
+export const delVistorInfo = ({ nbCode, ip, mac }) => {
+  return axios.request({
+    url: '/delVistorInfo',
+    method: 'post',
+    params: {
+      nbCode, ip, mac
+    }
+  })
+}

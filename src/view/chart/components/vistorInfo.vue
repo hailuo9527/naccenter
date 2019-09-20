@@ -45,6 +45,9 @@
           <!--   <template slot-scope="{ row }" slot="dhcpIp">
                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.dhcpIp }}</span></span>
              </template>-->
+          <template slot-scope="{ row, index }" slot="action">
+            <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row, index)"/>
+          </template>
         </Table>
       </Row>
     </div>
@@ -53,7 +56,7 @@
 </template>
 
 <script>
-  import {getVistorInfo, getSystemStatus} from '../../../api/chart'
+  import {getVistorInfo, getSystemStatus, delVistorInfo} from '../../../api/chart'
 
   export default {
     name: 'dhcpConfig',
@@ -89,6 +92,12 @@
             title: '主机名',
             key: 'hostName'
           },
+          {
+            title: 'Action',
+            slot: 'action',
+            width: 150,
+            align: 'center'
+          }
         ],
         tableList: [],
         vistorList: []
@@ -117,7 +126,27 @@
         if (res.data.code === 'success') {
           this.vistorList = res.data.result || {}
         }
-      }
+      },
+
+      /* 删除列表 */
+      removeList (item, index) {
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>确定要移除此访客吗？</p>',
+          loading: true,
+          onOk: async () => {
+            let res = await delVistorInfo({ nbCode: this.nbCode, ip: item.visitorIp, mac: item.visitorMac })
+            if (res.data.code === 'success') {
+              this.$Modal.remove()
+              this.$Message.info(res.data.result)
+              this.getVistorInfo()
+            } else {
+              this.$Modal.remove()
+              this.$Message.error(res.data.result)
+            }
+          }
+        })
+      },
     },
     mounted() {
       this.getVistorInfo(),

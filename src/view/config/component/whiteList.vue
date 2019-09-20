@@ -149,7 +149,7 @@
     <!--撤回固定ip-->
     <Modal v-model="reBackIpModel" width="360">
       <p slot="header" style="color:#333;text-align:center">
-        <span>Ip地址</span>
+        <span>IP地址</span>
       </p>
       <div style="text-align:center">
         <Form :model="editIpForm"  label-position="left" ref="editIpForm" :rules="editIpFormRules">
