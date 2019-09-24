@@ -39,15 +39,18 @@ router.beforeEach((to, from, next) => {
       name: homeName // 跳转到homeName页
     })
   } else {
-    let arr = []
-    systemChild.map((item) => {
-      arr.push(item.name)
-    })
-    if (arr.indexOf(to.name) === 0) {
-      next({
-        name: 'error_404'
+    if (store.state.login.userInfo.roleId !== 1 &&  store.state.login.userInfo.roleId !== 2) {
+      let arr = []
+      systemChild.map((item) => {
+        arr.push(item.name)
       })
+      if (arr.indexOf(to.name) === 0) {
+        next({
+          name: 'error_404'
+        })
+      }
     }
+
   }
   next() //
 })
