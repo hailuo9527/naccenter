@@ -1,79 +1,79 @@
 <template>
-  <div class="home">
-      <div class="content">
-        <div class="content-item">
-          <div class="title">
-            NacBOX在线
-          </div>
-          <div class="body">
-            <div class="progress-num">{{nbPercent}}%</div>
-            <Progress :percent="nbPercent" :stroke-width="5" hide-info stroke-color="#fff"/>
-          </div>
+  <div class="home" >
+    <div class="content">
+      <div class="content-item">
+        <div class="title">
+          NacBOX在线
         </div>
-        <div class="content-item">
-          <div class="title">
-            在线主机
-          </div>
-          <div class="body">
-            <div class="chart-head">
-              <span> <i></i>在线 {{online.currentCount}}</span>
-              <span> <i></i>全部 {{online.sumCount}}</span>
-            </div>
-            <div class="chart">
-              <!--<i-circle :percent="onlinePercent" stroke-color="#00e9bc" :size="150">
-                <span class="demo-Circle-inner" style="font-size:24px">{{onlinePercent}}%</span>
-              </i-circle>-->
-              <div class="round-1">
-                <div class="round-2" :style="{width: onlinePercent + '%', height:onlinePercent + '%' }"></div>
-              </div>
-          </div>
-          </div>
+        <div class="body">
+          <div class="progress-num">{{nbPercent}}%</div>
+          <Progress :percent="nbPercent" :stroke-width="5" hide-info stroke-color="#fff"/>
         </div>
-        <div class="content-item">
-          <div class="title">
-            白名单
-          </div>
-          <div class="body">
-            <div class="progress-num">{{whiteList}} <span></span></div>
-          </div>
+      </div>
+      <div class="content-item">
+        <div class="title">
+          在线主机
         </div>
-        <div class="content-item">
-          <div class="title">
-            活跃主机
+        <div class="body">
+          <div class="chart-head">
+            <span> <i></i>在线 {{online.currentCount}}</span>
+            <span> <i></i>全部 {{online.sumCount}}</span>
           </div>
-          <div class="body">
-            <div class="chart-head">
-              <span> <i></i>活跃 {{activeHost.active}}</span>
-              <span> <i></i>在线 {{activeHost.live}}</span>
-            </div>
-            <div class="chart">
-           <!--   <chart-pie style="height: 150px;width: 150px;" :value="pieData" text="活跃主机"></chart-pie>-->
-              <i-circle :percent="activePercent" stroke-color="#00e9bc" :size="150">
-                <span class="demo-Circle-inner" style="font-size:24px">{{activePercent}}%</span>
-              </i-circle>
-            </div>
-          </div>
-        </div>
-        <div class="content-item">
-          <div class="title">
-            忽略名单
-          </div>
-          <div class="body">
-            <div class="progress-num">{{ignoreList}} <span></span></div>
-          </div>
-        </div>
-        <div class="content-item">
-          <div class="title">
-            警报
-          </div>
-          <div class="body">
-            <div class="progress-num" v-if="!warning.length">0</div>
-            <div v-if="warning.length">
-              <div id="warningChart"  style="width: 200px;height: 200px;" ></div>
+          <div class="chart">
+            <!--<i-circle :percent="onlinePercent" stroke-color="#00e9bc" :size="150">
+              <span class="demo-Circle-inner" style="font-size:24px">{{onlinePercent}}%</span>
+            </i-circle>-->
+            <div class="round-1">
+              <div class="round-2" :style="{width: onlinePercent + '%', height:onlinePercent + '%' }"></div>
             </div>
           </div>
         </div>
       </div>
+      <div class="content-item">
+        <div class="title">
+          白名单
+        </div>
+        <div class="body">
+          <div class="progress-num">{{whiteList}} <span></span></div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="title">
+          活跃主机
+        </div>
+        <div class="body">
+          <div class="chart-head">
+            <span> <i></i>活跃 {{activeHost.active}}</span>
+            <span> <i></i>在线 {{activeHost.live}}</span>
+          </div>
+          <div class="chart">
+            <!--   <chart-pie style="height: 150px;width: 150px;" :value="pieData" text="活跃主机"></chart-pie>-->
+            <i-circle :percent="activePercent" stroke-color="#00e9bc" :size="150">
+              <span class="demo-Circle-inner" style="font-size:24px">{{activePercent}}%</span>
+            </i-circle>
+          </div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="title">
+          忽略名单
+        </div>
+        <div class="body">
+          <div class="progress-num">{{ignoreList}} <span></span></div>
+        </div>
+      </div>
+      <div class="content-item">
+        <div class="title">
+          警报
+        </div>
+        <div class="body">
+          <div class="progress-num" v-if="!warning.length">0</div>
+          <div v-if="warning.length">
+            <div id="warningChart"  style="width: 200px;height: 200px;" ></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>

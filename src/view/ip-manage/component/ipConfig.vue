@@ -4,9 +4,10 @@
       <Col>
         <h3>DHCP:</h3>
       </Col>
-      <Col span="2">
+      <Col span="4">
         <i-switch type="small" v-model="dhcp" :loading="changeDhcp" @on-change="uptIpParamStatus">
         </i-switch>
+        <pop-tip style="margin-left: 20px" content='开启DHCP并配置如下参数后，NacBox将会自动为动态白名单分配IP（分配的IP在配置好的IP段内），租约时长为分配的IP有效时间（分钟）'/>
       </Col>
     </Row>
     <div v-show="dhcp">
@@ -36,9 +37,12 @@
                 </FormItem>
               </Col>
               <Col span="12">
-                <FormItem label="租约时长：" prop="dhcpDuration">
-                  <Input type="text" v-model.trim="netConfig.dhcpDuration" placeholder="请输入租约时长"></Input>
+                <FormItem label="租约时长：" prop="dhcpDuration" style="position: relative">
+                  <Input type="text" v-model.trim="netConfig.dhcpDuration || 10080" placeholder="请输入租约时长">
+                    <pop-tip slot="prepend" content='租约时长为分配的IP有效时间（分钟）'/>
+                  </Input>
                 </FormItem>
+
               </Col>
             </Row>
             <div class="save"><span style="font-size: 14px" @click="saveNetInfoHandle">保存</span></div>
@@ -54,8 +58,12 @@
 
 <script>
 import { getNameListByType, insIpParam, getIpParam, insRosterTemp, uptRosterTemp, saveIpManage, uptIpParamStatus } from '../../../api/ipManage'
+import PopTip from '@/components/pop-tip'
 export default {
   name: 'config',
+  components: {
+    PopTip
+  },
   data () {
     const ipaddressRules = (rule, value, callback) => {
       if (!value) callback()
@@ -212,5 +220,15 @@ export default {
   }
   .view-content .nav-content .form-group{
     margin: 20px;
+  }
+  /deep/.ivu-input-group-prepend{
+    position: absolute;
+    right: 8px;
+    z-index: 999;
+    border: none;
+    background: #fff;
+    .ivu-tooltip-popper{
+      width: 200px;
+    }
   }
 </style>

@@ -32,7 +32,6 @@ export default {
   watch: {
     $route: {
       handler (newVal, old) {
-        console.log(newVal)
         this.name = newVal.name
       },
       deep: true

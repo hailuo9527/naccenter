@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <Tabs :value="tab" @on-click="tabChange" >
+    <Tabs :value="tab" style="width: 99%" @on-click="tabChange" >
       <TabPane label="用户列表" name="tab1">
         <Table border :columns="tableColumns" :data="userList" :loading="tableLoad">
           <template slot-scope="{ row }" slot="userName">

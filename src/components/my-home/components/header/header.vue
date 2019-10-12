@@ -13,7 +13,7 @@
         <router-link :to="{path: `/management`}">资产视图</router-link>
         <!--  <router-link :to="{path: `/system`}">系统管理</router-link>-->
         <router-link :to="{path: `/warning`}">报警</router-link>
-       <!-- <router-link :to="{path: `/ipManage`}">IP管理</router-link>-->
+        <!-- <router-link :to="{path: `/ipManage`}">IP管理</router-link>-->
       </div>
       <div class="profile">
         <Dropdown style="margin-left: 20px" placement="bottom-end" trigger="click"  @on-click="dropEvent">
@@ -30,6 +30,7 @@
           </DropdownMenu>
         </Dropdown>
       </div>
+
 
     </row>
 </template>
