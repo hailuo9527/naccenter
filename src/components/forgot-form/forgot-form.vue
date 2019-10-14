@@ -1,21 +1,21 @@
 <template>
   <Form ref="forgotForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
     <FormItem prop="userNo">
-      <Input v-model="form.userNo" placeholder="请输入手机号">
+      <Input v-model.trim="form.userNo" placeholder="请输入手机号">
         <span slot="prepend">
           <Icon :size="16" type="md-phone-portrait"></Icon>
         </span>
       </Input>
     </FormItem>
     <FormItem prop="password">
-      <Input type="password" v-model="form.password" placeholder="请输入密码">
+      <Input type="password" v-model.trim="form.password" placeholder="请输入密码">
         <span slot="prepend">
           <Icon :size="14" type="md-lock"></Icon>
         </span>
       </Input>
     </FormItem>
     <FormItem prop="ensurePassword" >
-      <Input type="password" v-model="form.ensurePassword" placeholder="请再次输入密码">
+      <Input type="password" v-model.trim="form.ensurePassword" placeholder="请再次输入密码">
         <span slot="prepend">
           <Icon :size="14" type="md-lock"></Icon>
         </span>
@@ -23,7 +23,7 @@
     </FormItem>
     <FormItem prop="smsCode">
       <div style="display: flex; align-items: center;justify-content: center">
-        <Input v-model="form.smsCode" placeholder="请输入验证码">
+        <Input v-model.trim="form.smsCode" placeholder="请输入验证码">
         <span slot="prepend">
           <Icon :size="16" type="ios-send"></Icon>
         </span>
