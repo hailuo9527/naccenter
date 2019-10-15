@@ -24,9 +24,11 @@
           </a>
           <DropdownMenu slot="list">
             <DropdownItem name="sysControl">
-              <router-link :to="{path: `/system`}" style="color: #333">系统管理  <Badge :count="parseInt(applyCount+updateMsg)"></Badge></router-link>
+              <router-link :to="{path: `/system`}" style="color: #333; font-size: 14px">系统管理  <Badge :count="parseInt(applyCount+updateMsg)"></Badge></router-link>
             </DropdownItem>
-            <DropdownItem name="logout">退出</DropdownItem>
+            <DropdownItem name="logout" >
+              <span style="font-size: 14px">退出</span>
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>

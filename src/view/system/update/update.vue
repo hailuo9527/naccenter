@@ -41,10 +41,13 @@
               <!--{{bateInfo === '' ? '暂无更新数据' : bateInfo }}-->
             </div>
             <div style="padding: 50px 0">
-              <i-select v-model="willUpdateNbList" multiple style="width:260px">
-                <Option v-for="item in updatableNbList" :value="item.nbCode" :key="item.value">{{ item.nbName }}</Option>
-              </i-select>
-              <Button style="margin-left: 20px;" @click="updatVersionToNB" :loading="loading2" type="info" v-if="willUpdateNbList.length">更新</Button>
+              <Card :bordered="false" style="min-height: 300px">
+                <p class="title">可升级设备：</p>
+                <Table border ref="selection" @on-selection-change="selectNbChange" :columns="columns" :data="updatableNbList"></Table>
+                <Button style="margin-top: 20px;" @click="updatVersionToNB" :loading="loading2" type="info" v-if="willUpdateNbList.length">更新</Button>
+              </Card>
+
+
             </div>
           </Card>
           <div v-if="!updateMsg && userInfo.roleId !== 1" style="display: flex; justify-content: center; align-items: center; height: 500px;width: 100%;font-size: 16px">
@@ -103,7 +106,22 @@
         nbCodeFile: null,
         loading: false,
         loading2: false,
-        bateInfo: ''
+        bateInfo: '',
+        columns: [
+          {
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: '机器名称',
+            key: 'nbName'
+          },
+          {
+            title: '机器序列号',
+            key: 'nbCode'
+          }
+        ],
       }
     },
     computed: {
@@ -243,6 +261,16 @@
           that.$Message.error("请上传NB序列号初始化文件！");
         }
       },
+
+     /* 选中要更新的机器 */
+      selectNbChange (selection) {
+        let arr = []
+        selection.map((item) => {
+          arr.push(item.nbCode)
+        })
+        this.willUpdateNbList = arr
+
+      }
     },
     mounted() {
       this.selLatestEdition()
