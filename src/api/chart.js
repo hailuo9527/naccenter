@@ -254,3 +254,17 @@ export const delVistorInfo = ({ nbCode, ip, mac }) => {
     }
   })
 }
+
+/*
+*  将访客添加到白名单
+* */
+
+export const addVistorToRoster = ({ openId, nbCode, ip, mac }) => {
+  return axios.request({
+    url: '/addVistorToRoster',
+    method: 'post',
+    params: {
+      openId, nbCode, ip, mac
+    }
+  })
+}
