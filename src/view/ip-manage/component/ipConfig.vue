@@ -7,7 +7,7 @@
       <Col span="4">
         <i-switch type="small" v-model="dhcp" :loading="changeDhcp" @on-change="uptIpParamStatus">
         </i-switch>
-        <pop-tip style="margin-left: 20px" content='开启DHCP并配置如下参数后，NacBox将会自动为动态白名单分配IP（分配的IP在配置好的IP段内），租约时长为分配的IP有效时间（分钟）'/>
+        <pop-tip style="margin-left: 20px" placement="bottom" content='开启DHCP并配置如下参数后，NacBox将会自动为动态白名单分配IP（分配的IP在配置好的IP段内），租约时长为分配的IP有效时间（分钟）'/>
       </Col>
     </Row>
     <div v-show="dhcp">

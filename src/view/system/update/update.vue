@@ -160,9 +160,9 @@
           let formData = new FormData();
 
           //多个文件上传
-        /*  for(var i=0; i< that.file.length; i++){
-            formData.append("uploadFile",that.file[i]);   // 文件对象
-          }*/
+          /*  for(var i=0; i< that.file.length; i++){
+              formData.append("uploadFile",that.file[i]);   // 文件对象
+            }*/
           formData.append("updFile",that.file[0]);   // 文件对象
           formData.append("remarkFile",that.file[1]);   // 文件对象
           let config = {
@@ -187,7 +187,7 @@
             that.$Message.error('服务器错误' + error);
           });
         }
-         else {
+        else {
           that.$Message.error("请上传系统文件！");
         }
       },
@@ -207,6 +207,9 @@
         this.getUpdateMsg().then((res) => {
           if (res.data.code === 'success') {
             this.updatableNbList = res.data.result || {}
+            if (!this.isEmptyObject(res.data.result)) {
+              this.selLatestEdition()
+            }
           } else {
             this.$Message.error(res.data.result)
           }
@@ -262,7 +265,7 @@
         }
       },
 
-     /* 选中要更新的机器 */
+      /* 选中要更新的机器 */
       selectNbChange (selection) {
         let arr = []
         selection.map((item) => {
@@ -273,7 +276,7 @@
       }
     },
     mounted() {
-      this.selLatestEdition()
+      // this.selLatestEdition()
       this.checkVersion()
     }
   }

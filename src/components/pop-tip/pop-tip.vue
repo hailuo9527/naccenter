@@ -2,7 +2,7 @@
   <!--<Poptip word-wrap width="200" trigger="hover" :content="content">
     <Icon style="font-weight: bold;" size="14" color="" type="ios-help-circle-outline" />
   </Poptip>-->
-  <Tooltip :content="content" placement="top" max-width="200" theme="light" >
+  <Tooltip :content="content" :placement="placement" max-width="200" theme="light" >
     <Icon class="handle" size="14"  type="ios-help-circle-outline" />
   </Tooltip>
 </template>
@@ -13,6 +13,10 @@
       content: {
         type: String,
         default: ''
+      },
+      placement: {
+        type: String,
+        default: 'top'
       }
     }
   }
