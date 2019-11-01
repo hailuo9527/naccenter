@@ -1,7 +1,7 @@
 <template>
   <Form ref="regForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
     <FormItem prop="userNo">
-      <Input v-model="form.userNo" placeholder="请输入手机号">
+      <Input v-model.trim="form.userNo" placeholder="请输入手机号">
         <span slot="prepend">
           <Icon :size="16" type="md-phone-portrait"></Icon>
         </span>
@@ -9,7 +9,7 @@
     </FormItem>
     <FormItem prop="smsCode">
       <div style="display: flex; align-items: center;justify-content: center">
-        <Input v-model="form.smsCode" placeholder="请输入验证码">
+        <Input v-model.trim="form.smsCode" placeholder="请输入验证码">
         <span slot="prepend">
           <Icon :size="16" type="ios-send"></Icon>
         </span>

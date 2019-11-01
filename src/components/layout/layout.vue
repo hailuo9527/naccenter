@@ -6,8 +6,11 @@
        <div class="aside">
          <my-aside></my-aside>
        </div>
-       <div class="content">
+       <div class="content" v-if="asideList.length">
          <router-view />
+       </div>
+       <div class="no-content" v-if="!asideList.length">
+         暂无数据，请先添加NB机器
        </div>
      </div>
     </Layout>

@@ -43,7 +43,7 @@ export default {
           align: 'center'
         },
         {
-          title: 'ip地址',
+          title: 'IP地址',
           key: 'ipAddress',
           slot: 'ipAddress'
         },

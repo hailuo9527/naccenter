@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <Tabs :value="tab" @on-click="tabChange" >
+    <Tabs :value="tab" style="width: 99%" @on-click="tabChange" >
       <TabPane label="用户列表" name="tab1">
         <Table border :columns="tableColumns" :data="userList" :loading="tableLoad">
           <template slot-scope="{ row }" slot="userName">
@@ -12,6 +12,7 @@
           <template slot-scope="{ row, index }" slot="action">
             <Button type="primary" size="small" v-if="row.userNo !== userInfo.userNo" style="margin-right: 5px" @click="show(index, row)">修改</Button>
             <Button type="warning" size="small" v-if="row.userNo === userInfo.userNo" :disabled="row.roleId === '1'" style="margin-right: 5px" @click="changeAccess">权限转让</Button>
+            <Button type="error" size="small" v-if="row.userNo !== userInfo.userNo" style="margin-right: 5px" @click="removeUser(row.userId)">移除</Button>
           </template>
         </Table>
         <!-- <Table border :columns="columns7" :data="data6" max-height="500"></Table>-->
@@ -98,7 +99,7 @@
 </template>
 <script>
 import { selUserInfo, updateUser, insUser, uptUserStatus } from '../../../api/userManage'
-import { roleTransfer } from '../../../api/login'
+import { roleTransfer, userUnbind } from '../../../api/login'
 import { selRoleInfo } from '../../../api/roleInfo'
 import { mapState } from 'vuex'
 
@@ -247,6 +248,23 @@ export default {
       if (res.data.code === 'success') {
         this.roleNameList = res.data.result
       }
+    },
+    /* 移除用户 */
+    removeUser (id) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '</p>确定要移除此用户吗？移除后不可恢复！</p>',
+        onOk: async () => {
+          let res = await userUnbind({ userId: id })
+          console.log(res)
+          if (res.data.code === 'success') {
+            this.$Message.success('操作成功！')
+            this.selUserInfo()
+          } else {
+            this.$Message.error(res.data.result)
+          }
+        }
+      })
     },
     /* 修改用户信息 */
     async updateUser () {

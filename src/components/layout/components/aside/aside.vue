@@ -4,7 +4,10 @@
     <div style="display: flex; justify-content: center">
       <div class="add-list" @click="addNbModel = true">
         <!--      <span>添加</span>-->
-        <Icon type="md-add" color="#fff" :size="25"/>
+        <Tooltip content="点击添加NB机器" placement="top" max-width="200" theme="light" >
+          <Icon type="md-add" color="#fff" :size="25"/>
+        </Tooltip>
+        <!--<Icon type="md-add" color="#fff" :size="25"/>-->
       </div>
     </div>
 
@@ -180,7 +183,11 @@ export default {
       this.$router.push({ path: this.$route.path, query: { nbCode: this.activeNb.nbCode } })
     },
     getAllNbList (refresh) {
-      this.getAsideList(refresh)
+      this.getAsideList(refresh).then((res) => {
+        if (this.asideList.length === 1) {
+          this.changeActive(0,this.asideList[0])
+        }
+      })
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
@@ -212,7 +219,6 @@ export default {
     async addNb (nbCode, nbName) {
       this.modal_loading = true
       let res = await addNb({ nbCode: nbCode, nbName: nbName })
-      console.log(res)
       this.modal_loading = false
       if (res.data.code === 'success') {
         this.addNbModel = false
@@ -247,7 +253,6 @@ export default {
             this.$Modal.remove()
             this.$Message.info('删除成功')
             this.getAllNbList(true)
-            console.log(this.asideList)
             this.$router.push({ path: this.$route.path, query: { nbCode: this.asideList[0].nbCode } })
           } else {
             this.$Modal.remove()
@@ -291,7 +296,6 @@ export default {
         this.setAsideList(arr)
         this.changeActive(null, arr[0])
 
-        console.log(this.asideList)
       } else {
         this.$Message.error('没有找到，请检查输入的nbCode是否正确')
       }

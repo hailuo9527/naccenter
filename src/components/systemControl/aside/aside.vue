@@ -6,6 +6,7 @@
           <Icon :type="item.meta.icon" class="icon"/>
           {{ item.meta.title }}
           <Badge :count="count" v-if="item.meta.title==='申请管理'"></Badge>
+          <Badge :count="updateMsg" v-if="item.meta.title==='系统更新'"></Badge>
         </div>
       </div>
     </div>
@@ -26,14 +27,18 @@ export default {
   computed: {
     ...mapState({
       userInfo: state => state.login.userInfo,
-      count: state => state.app.applyCount
+      count: state => state.app.applyCount,
+      updateMsg: state => state.app.updateMsg
     })
   },
   watch: {
     $route: {
       handler (newVal, old) {
-        console.log(newVal)
         this.name = newVal.name
+        console.log(newVal)
+        if (newVal.name === 'userConfig') {
+          this.$router.replace({ name: this.menu[0].name })
+        }
       },
       deep: true
     }

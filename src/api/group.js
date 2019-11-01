@@ -132,3 +132,12 @@ export const uptGroupParam = ({ id, groupId, single, learning, ctime, btime, lti
     }
   })
 }
+
+/* 通过分组Id获取组配置 */
+
+export const getGroupParam = (groupId) => {
+  return axios.request({
+    url: `/groups/getGroupParam/${groupId}`,
+    method: 'get'
+  })
+}

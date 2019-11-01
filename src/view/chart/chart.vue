@@ -21,11 +21,15 @@
                 <div class="item-content" v-if="networkInfo">
                   <div class="list-item">
                     <span class="name">IP地址</span>：
-                    <span class="value">{{networkInfo.ipAddress}}</span>
+                    <span class="value">{{networkInfo.ipAddress?networkInfo.ipAddress.split('/')[0] : ''}}</span>
                   </div>
                   <div class="list-item">
                     <span class="name">IP子网</span>：
                     <span class="value">{{networkInfo.ipSubnet}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span class="name">MAC地址</span>：
+                    <span class="value">{{networkInfo.ipAddress?networkInfo.ipAddress.split('/')[1] : ''}}</span>
                   </div>
                   <div class="list-item">
                     <span class="name">网关</span>：

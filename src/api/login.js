@@ -127,3 +127,17 @@ export const addStaffNetworking = ({ staffName, staffTel, staffIP, staffMAC, nbC
     }
   })
 }
+
+/*
+*  企业管理员解除于子用户的绑定关系
+* */
+
+export const userUnbind = ({ userId }) => {
+  return axios.request({
+    url: `/userUnbind`,
+    method: 'post',
+    params: {
+      userId
+    }
+  })
+}
