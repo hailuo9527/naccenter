@@ -5,7 +5,6 @@
         <div style="padding-bottom: 50px">
           <Card v-if="userInfo.roleId === 1">
             <p class="title">上传新版本系统镜像：</p>
-
             <div>
               <Upload
                 multiple

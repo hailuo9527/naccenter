@@ -92,7 +92,7 @@
         @on-ok="ok (model1, replaceCode)"
         @on-cancel="cancel">
         <Select v-model="model1" style="width:100%">
-        <Option v-for="(i,index) in asideList" :value="i.nbCode" v-if="i.nbCode !== replaceCode">{{ i.nbCode }}</Option>
+        <Option v-for="(i,index) in asideList" :key="index" :value="i.nbCode" v-if="i.nbCode !== replaceCode">{{ i.nbName }}</Option>
     </Select>
     </Modal>
 
@@ -160,12 +160,16 @@ export default {
     },
     // 点击备份
     replaceNb (code) {
-      this.modal1 = true
-      this.replaceCode = code
-      console.log(this.replaceCode)
-    },
-    cancel () {
-      this.$Message.info('Clicked cancel')
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>您确定要移植此机器配置到其他目标机器上吗？确定后目标机器将抛弃自身配置继承源机器所有配置，源机器将被初始化！</p>',
+        onOk: () => {
+          this.modal1 = true
+          this.replaceCode = code
+          this.$Modal.remove()
+        }
+      })
+
     },
     ...mapMutations([
       'setAsideList',
