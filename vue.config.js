@@ -20,7 +20,7 @@ const TEST_URL = process.env.NODE_ENV === 'production'
   ? 'http://nc.wingsbro.com'
   : '/' */
 const BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'http://nc.wingsbro.com'
+  ? '//nc.wingsbro.com'
   : '/'
 module.exports = {
   // Project deployment base
