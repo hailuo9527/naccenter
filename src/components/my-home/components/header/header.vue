@@ -2,7 +2,7 @@
     <Row class="header">
       <div class="logo">
         <div class="img">
-          <img :src="logo" alt="">
+          <!--<img :src="logo" alt="">-->
         </div>
         <div class="text">NacCenter</div>
       </div>

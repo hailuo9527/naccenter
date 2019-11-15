@@ -11,8 +11,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://192.1 68.1.176:8070',
-    // dev: 'http://app.wingsbro.com:8070',
+    //dev: '//192.1 68.1.176:8070',
+    dev: 'https://nc.wingsbro.com:8070',
     // dev: 'http://wingsbro.mynetgear.com:8070',
     // pro: 'http://wingsbro.mynetgear.com:8070',
     pro: '//nc.wingsbro.com:8070'
@@ -23,7 +23,7 @@ export default {
     id: 'qrcode',
     appid: 'wx243ad0422689c414',
     scope: 'snsapi_login',
-    redirect_uri: process.env.NODE_ENV === 'development' ? 'http://nc.wingsbro.com?code=CODE&state=STATE' : window.location.href + '?code=CODE&state=STATE',
+    redirect_uri: process.env.NODE_ENV === 'development' ? 'https://nc.wingsbro.com?code=CODE&state=STATE' : window.location.href + '?code=CODE&state=STATE',
     state: '1211111',
     style: 'black',
     href: ''
