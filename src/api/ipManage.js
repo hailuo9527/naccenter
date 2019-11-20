@@ -192,3 +192,16 @@ export const uptIpParamStatus = ({ nbCode }) => {
     }
   })
 }
+/*
+*批量将固定名单添加到动态名单
+* */
+
+export const uptRosterAll = ({ nbCode }) => {
+  return axios.request({
+    url: '/uptRosterAll',
+    method: 'post',
+    params: {
+      nbCode
+    }
+  })
+}

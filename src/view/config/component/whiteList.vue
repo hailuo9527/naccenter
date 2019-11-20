@@ -34,7 +34,8 @@
       </Col>
       <Col class="btn-group">
         <span @click="addWhiteModel = true">添加</span>
-        <span @click="removeAll(1)" v-if="whiteList.length>0">清空列表</span>
+        <span @click="removeAll(1)" v-if="whiteList.length>0">清空</span>
+        <span @click="uptRosterAll" v-if="whiteList.length>0">全部下移</span>
       </Col>
     </Row>
     <Row class="list-head" type="flex" justify="space-between" align="top" style="margin-top: 20px;">
@@ -75,7 +76,7 @@
       </Col>
       <Col class="btn-group">
         <span @click="addLiveModel = true">添加</span>
-        <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空列表</span>
+        <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空</span>
       </Col>
     </Row>
     <Modal v-model="addWhiteModel" width="360">
@@ -190,7 +191,8 @@ import {
   updNameListById
 } from '../../../api/nbConfig'
 import {
-  uptRosterTemp
+  uptRosterTemp,
+  uptRosterAll
 } from '../../../api/ipManage'
 
 import { uploadFile } from '../../../api/upload'
@@ -456,6 +458,24 @@ export default {
         }
       })
     },
+    /* 批量将固定名单添加到动态名单 */
+    uptRosterAll () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定把当前固定白名单全部修改成动态名单吗？</p>',
+        loading: true,
+        onOk: async () => {
+          let res = await uptRosterAll({ nbCode: this.nbCode })
+          this.$Modal.remove()
+          if (res.data.code === 'success') {
+            this.$Message.info('操作成功！')
+            this.getDefaultList()
+          } else {
+            this.$Message.error(res.data.result)
+          }
+         }
+      })
+    },
     // 修改别名
     async updNameListById () {
       let res = await updNameListById({ ...this.editNameForm })
@@ -540,7 +560,7 @@ export default {
     changeIpStatus (item, index) {
       this.$Modal.confirm({
         title: '提示',
-        content: '<p>确定要把此MAC地址修改位动态分配吗？</p>',
+        content: '<p>确定要把此MAC地址修改为动态分配吗？</p>',
         loading: true,
         onOk: async () => {
           let json = {

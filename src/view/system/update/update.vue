@@ -27,6 +27,15 @@
                     <Icon type="ios-close" :size="26" style="float:right;cursor: pointer" @click="delFileList(index)"></Icon>
                   </li>
                 </ul>
+                <Row :gutter="30" type="flex" align="middle" v-if="file.length" style="padding: 10px">
+                  <Col>
+                    <span>自动更新:</span>
+                  </Col>
+                  <Col span="4">
+                    <i-switch type="small" v-model="autoUpdate">
+                    </i-switch>
+                  </Col>
+                </Row>
               </div>
               <div style="text-align: center; padding: 20px 0;">
                 <Button @click="upload" :loading="loading" type="info">上传</Button>
@@ -121,6 +130,7 @@
             key: 'nbCode'
           }
         ],
+        autoUpdate: false,
       }
     },
     computed: {
@@ -165,17 +175,17 @@
           formData.append("updFile",that.file[0]);   // 文件对象
           formData.append("remarkFile",that.file[1]);   // 文件对象
           let config = {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }
-          axios.post(that.$config.baseUrl.pro + "/upload", formData, {
             timeout: 10000,
             headers: {
               'Content-Type': 'multipart/form-data',
               AUTHORIZATION: getToken()
             }
-          }).then(function (res) {
+          }
+          let params = {
+            autoUpdate: that.autoUpdate ? 'on' : 'off'
+          }
+
+          axios.post(that.$config.baseUrl.pro + "/upload"+ `?autoUpdate=${params.autoUpdate}`, formData, config).then(function (res) {
             that.loading = false;
             if (res.data.code === 'success') {
               that.$Message.success(res.data.result)
