@@ -89,8 +89,7 @@
         width="360"
         v-model="modal1"
         title="替换NB机器"
-        @on-ok="ok (model1, replaceCode)"
-        @on-cancel="cancel">
+        @on-ok="ok (model1, replaceCode)">
         <Select v-model="model1" style="width:100%">
         <Option v-for="(i,index) in asideList" :key="index" :value="i.nbCode" v-if="i.nbCode !== replaceCode">{{ i.nbName }}</Option>
     </Select>
