@@ -17,8 +17,7 @@
         </Col>
         <Col span="12">
           <div class="form-item">
-            访问范围：
-            <span>{{vistorList.viRight != null ? visitorList.viRight : 'unknow'}}</span>
+
           </div>
         </Col>
       </Row>
@@ -58,7 +57,6 @@
 </template>
 
 <script>
-// import { getVistorInfo, getSystemStatus } from '../../../api/chart'
 import { getVistorInfo, getSystemStatus, delVistorInfo, addVistorToRoster } from '../../../api/chart'
 
 export default {
@@ -72,11 +70,6 @@ export default {
           width: 60
         },
         {
-          title: '微信ID',
-          key: 'openid'
-        },
-        {
-          title: '微信昵称',
           title: '微信ID/手机号',
           key: 'openid'
         },
@@ -99,6 +92,12 @@ export default {
         {
           title: '主机名',
           key: 'hostName'
+        },
+        {
+          title: 'Action',
+          slot: 'action',
+          width: 150,
+          align: 'center'
         }
       ],
       tableList: [],
@@ -112,10 +111,11 @@ export default {
     }
   },
   methods: {
-    // 获取配置信息
+    // 获取访客列表
     async getVistorInfo () {
       this.loading = true
       let res = await getVistorInfo({ nbCode: this.nbCode })
+      console.log(res)
       this.loading = false
       if (res.data.code === 'success') {
         this.tableList = res.data.result || []
@@ -127,10 +127,55 @@ export default {
       if (res.data.code === 'success') {
         this.vistorList = res.data.result || {}
       }
+    },
+
+    /* 删除列表 */
+    removeList (item, index) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定要移除此访客吗？</p>',
+        loading: true,
+        onOk: async () => {
+          let res = await delVistorInfo({ nbCode: this.nbCode, ip: item.visitorIp, mac: item.visitorMac })
+          if (res.data.code === 'success') {
+            this.$Modal.remove()
+            this.$Message.info(res.data.result)
+            this.getVistorInfo()
+          } else {
+            this.$Modal.remove()
+            this.$Message.error(res.data.result)
+          }
+        }
+      })
+    },
+    /* 将访客添加到白名单 */
+    addVistorToWhiteList (item) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定要将此访客添加到白名单吗？</p>',
+        loading: true,
+        onOk: async () => {
+          let json = {
+            openId: item.openId,
+            nbCode: this.nbCode,
+            ip: item.visitorIp,
+            mac: item.visitorMac
+          }
+          let res = await addVistorToRoster(json)
+          if (res.data.code === 'success') {
+            this.$Modal.remove()
+            this.$Message.info(res.data.result)
+            this.getVistorInfo()
+          } else {
+            this.$Modal.remove()
+            this.$Message.error(res.data.result)
+          }
+        }
+      })
     }
   },
   mounted () {
-    this.getVistorInfo(),
+    this.getVistorInfo()
     this.getSystemStatus()
   }
 }
