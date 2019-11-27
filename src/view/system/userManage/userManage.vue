@@ -98,135 +98,135 @@
   </div>
 </template>
 <script>
-  import { selUserInfo, updateUser, insUser, uptUserStatus } from '../../../api/userManage'
-  import { roleTransfer, userUnbind } from '../../../api/login'
-  import { selRoleInfo } from '../../../api/roleInfo'
-  import { mapState } from 'vuex'
+import { selUserInfo, updateUser, insUser, uptUserStatus } from '../../../api/userManage'
+import { roleTransfer, userUnbind } from '../../../api/login'
+import { selRoleInfo } from '../../../api/roleInfo'
+import { mapState } from 'vuex'
 
-  export default {
-    name: 'userManage',
-    data () {
-      const validatePhone = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('手机号不能为空'))
-        } else if (!/^1[34578]\d{9}$/.test(value)) {
-          callback('手机号格式不正确')
-        } else {
-          callback()
-        }
+export default {
+  name: 'userManage',
+  data () {
+    const validatePhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('手机号不能为空'))
+      } else if (!/^1[34578]\d{9}$/.test(value)) {
+        callback('手机号格式不正确')
+      } else {
+        callback()
       }
-      return {
-        tab: 'tab1',
-        modal: false,
-        tableLoad: false,
-        saveLoading: false,
-        searchText: '',
-        activeUserInfo: {
+    }
+    return {
+      tab: 'tab1',
+      modal: false,
+      tableLoad: false,
+      saveLoading: false,
+      searchText: '',
+      activeUserInfo: {
+      },
+      tableColumns: [
+        {
+          type: 'index',
+          width: 60,
+          align: 'center'
         },
-        tableColumns: [
-          {
-            type: 'index',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '用户名',
-            key: 'userName',
-            slot: 'userName'
-          },
-          {
-            title: '用户账号',
-            key: 'userNo'
-          },
-          {
-            title: '角色名称',
-            key: 'roleName'
-          },
-          {
-            title: '是否激活',
-            key: 'activation',
-            slot: 'activation'
-          },
-          {
-            title: '创建时间',
-            key: 'ctime',
-          },
-          {
-            title: '操作',
-            key: 'action',
-            width: 150,
-            align: 'center',
-            slot: 'action'
-          }
+        {
+          title: '用户名',
+          key: 'userName',
+          slot: 'userName'
+        },
+        {
+          title: '用户账号',
+          key: 'userNo'
+        },
+        {
+          title: '角色名称',
+          key: 'roleName'
+        },
+        {
+          title: '是否激活',
+          key: 'activation',
+          slot: 'activation'
+        },
+        {
+          title: '创建时间',
+          key: 'ctime'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          width: 150,
+          align: 'center',
+          slot: 'action'
+        }
+      ],
+      userList: [],
+      roleNameList: [], // 角色名称列表
+      insUserForm: {
+      },
+      insUserFormValidate: {
+        userNo: [
+          { required: true, validator: validatePhone, trigger: 'blur' }
         ],
-        userList: [],
-        roleNameList: [], // 角色名称列表
-        insUserForm: {
-        },
-        insUserFormValidate: {
-          userNo: [
-            { required: true, validator: validatePhone, trigger: 'blur' }
-          ],
-          userName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' },
-            { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
-            { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
-          ],
-          roleId: [
-            { required: true, message: '请选择角色!', trigger: 'change', type: 'string' }
-          ]
-        },
-        uptUserValidate: {
-        },
-        accessModal: false,
-        accessForm: {
-        },
-        accessRules: {
-          activeUserId: [
-            { required: true, message: '请选择用户!', trigger: 'change', type: 'string' }
-          ]
-        }
+        userName: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
+          { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
+        ],
+        roleId: [
+          { required: true, message: '请选择角色!', trigger: 'change', type: 'string' }
+        ]
+      },
+      uptUserValidate: {
+      },
+      accessModal: false,
+      accessForm: {
+      },
+      accessRules: {
+        activeUserId: [
+          { required: true, message: '请选择用户!', trigger: 'change', type: 'string' }
+        ]
       }
+    }
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.login.userInfo
+    })
+  },
+  methods: {
+    tabChange (name) {
+      // console.log(name)
+      this.tab = name
     },
-    computed: {
-      ...mapState({
-        userInfo: state => state.login.userInfo
+    show (index, row) {
+      this.modal = true
+      this.activeUserInfo = Object.assign(this.activeUserInfo, row)
+      this.activeUserInfo.userName = row.userName
+    },
+    ok () {
+      this.$refs['uptUser'].validate((valid) => {
+        if (valid) {
+          this.updateUser()
+        } else {
+          this.$Message.error('操作失败，请检查输入信息格式是否正确!')
+        }
       })
     },
-    methods: {
-      tabChange (name) {
-        // console.log(name)
-        this.tab = name
-      },
-      show (index, row) {
-        this.modal = true
-        this.activeUserInfo = Object.assign(this.activeUserInfo, row)
-        this.activeUserInfo.userName = row.userName
-      },
-      ok () {
-        this.$refs['uptUser'].validate((valid) => {
-          if (valid) {
-            this.updateUser()
-          } else {
-            this.$Message.error('操作失败，请检查输入信息格式是否正确!')
-          }
-        })
-      },
-      /* 获取用户列表 */
-      async selUserInfo (userName) {
-        this.tableLoad = true
-        let res = await selUserInfo({ userName: userName })
-        console.log(res)
-        this.tableLoad = false
-        if (res.data.code === 'success') {
-          this.userList = res.data.result
-        }
-      },
-      /* 新增用户 */
-      /* async insUser () {
+    /* 获取用户列表 */
+    async selUserInfo (userName) {
+      this.tableLoad = true
+      let res = await selUserInfo({ userName: userName })
+      console.log(res)
+      this.tableLoad = false
+      if (res.data.code === 'success') {
+        this.userList = res.data.result
+      }
+    },
+    /* 新增用户 */
+    /* async insUser () {
         let json = {
           userNo: this.insUserForm.userNo,
           userName: this.insUserForm.userName,
@@ -246,111 +246,111 @@
         }
         console.log(res)
       }, */
-      /* 获取角色列表 */
-      async selRoleInfo () {
-        let res = await selRoleInfo()
-        if (res.data.code === 'success') {
-          this.roleNameList = res.data.result
-        }
-      },
-      /* 移除用户 */
-      removeUser (id) {
-        this.$Modal.confirm({
-          title: '提示',
-          content: '</p>确定要移除此用户吗？移除后不可恢复！</p>',
-          onOk: async () => {
-            let res = await userUnbind({ userId: id })
-            console.log(res)
-            if (res.data.code === 'success') {
-              this.$Message.success('操作成功！')
-              this.selUserInfo()
-            } else {
-              this.$Message.error(res.data.result)
-            }
-          }
-        })
-      },
-      /* 修改用户信息 */
-      async updateUser () {
-        let json = {
-          userNo: this.activeUserInfo.userNo,
-          userName: this.activeUserInfo.userName,
-          password: this.activeUserInfo.password,
-          parentId: this.activeUserInfo.parentId,
-          activation: this.activeUserInfo.activation,
-          roleId: this.activeUserInfo.roleId,
-          userId: this.activeUserInfo.userId
-        }
-        console.log(json)
-        let res = await updateUser(json)
-        if (res.data.code === 'success') {
-          this.$Message.success('操作成功')
-          this.selUserInfo()
-        }
-        // console.log(res)
-      },
-      /* 修改用户状态 */
-      async uptUserStatus () {
-        let res = await uptUserStatus({
-          userNo: this.activeUserInfo.userNo,
-          activation: this.activeUserInfo.activation
-        })
-        // console.log(res)
-        if (res.data.code === 'success') {
-          this.$Message.success(res.data.result)
-          this.selUserInfo()
-        }
-      },
-      /* 请求转让 */
-      async roleTransfer () {
-        console.log(this.accessForm.activeUserId)
-        let res = await roleTransfer({ userId: this.accessForm.activeUserId })
-        // console.log(res)
-        if (res.data.code === 'success') {
-          this.$Message.success('转让成功，请重新登录！')
-        } else {
-          this.$Message.error(res.data.result)
-        }
-      },
-      userChange (data) {
-        //this.$Message.success(data)
-      },
-      /* 权限转让 */
-      changeAccess () {
-        this.$Modal.confirm({
-          title: '提示',
-          content: '</p>转让后将不能继续使用权限，确定要转让您的权限吗？</p>',
-          onOk: () => {
-            this.accessModal = true
-          }
-        })
-      },
-      submitAccessChange () {
-        this.$refs['access'].validate((valid) => {
-          if (valid) {
-            //console.log(this.accessForm)
-            this.roleTransfer()
-          } else {
-            this.$Message.error('操作失败，请检查输入信息格式是否正确!')
-          }
-        })
-      },
-      /* */
-      handleSubmit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.insUser()
-          } else {
-            this.$Message.error('操作失败，请检查输入信息格式是否正确!')
-          }
-        })
+    /* 获取角色列表 */
+    async selRoleInfo () {
+      let res = await selRoleInfo()
+      if (res.data.code === 'success') {
+        this.roleNameList = res.data.result
       }
     },
-    mounted () {
-      this.selUserInfo()
-      this.selRoleInfo()
+    /* 移除用户 */
+    removeUser (id) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '</p>确定要移除此用户吗？移除后不可恢复！</p>',
+        onOk: async () => {
+          let res = await userUnbind({ userId: id })
+          console.log(res)
+          if (res.data.code === 'success') {
+            this.$Message.success('操作成功！')
+            this.selUserInfo()
+          } else {
+            this.$Message.error(res.data.result)
+          }
+        }
+      })
+    },
+    /* 修改用户信息 */
+    async updateUser () {
+      let json = {
+        userNo: this.activeUserInfo.userNo,
+        userName: this.activeUserInfo.userName,
+        password: this.activeUserInfo.password,
+        parentId: this.activeUserInfo.parentId,
+        activation: this.activeUserInfo.activation,
+        roleId: this.activeUserInfo.roleId,
+        userId: this.activeUserInfo.userId
+      }
+      console.log(json)
+      let res = await updateUser(json)
+      if (res.data.code === 'success') {
+        this.$Message.success('操作成功')
+        this.selUserInfo()
+      }
+      // console.log(res)
+    },
+    /* 修改用户状态 */
+    async uptUserStatus () {
+      let res = await uptUserStatus({
+        userNo: this.activeUserInfo.userNo,
+        activation: this.activeUserInfo.activation
+      })
+      // console.log(res)
+      if (res.data.code === 'success') {
+        this.$Message.success(res.data.result)
+        this.selUserInfo()
+      }
+    },
+    /* 请求转让 */
+    async roleTransfer () {
+      console.log(this.accessForm.activeUserId)
+      let res = await roleTransfer({ userId: this.accessForm.activeUserId })
+      // console.log(res)
+      if (res.data.code === 'success') {
+        this.$Message.success('转让成功，请重新登录！')
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
+    userChange (data) {
+      // this.$Message.success(data)
+    },
+    /* 权限转让 */
+    changeAccess () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '</p>转让后将不能继续使用权限，确定要转让您的权限吗？</p>',
+        onOk: () => {
+          this.accessModal = true
+        }
+      })
+    },
+    submitAccessChange () {
+      this.$refs['access'].validate((valid) => {
+        if (valid) {
+          // console.log(this.accessForm)
+          this.roleTransfer()
+        } else {
+          this.$Message.error('操作失败，请检查输入信息格式是否正确!')
+        }
+      })
+    },
+    /* */
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.insUser()
+        } else {
+          this.$Message.error('操作失败，请检查输入信息格式是否正确!')
+        }
+      })
     }
+  },
+  mounted () {
+    this.selUserInfo()
+    this.selRoleInfo()
   }
+}
 </script>
 <style lang="less" scoped>
   @import "userManage";

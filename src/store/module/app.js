@@ -1,6 +1,6 @@
 import { getAllNbList } from '../../api/config'
 import { selNewMessage } from '../../api/userBind'
-import { checkVersion } from "../../api/update";
+import { checkVersion } from '../../api/update'
 
 export default {
   state: {
@@ -48,11 +48,11 @@ export default {
            reject(err)
          })
        })
-     }*/
+     } */
     getAsideList ({ commit }, refresh) {
       return new Promise((resolve, reject) => {
         getAllNbList().then(res => {
-          //console.log(res)
+          // console.log(res)
           if (res.data.code === 'success') {
             let arr = []
             res.data.result.map((item, index) => {

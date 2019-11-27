@@ -36,7 +36,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next()
-  },
+  }
 }
 </script>
 <style lang="less" scoped>

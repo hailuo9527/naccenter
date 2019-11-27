@@ -17,7 +17,7 @@
         </Col>
         <Col span="12">
           <div class="form-item">
-            访客范围：
+            访问范围：
             <span>{{vistorList.viRight != null ? visitorList.viRight : 'unknow'}}</span>
           </div>
         </Col>

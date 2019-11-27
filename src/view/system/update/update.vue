@@ -55,7 +55,6 @@
                 <Button style="margin-top: 20px;" @click="updatVersionToNB" :loading="loading2" type="info" v-if="willUpdateNbList.length">更新</Button>
               </Card>
 
-
             </div>
           </Card>
           <div v-if="!updateMsg && userInfo.roleId !== 1" style="display: flex; justify-content: center; align-items: center; height: 500px;width: 100%;font-size: 16px">
@@ -99,196 +98,191 @@
   </div>
 </template>
 <script>
-  import axios from 'axios'
-  import { getToken } from '../../../libs/util'
-  import { selLatestEdition, updatVersionToNB } from "../../../api/update";
-  import { mapState, mapActions } from 'vuex'
-  export default {
-    name: 'update',
-    data () {
-      return {
-        willUpdateNbList: [],
-        updatableNbList: [],
-        baseUrl: '',
-        file: [],
-        nbCodeFile: null,
-        loading: false,
-        loading2: false,
-        bateInfo: '',
-        columns: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '机器名称',
-            key: 'nbName'
-          },
-          {
-            title: '机器序列号',
-            key: 'nbCode'
+import axios from 'axios'
+import { getToken } from '../../../libs/util'
+import { selLatestEdition, updatVersionToNB } from '../../../api/update'
+import { mapState, mapActions } from 'vuex'
+export default {
+  name: 'update',
+  data () {
+    return {
+      willUpdateNbList: [],
+      updatableNbList: [],
+      baseUrl: '',
+      file: [],
+      nbCodeFile: null,
+      loading: false,
+      loading2: false,
+      bateInfo: '',
+      columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        },
+        {
+          title: '机器名称',
+          key: 'nbName'
+        },
+        {
+          title: '机器序列号',
+          key: 'nbCode'
+        }
+      ],
+      autoUpdate: false
+    }
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.login.userInfo,
+      updateMsg: state => state.app.updateMsg
+    })
+  },
+  methods: {
+    ...mapActions([
+      'getUpdateMsg'
+    ]),
+    delFileList (index) {
+      let that = this
+      that.file.splice(index, 1)
+    },
+    handleUpload (file) {
+      let that = this
+      if (that.file.length >= 2) {
+        this.$Message.info('最多只能上传2个文件')
+      } else {
+        that.file.push(file)
+      }
+      return false
+    },
+    /* 上传更新文件 */
+    upload () {
+      let that = this
+      if (that.file.length > 0) {
+        if (that.file.length === 1) {
+          that.$Message.error('请上传备注文件！')
+          return
+        }
+        that.loading = true
+        // 创建 formData 对象
+        let formData = new FormData()
+
+        // 多个文件上传
+        /*  for(var i=0; i< that.file.length; i++){
+              formData.append("uploadFile",that.file[i]);   // 文件对象
+            } */
+        formData.append('updFile', that.file[0]) // 文件对象
+        formData.append('remarkFile', that.file[1]) // 文件对象
+        let config = {
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            AUTHORIZATION: getToken()
           }
-        ],
-        autoUpdate: false,
+        }
+        let params = {
+          autoUpdate: that.autoUpdate ? 'on' : 'off'
+        }
+
+        axios.post(that.$config.baseUrl.pro + '/upload' + `?autoUpdate=${params.autoUpdate}`, formData, config).then(function (res) {
+          that.loading = false
+          if (res.data.code === 'success') {
+            that.$Message.success(res.data.result)
+          }
+        }).catch(function (error) {
+          that.loading = false
+          that.$Message.error('服务器错误' + error)
+        })
+      } else {
+        that.$Message.error('请上传系统文件！')
       }
     },
-    computed: {
-      ...mapState({
-        userInfo: state => state.login.userInfo,
-        updateMsg: state => state.app.updateMsg
+    /* 获取NacBox最新版本介绍公告 */
+    async selLatestEdition () {
+      let res = await selLatestEdition()
+      if (res.data.code === 'success') {
+        let reg = /\n/g
+        this.bateInfo = res.data.result === '' ? '暂无信息' : res.data.result
+        this.bateInfo = this.bateInfo.replace(reg, '</br>')
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
+    /* 获取可更新NB列表 */
+    checkVersion () {
+      this.getUpdateMsg().then((res) => {
+        if (res.data.code === 'success') {
+          this.updatableNbList = res.data.result || {}
+          if (!this.isEmptyObject(res.data.result)) {
+            this.selLatestEdition()
+          }
+        } else {
+          this.$Message.error(res.data.result)
+        }
       })
     },
-    methods: {
-      ...mapActions([
-        'getUpdateMsg'
-      ]),
-      delFileList(index){
-        let that = this;
-        that.file.splice(index, 1);
-      },
-      handleUpload (file) {
-        let that = this;
-        if(that.file.length >= 2){
-          this.$Message.info("最多只能上传2个文件");
-        }else{
-          that.file.push(file);
-        }
-        return false;
-      },
-      /* 上传更新文件 */
-      upload(){
-        let that = this;
-        if(that.file.length > 0){
-          if (that.file.length === 1) {
-            that.$Message.error("请上传备注文件！");
-            return
-          }
-          that.loading = true;
-          //创建 formData 对象
-          let formData = new FormData();
-
-          //多个文件上传
-          /*  for(var i=0; i< that.file.length; i++){
-              formData.append("uploadFile",that.file[i]);   // 文件对象
-            }*/
-          formData.append("updFile",that.file[0]);   // 文件对象
-          formData.append("remarkFile",that.file[1]);   // 文件对象
-          let config = {
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              AUTHORIZATION: getToken()
-            }
-          }
-          let params = {
-            autoUpdate: that.autoUpdate ? 'on' : 'off'
-          }
-
-          axios.post(that.$config.baseUrl.pro + "/upload"+ `?autoUpdate=${params.autoUpdate}`, formData, config).then(function (res) {
-            that.loading = false;
-            if (res.data.code === 'success') {
-              that.$Message.success(res.data.result)
-            }
-
-          }).catch(function (error) {
-            that.loading = false;
-            that.$Message.error('服务器错误' + error);
-          });
-        }
-        else {
-          that.$Message.error("请上传系统文件！");
-        }
-      },
-      /* 获取NacBox最新版本介绍公告 */
-      async selLatestEdition () {
-        let res = await selLatestEdition()
-        if (res.data.code === 'success') {
-          let reg = /\n/g
-          this.bateInfo = res.data.result === '' ? '暂无信息' : res.data.result
-          this.bateInfo = this.bateInfo.replace(reg, '</br>')
-        } else {
-          this.$Message.error(res.data.result)
-        }
-      },
-      /* 获取可更新NB列表 */
-      checkVersion () {
-        this.getUpdateMsg().then((res) => {
-          if (res.data.code === 'success') {
-            this.updatableNbList = res.data.result || {}
-            if (!this.isEmptyObject(res.data.result)) {
-              this.selLatestEdition()
-            }
-          } else {
-            this.$Message.error(res.data.result)
-          }
+    /* 更新nb系统版本 */
+    async updatVersionToNB () {
+      this.loading2 = true
+      let res = await updatVersionToNB(this.willUpdateNbList)
+      this.loading2 = false
+      if (res.data.code === 'success') {
+        this.$Message.success({
+          content: '更新指令已发出，五分钟后即可更新到新版本！',
+          duration: 3
         })
-      },
-      /* 更新nb系统版本 */
-      async updatVersionToNB () {
-        this.loading2 = true
-        let res = await  updatVersionToNB(this.willUpdateNbList)
-        this.loading2 = false
-        if (res.data.code === 'success') {
-          this.$Message.success({
-            content: '更新指令已发出，五分钟后即可更新到新版本！',
-            duration: 3
-          })
-        } else {
-          this.$Message.error(res.data.result)
-        }
-      },
-
-      nbFileUpload (file) {
-        this.nbCodeFile = file
-        return false;
-      },
-      /* 上传NB序列号初始化文件 */
-      uploadNbCodeFile(){
-        let that = this;
-        if(that.nbCodeFile){
-          that.loading = true;
-          //创建 formData 对象
-          let formData = new FormData();
-
-          formData.append("nbCodeFile",that.nbCodeFile);   // 文件对象
-          axios.post(that.$config.baseUrl.pro + "/uploadNbCodeFile", formData, {
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              AUTHORIZATION: getToken()
-            }
-          }).then(function (res) {
-            that.loading = false;
-            if (res.data.code === 'success') {
-              that.$Message.success(res.data.result)
-            }
-
-          }).catch(function (error) {
-            that.loading = false;
-            that.$Message.error('服务器错误' + error);
-          });
-        }
-        else {
-          that.$Message.error("请上传NB序列号初始化文件！");
-        }
-      },
-
-      /* 选中要更新的机器 */
-      selectNbChange (selection) {
-        let arr = []
-        selection.map((item) => {
-          arr.push(item.nbCode)
-        })
-        this.willUpdateNbList = arr
-
+      } else {
+        this.$Message.error(res.data.result)
       }
     },
-    mounted() {
-      // this.selLatestEdition()
-      this.checkVersion()
+
+    nbFileUpload (file) {
+      this.nbCodeFile = file
+      return false
+    },
+    /* 上传NB序列号初始化文件 */
+    uploadNbCodeFile () {
+      let that = this
+      if (that.nbCodeFile) {
+        that.loading = true
+        // 创建 formData 对象
+        let formData = new FormData()
+
+        formData.append('nbCodeFile', that.nbCodeFile) // 文件对象
+        axios.post(that.$config.baseUrl.pro + '/uploadNbCodeFile', formData, {
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            AUTHORIZATION: getToken()
+          }
+        }).then(function (res) {
+          that.loading = false
+          if (res.data.code === 'success') {
+            that.$Message.success(res.data.result)
+          }
+        }).catch(function (error) {
+          that.loading = false
+          that.$Message.error('服务器错误' + error)
+        })
+      } else {
+        that.$Message.error('请上传NB序列号初始化文件！')
+      }
+    },
+
+    /* 选中要更新的机器 */
+    selectNbChange (selection) {
+      let arr = []
+      selection.map((item) => {
+        arr.push(item.nbCode)
+      })
+      this.willUpdateNbList = arr
     }
+  },
+  mounted () {
+    // this.selLatestEdition()
+    this.checkVersion()
   }
+}
 </script>
 <style lang="less" scoped>
   @import "../userInfo/userInfo";

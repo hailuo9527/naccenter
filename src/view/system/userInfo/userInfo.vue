@@ -33,57 +33,57 @@
   </div>
 </template>
 <script>
-  import { selUserInfo, updateUser, insUser, uptUserStatus } from '../../../api/userManage'
-  import { selRoleInfo } from '../../../api/roleInfo'
-  import { mapState, mapActions } from 'vuex'
+import { selUserInfo, updateUser, insUser, uptUserStatus } from '../../../api/userManage'
+import { selRoleInfo } from '../../../api/roleInfo'
+import { mapState, mapActions } from 'vuex'
 
-  export default {
-    name: 'userInfo',
-    data () {
-      const validatePassword = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请再次输入密码！'))
-        } else if (value !== this.insUserForm.password) {
-          callback('两次输入的密码不一致！')
-        } else {
-          callback()
-        }
+export default {
+  name: 'userInfo',
+  data () {
+    const validatePassword = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请再次输入密码！'))
+      } else if (value !== this.insUserForm.password) {
+        callback('两次输入的密码不一致！')
+      } else {
+        callback()
       }
-      return {
-        saveLoading: false,
-        roleNameList: [],
-        insUserForm: {
-        },
-        insUserFormValidate: {
-          userName: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' },
-            { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
-            { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
-          ],
-          roleId: [
-            { required: true, message: '请选择角色', trigger: 'change', type: 'number' }
-          ],
-          ensurePassword: [
-            { required: true, trigger: 'blur', validator: validatePassword },
-            { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
-            { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
-          ]
-        }
+    }
+    return {
+      saveLoading: false,
+      roleNameList: [],
+      insUserForm: {
+      },
+      insUserFormValidate: {
+        userName: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
+          { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
+        ],
+        roleId: [
+          { required: true, message: '请选择角色', trigger: 'change', type: 'number' }
+        ],
+        ensurePassword: [
+          { required: true, trigger: 'blur', validator: validatePassword },
+          { type: 'string', min: 6, message: '密码不能少于6位', trigger: 'blur' },
+          { type: 'string', max: 15, message: '密码不能大于15位', trigger: 'blur' }
+        ]
       }
-    },
-    computed: {
-      ...mapState({
-        userInfo: state => state.login.userInfo
-      })
-    },
-    methods: {
-      ...mapActions([
-        'handleLogin'
-      ]),
-      /*/!* 获取用户信息 *!/
+    }
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.login.userInfo
+    })
+  },
+  methods: {
+    ...mapActions([
+      'handleLogin'
+    ]),
+    /* /!* 获取用户信息 *!/
       async selUserInfo (userName) {
         let res = await selUserInfo({ userName: userName })
         console.log(res)
@@ -91,51 +91,51 @@
           this.insUserForm = res.data.result[0]
           this.insUserForm.password = ''
         }
-      },*/
-      /* 修改用户信息 */
-      async updateUser () {
-        // console.log({ ...this.insUserForm })
-        let json = {
-          ...this.insUserForm
-        }
-        let res = await updateUser(json)
-        //console.log(res)
-        if (res.data.code === 'success') {
-          this.$Message.success('操作成功')
-          this.handleLogin({ userNo: this.insUserForm.userNo, password: this.insUserForm.password }).then(res => {
-            if (res.data.code === 'success') {
-              this.selUserInfo(this.userInfo.userName)
-            } else {
-              this.$Message.error(res.data.result)
-            }
-          })
-        }
-        // console.log(res)
-      },
-      /* 获取角色列表 */
-      async selRoleInfo () {
-        let res = await selRoleInfo()
-        if (res.data.code === 'success') {
-          this.roleNameList = res.data.result
-        }
-      },
-      handleSubmit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.updateUser()
+      }, */
+    /* 修改用户信息 */
+    async updateUser () {
+      // console.log({ ...this.insUserForm })
+      let json = {
+        ...this.insUserForm
+      }
+      let res = await updateUser(json)
+      // console.log(res)
+      if (res.data.code === 'success') {
+        this.$Message.success('操作成功')
+        this.handleLogin({ userNo: this.insUserForm.userNo, password: this.insUserForm.password }).then(res => {
+          if (res.data.code === 'success') {
+            this.selUserInfo(this.userInfo.userName)
           } else {
-            this.$Message.error('操作失败，请检查输入信息格式是否正确!')
+            this.$Message.error(res.data.result)
           }
         })
-      },
+      }
+      // console.log(res)
     },
-    mounted () {
-      //console.log(this.userInfo)
-      this.selRoleInfo()
-      this.insUserForm = this.userInfo
-      //this.selUserInfo(this.userInfo.userName)
+    /* 获取角色列表 */
+    async selRoleInfo () {
+      let res = await selRoleInfo()
+      if (res.data.code === 'success') {
+        this.roleNameList = res.data.result
+      }
+    },
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.updateUser()
+        } else {
+          this.$Message.error('操作失败，请检查输入信息格式是否正确!')
+        }
+      })
     }
+  },
+  mounted () {
+    // console.log(this.userInfo)
+    this.selRoleInfo()
+    this.insUserForm = this.userInfo
+    // this.selUserInfo(this.userInfo.userName)
   }
+}
 </script>
 <style lang="less" scoped>
   @import "userInfo";

@@ -473,7 +473,7 @@ export default {
           } else {
             this.$Message.error(res.data.result)
           }
-         }
+        }
       })
     },
     // 修改别名

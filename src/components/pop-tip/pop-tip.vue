@@ -7,19 +7,19 @@
   </Tooltip>
 </template>
 <script>
-  export default {
-    name: 'popTip',
-    props: {
-      content: {
-        type: String,
-        default: ''
-      },
-      placement: {
-        type: String,
-        default: 'top'
-      }
+export default {
+  name: 'popTip',
+  props: {
+    content: {
+      type: String,
+      default: ''
+    },
+    placement: {
+      type: String,
+      default: 'top'
     }
   }
+}
 </script>
 <style lang="less" scoped>
   .handle{

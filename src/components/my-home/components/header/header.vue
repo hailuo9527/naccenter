@@ -33,7 +33,6 @@
         </Dropdown>
       </div>
 
-
     </row>
 </template>
 <script>
@@ -57,7 +56,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'handleLoginOut', 'getAsideList', 'getApplyCount','getUpdateMsg'
+      'handleLoginOut', 'getAsideList', 'getApplyCount', 'getUpdateMsg'
     ]),
     ...mapMutations([
       'setActiveNb', 'setApplyCount', 'setUpdateMsg'

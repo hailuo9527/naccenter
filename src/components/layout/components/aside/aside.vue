@@ -168,7 +168,6 @@ export default {
           this.$Modal.remove()
         }
       })
-
     },
     ...mapMutations([
       'setAsideList',
@@ -188,7 +187,7 @@ export default {
     getAllNbList (refresh) {
       this.getAsideList(refresh).then((res) => {
         if (this.asideList.length === 1) {
-          this.changeActive(0,this.asideList[0])
+          this.changeActive(0, this.asideList[0])
         }
       })
     },
@@ -298,7 +297,6 @@ export default {
         })
         this.setAsideList(arr)
         this.changeActive(null, arr[0])
-
       } else {
         this.$Message.error('没有找到，请检查输入的nbCode是否正确')
       }

@@ -65,7 +65,7 @@
             </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">访客范围:</label>
+                <label for="" class="my-label">访问范围:</label>
                 <Select v-model="defaultConfig.viRight" style="width:80px">
                   <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.name }}</Option>
                 </Select>
@@ -230,6 +230,7 @@ export default {
       callback()
     }
     return {
+      option: '',
       activeNav: 0,
       navList: [
         '模式参数',
@@ -237,8 +238,8 @@ export default {
         '白名单',
         '忽略名单',
         '入侵名单',
-        'DHCP配置',
-        /*'IP回收'*/
+        'DHCP配置'
+        /* 'IP回收' */
       ],
       loading: false,
 
@@ -251,7 +252,7 @@ export default {
         visitor: true,
         visitCount: '',
         visitDuration: '',
-        viRight: 'ALL'
+        viRight: ''
       },
 
       netConfig: {
@@ -360,19 +361,20 @@ export default {
     /* 获取模式参数 */
     async getDefaultConfig (nbCode) {
       let res = await getNbConfig({ nbCode: nbCode })
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         let data = res.data.result[0]
         this.defaultConfig = Object.assign(this.defaultConfig, data)
         this.defaultConfig.learning = data.learning !== 'off'
         this.defaultConfig.single = data.single !== 'off'
         this.defaultConfig.visitor = data.visitor !== 'off'
+        this.defaultConfig.viRight = data.viRight
       }
-      console.log(this.defaultConfig)
+      // console.log(this.defaultConfig)
     },
     /* 保存模式设置 */
     async save (arr) {
-      console.log(arr)
+      // console.log(arr)
       let args = Object.assign({}, arr)
       args.learning = arr.learning ? 'on' : 'off'
       args.single = arr.single ? 'on' : 'off'

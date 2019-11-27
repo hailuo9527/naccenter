@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
       name: homeName // 跳转到homeName页
     })
   } else {
-    if (store.state.login.userInfo.roleId !== 1 &&  store.state.login.userInfo.roleId !== 2) {
+    if (store.state.login.userInfo.roleId !== 1 && store.state.login.userInfo.roleId !== 2) {
       let arr = []
       systemChild.map((item) => {
         arr.push(item.name)
@@ -50,7 +50,6 @@ router.beforeEach((to, from, next) => {
         })
       }
     }
-
   }
   next() //
 })

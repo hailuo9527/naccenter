@@ -334,10 +334,10 @@ export default {
           title: 'Mac地址',
           slot: 'mac'
         },
-       /* {
+        /* {
           title: 'Ip地址',
           slot: 'ip'
-        },*/
+        }, */
 
         {
           title: 'Action',
@@ -377,10 +377,10 @@ export default {
       ignoreFormRules: {
         macAdress: [
           { required: true, validator: macAddressRules, trigger: 'blur' }
-        ],
-        /*ipAdress: [
+        ]
+        /* ipAdress: [
           { required: true, validator: ipAddress, trigger: 'blur' }
-        ]*/
+        ] */
       }
     }
   },
@@ -474,7 +474,7 @@ export default {
     },
     /* 获取模式参数 */
     async getGroupParam (groupId) {
-      let res = await  getGroupParam(groupId)
+      let res = await getGroupParam(groupId)
       console.log(res)
       if (res.data.code === 'success') {
         this.defaultConfig = res.data.result || {}
@@ -617,20 +617,19 @@ export default {
     },
     // 切换tab
     changeNav (data) {
-      this.activeNav = data;
+      this.activeNav = data
       console.log(data)
       switch (data) {
         case 'supTab2':
           this.getGroupParam(this.activeGroupId)
           break
         case 'supTab3':
-          this.getList();
-        break
-
+          this.getList()
+          break
       }
-      /*if (data === 'supTab3') {
+      /* if (data === 'supTab3') {
         this.getList()
-      }*/
+      } */
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {

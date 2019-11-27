@@ -103,7 +103,7 @@ export default {
         smsCode: ''
       },
       content: '获取验证码', // 按钮内容
-      totalTime: 60,  // 倒计时
+      totalTime: 60, // 倒计时
       canClick: true // 是否可点击
     }
   },
@@ -130,7 +130,7 @@ export default {
       })
     },
     getCode () {
-      if (!this.canClick) return  // 不可重复点击
+      if (!this.canClick) return // 不可重复点击
       this.$emit('on-getCode', this.form.userNo)
       this.canClick = false
       this.content = this.totalTime + 's后重新发送'

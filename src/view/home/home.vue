@@ -108,7 +108,7 @@ export default {
       ],
       pieData: [
         { value: 335, name: '活跃' },
-        { value: 310, name: '在线' },
+        { value: 310, name: '在线' }
       ]
     }
   },
@@ -134,7 +134,7 @@ export default {
         this.activeHost = res.data.result
         this.pieData = [
           { value: this.activeHost.live, name: '活跃' + this.activeHost.live },
-          { value: this.activeHost.active, name: '不活跃' + this.activeHost.active },
+          { value: this.activeHost.active, name: '不活跃' + this.activeHost.active }
         ]
       }
     },
@@ -173,7 +173,6 @@ export default {
       this.getRosterSum(5)
       this.getCurrentCount()
       this.getBlockHostCount()
-
     },
     // 饼图
     pieChart () {
@@ -182,22 +181,22 @@ export default {
         title: {
           text: '', // 标题文本
           left: 30,
-          top:10,
-          textStyle:{
-            fontSize:16,
-            fontWeight:400
+          top: 10,
+          textStyle: {
+            fontSize: 16,
+            fontWeight: 400
           }
         },
-        tooltip : {
+        tooltip: {
           trigger: 'item',
           // formatter: "{a} <br/> " + this.tooltipFormatter + ":{c} ({d}%)"
           formatter: '{b}' + ':{c} ({d}%)'
         },
-        series : [
+        series: [
           {
-            name: '标题',  // 提示框标题
+            name: '标题', // 提示框标题
             type: 'pie',
-            radius : '70%',
+            radius: '70%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             data: [...this.warning],

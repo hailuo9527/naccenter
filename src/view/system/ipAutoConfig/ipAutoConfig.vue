@@ -73,10 +73,10 @@ export default {
       ipFormRules: {
         mask: [
           { required: true, validator: ipSubRules, trigger: 'blur' }
-        ],
-        /*groupId: [
+        ]
+        /* groupId: [
           { required: true, message: '请选择分组!', trigger: 'change', type: 'number' }
-        ]*/
+        ] */
       },
       groupList: [],
       modal: false,

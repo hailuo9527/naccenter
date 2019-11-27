@@ -52,7 +52,7 @@ export default {
     userNoRules: {
       type: Array,
       default: function () {
-        const  validatePhone = (rule, value, callback) => {
+        const validatePhone = (rule, value, callback) => {
           if (!value) {
             return callback(new Error('手机号不能为空'))
           } else if (!/^1[34578]\d{9}$/.test(value)) {
@@ -126,7 +126,7 @@ export default {
         smsCode: ''
       },
       content: '获取验证码', // 按钮内容
-      totalTime: 60,  // 倒计时
+      totalTime: 60, // 倒计时
       canClick: true // 是否可点击
     }
   },
@@ -155,7 +155,7 @@ export default {
       })
     },
     getCode () {
-      if (!this.canClick) return  // 不可重复点击
+      if (!this.canClick) return // 不可重复点击
       if (this.form.userNo === '') {
         this.$Message.error('请输入手机号码！')
         return
