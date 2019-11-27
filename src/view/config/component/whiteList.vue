@@ -488,10 +488,10 @@ export default {
             id: item.id,
             macAddress: item.macAddress,
             ipAddress: null,
-            nbCode: this.nbCode
+            nbCode: this.nbCode,
+            userName: item.userName
           }
           let res = await uptRosterTemp(json)
-          // console.log(res)
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info(res.data.result)

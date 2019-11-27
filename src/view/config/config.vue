@@ -58,7 +58,15 @@
                 <label for="" class="my-label">访客模式:</label>
                 <i-switch v-model="defaultConfig.visitor"/>
               </div>
-            </Col>
+            </Col>   
+            <Col span="16" :xl="12">
+              <div class="form-item">
+                <label for="" class="my-label">访客范围:</label>
+                <Select v-model="defaultConfig.viRight" style="width:80px">
+                  <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.name }}</Option>
+                </Select>
+              </div>
+            </Col>   
           </Row>
           <Row :gutter="30" v-if="defaultConfig.visitor">
             <Col span="16" :xl="12">
@@ -237,7 +245,8 @@ export default {
         single: false,
         visitor: true,
         visitCount: '',
-        visitDuration: ''
+        visitDuration: '',
+        viRight: "ALL"
       },
 
       netConfig: {
@@ -283,7 +292,20 @@ export default {
           align: 'center'
         }
       ],
-      blockList: []
+      blockList: [],
+      options: [
+        {
+          name: '全部', value: 'ALL'
+        },
+
+        {
+          name: '局域网', value: 'LAN'
+        }, 
+
+        {
+          name: '互联网', value: 'Internet'
+        }
+      ]
     }
   },
   computed: {
@@ -351,6 +373,7 @@ export default {
       args.single = arr.single ? 'on' : 'off'
       args.visitor = arr.visitor ? 'on' : 'off'
       args.nbCode = this.activeNb.nbCode
+      args.viRight = arr.viRight
       let res = await changeNbConfig({ ...args })
       if (res.data.code === 'success') {
         this.$Message.success('保存成功')

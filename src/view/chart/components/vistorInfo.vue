@@ -17,7 +17,8 @@
         </Col>
         <Col span="12">
           <div class="form-item">
-
+            访客范围：
+            <span>{{vistorList.viRight != null ? visitorList.viRight : 'unknow'}}</span>
           </div>
         </Col>
       </Row>
@@ -105,7 +106,6 @@
       async getVistorInfo() {
         this.loading = true
         let res = await getVistorInfo({nbCode: this.nbCode})
-        console.log(res)
         this.loading = false
         if (res.data.code === 'success') {
           this.tableList = res.data.result || []

@@ -240,3 +240,17 @@ export const getVistorInfo = ({ nbCode }) => {
     }
   })
 }
+
+/*
+* 修改资产视图单一行操作
+* */
+
+export const updateHostManage = ({ nbCode, f01, ipAddress, f02, f03, f04, f05, f06, f07 }) => {
+  return axios.request({
+    url: '/updHostManage',
+    method: 'post',
+    params: {
+      nbCode, f01, ipAddress, f02, f03, f04, f05, f06, f07
+    }
+  })
+}

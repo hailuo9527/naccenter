@@ -39,7 +39,7 @@
               <span style="font-size: 12px;color: #666"><span style="color: #333;margin-left: 20px">{{ row.f07 }}</span></span>
             </template>
             <template slot-scope="{ row }" slot="f08">
-              <span style="font-size: 12px;color: #666"><span style="color: #333;margin-left: 20px">{{ row.f08 }}</span></span>
+              <span style="font-size: 12px;color: #666"><span style="color: #333;"><Icon type="ios-create-outline" color="rgb(0, 233, 188)" size="20" @click="modify([row.f01, row.ipAddress, row.f02, row.f03, row.f04, row.f05, row.f06, row.f07])"/></span></span>
             </template>
 
           </Table>
@@ -53,17 +53,34 @@
         </Col>
       </Row>-->
     </div>
+    
+    <!-- 修改信息 -->
+    <Modal
+        v-model="status"
+        width="360"
+        title="修改操作"
+        @on-ok="modifyConfirm">
+        <p>主机名<Input v-model ="singleRowData[0]" placeholder="主机名" clearable style="width: 100%" /></p>
+        <p>IP地址<Input v-model ="singleRowData[1]" placeholder="IP地址" disabled clearable style="width: 100%" /></p>
+        <p>主机MAC地址<Input v-model ="singleRowData[2]" placeholder="主机MAC地址" disabled clearable style="width: 100%" /></p>
+        <p>主机MAC厂商<Input v-model ="singleRowData[3]" placeholder="主机MAC厂商" clearable style="width: 100%" /></p>
+        <p>操作系统类型<Input v-model ="singleRowData[4]" placeholder="操作系统类型" clearable style="width: 100%" /></p>
+        <p>终端类型<Input v-model ="singleRowData[5]" placeholder="终端类型" clearable style="width: 100%" /></p>
+        <p>终端厂商<Input v-model ="singleRowData[6]" placeholder="终端厂商" clearable style="width: 100%" /></p>
+        <p>开启的端口<Input v-model ="singleRowData[7]" placeholder="开启的端口" disabled clearable style="width: 100%" /></p>
+    </Modal>
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { getManagement, delHostManage, changeStatus } from '../../api/chart'
+import { mapState, mapActions, mapMutations,} from 'vuex'
+import { getManagement, delHostManage, changeStatus, updateHostManage} from '../../api/chart'
 import excel from '@/libs/excel'
 
 export default {
   name: 'chart',
   data () {
     return {
+      status: false,
       loading: false,
       pageInfo: {
         pageNo: 1,
@@ -147,7 +164,7 @@ export default {
           }
         },
         {
-          title: '服务进程',
+          title: '操作',
           slot: 'f08',
           width: 150,
           tooltip: true
@@ -157,7 +174,8 @@ export default {
       ],
       managementList: [
       ],
-      exportLoading: false
+      exportLoading: false,
+      singleRowData: []
     }
   },
   methods: {
@@ -212,8 +230,8 @@ export default {
       if (this.managementList.length) {
         this.exportLoading = true
         const params = {
-          title: [ '主机名', 'ipAddress',	'ip地址',	'主机MAC地址',	'主机MAC厂商',	'操作系统类型',	'终端类型',	'终端厂商', '开启的端口',	'服务进程'	],
-          key: ['f01', 'f02', 'f03', 'f04', 'f05', 'f06', 'f07', 'f08'],
+          title: [ '主机名', 'ipAddress',	'IP地址',	'主机MAC地址',	'主机MAC厂商',	'操作系统类型',	'终端类型',	'终端厂商', '开启的端口'],
+          key: ['f01', 'f02', 'f03', 'f04', 'f05', 'f06', 'f07'],
           data: this.managementList,
           autoWidth: true,
           filename: '资产列表'
@@ -223,6 +241,22 @@ export default {
       } else {
         this.$Message.info('表格数据不能为空！')
       }
+    },
+    //修改资产视图操作
+    modify (e) {
+      this.status = true;
+      this.singleRowData = e;
+    },
+    //修改资产视图操作确认
+    async modifyConfirm () {
+          this.loading = true
+          let res = await updateHostManage({nbCode: this.activeNb.nbCode, f01: this.singleRowData[0], ipAddress: this.singleRowData[1], f02: this.singleRowData[2], f03: this.singleRowData[3], f04: this.singleRowData[4], f05: this.singleRowData[5], f06: this.singleRowData[6], f07: this.singleRowData[7]})
+          this.loading = false
+          if(res.data.code == "success"){
+            this.$Loading.start()
+            this.getManagement(1)
+            this.$Loading.finish()
+          }
     }
   },
   computed: {
