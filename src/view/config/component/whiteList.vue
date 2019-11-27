@@ -462,7 +462,7 @@ export default {
       this.addWhiteModel = false
       if (res.data.code === 'success') {
         this.$Message.success('添加成功')
-       this.getDefaultList()
+        this.getDefaultList()
       } else {
         this.$Message.error(res.data.result)
       }
@@ -495,7 +495,7 @@ export default {
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info(res.data.result)
-            //this.whiteList.splice(index, 1)
+            // this.whiteList.splice(index, 1)
             this.getDefaultList()
           } else {
             this.$Modal.remove()

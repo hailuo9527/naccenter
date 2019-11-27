@@ -58,7 +58,7 @@
                 <label for="" class="my-label">访客模式:</label>
                 <i-switch v-model="defaultConfig.visitor"/>
               </div>
-            </Col>   
+            </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
                 <label for="" class="my-label">访客范围:</label>
@@ -66,7 +66,7 @@
                   <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.name }}</Option>
                 </Select>
               </div>
-            </Col>   
+            </Col>
           </Row>
           <Row :gutter="30" v-if="defaultConfig.visitor">
             <Col span="16" :xl="12">
@@ -246,7 +246,7 @@ export default {
         visitor: true,
         visitCount: '',
         visitDuration: '',
-        viRight: "ALL"
+        viRight: 'ALL'
       },
 
       netConfig: {
@@ -300,7 +300,7 @@ export default {
 
         {
           name: '局域网', value: 'LAN'
-        }, 
+        },
 
         {
           name: '互联网', value: 'Internet'

@@ -46,14 +46,13 @@
         </Col>
       </Row>
 
-
      <!-- <Row type="flex" justify="center" class="opera">
         <Col>
           <Page :total="pageInfo.total" @on-change="pageChange" prev-text="上一页" next-text="下一页" :page-size="pageInfo.pageSize" />
         </Col>
       </Row>-->
     </div>
-    
+
     <!-- 修改信息 -->
     <Modal
         v-model="status"
@@ -72,8 +71,8 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapMutations,} from 'vuex'
-import { getManagement, delHostManage, changeStatus, updateHostManage} from '../../api/chart'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { getManagement, delHostManage, changeStatus, updateHostManage } from '../../api/chart'
 import excel from '@/libs/excel'
 
 export default {
@@ -168,8 +167,7 @@ export default {
           slot: 'f08',
           width: 150,
           tooltip: true
-        },
-
+        }
 
       ],
       managementList: [
@@ -219,7 +217,7 @@ export default {
       this.loading = true
       let res = await changeStatus({ nbCode: this.activeNb.nbCode })
       this.loading = false
-      //console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.$Message.success('拉取数据中，请稍后刷新！')
       } else {
@@ -242,21 +240,21 @@ export default {
         this.$Message.info('表格数据不能为空！')
       }
     },
-    //修改资产视图操作
+    // 修改资产视图操作
     modify (e) {
-      this.status = true;
-      this.singleRowData = e;
+      this.status = true
+      this.singleRowData = e
     },
-    //修改资产视图操作确认
+    // 修改资产视图操作确认
     async modifyConfirm () {
-          this.loading = true
-          let res = await updateHostManage({nbCode: this.activeNb.nbCode, f01: this.singleRowData[0], ipAddress: this.singleRowData[1], f02: this.singleRowData[2], f03: this.singleRowData[3], f04: this.singleRowData[4], f05: this.singleRowData[5], f06: this.singleRowData[6], f07: this.singleRowData[7]})
-          this.loading = false
-          if(res.data.code == "success"){
-            this.$Loading.start()
-            this.getManagement(1)
-            this.$Loading.finish()
-          }
+      this.loading = true
+      let res = await updateHostManage({ nbCode: this.activeNb.nbCode, f01: this.singleRowData[0], ipAddress: this.singleRowData[1], f02: this.singleRowData[2], f03: this.singleRowData[3], f04: this.singleRowData[4], f05: this.singleRowData[5], f06: this.singleRowData[6], f07: this.singleRowData[7] })
+      this.loading = false
+      if (res.data.code == 'success') {
+        this.$Loading.start()
+        this.getManagement(1)
+        this.$Loading.finish()
+      }
     }
   },
   computed: {
@@ -277,10 +275,10 @@ export default {
   },
   mounted () {
     this.getManagement(1)
-  },
+  }
 /*  beforeDestroy () {
     this.getAsideList()
-  }*/
+  } */
 
 }
 </script>
