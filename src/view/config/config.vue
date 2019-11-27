@@ -65,8 +65,8 @@
             </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">访问范围:</label>
-                <Select v-model="defaultConfig.viRight" style="width:80px">
+                <label for="" class="my-label">访问范围 <pop-tip content="允许访客访问的网络范围"/> :</label>
+                <Select v-model="defaultConfig.viRight" >
                   <Option v-for="item in options" :value="item.value" :key="item.value">{{ item.name }}</Option>
                 </Select>
               </div>
