@@ -34,6 +34,19 @@ export const delNb = (nbCode) => {
 }
 
 /*
+* 替换Nb机器
+* */
+export const repNb = ({ newNbCode, oldNbCode }) => {
+  return axios.request({
+    url: `/nbReplace`,
+    method: 'post',
+    params: {
+      newNbCode, oldNbCode
+    }
+  })
+}
+
+/*
 * 通过NB序列号查询NB信息接口
 * */
 export const findNb = (nbName) => {

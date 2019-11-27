@@ -138,7 +138,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$config.wxConfig.redirect_uri)
     this.checkWxLogin()
   },
   destroyed () {

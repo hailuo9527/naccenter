@@ -254,3 +254,30 @@ export const updateHostManage = ({ nbCode, f01, ipAddress, f02, f03, f04, f05, f
     }
   })
 }
+/*
+*  删除访客信息（强DEL制访客下线）
+* */
+
+export const delVistorInfo = ({ nbCode, ip, mac }) => {
+  return axios.request({
+    url: '/delVistorInfo',
+    method: 'post',
+    params: {
+      nbCode, ip, mac
+    }
+  })
+}
+
+/*
+*  将访客添加到白名单
+* */
+
+export const addVistorToRoster = ({ openId, nbCode, ip, mac }) => {
+  return axios.request({
+    url: '/addVistorToRoster',
+    method: 'post',
+    params: {
+      openId, nbCode, ip, mac
+    }
+  })
+}

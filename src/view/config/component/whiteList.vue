@@ -34,7 +34,8 @@
       </Col>
       <Col class="btn-group">
         <span @click="addWhiteModel = true">添加</span>
-        <span @click="removeAll(1)" v-if="whiteList.length>0">清空列表</span>
+        <span @click="removeAll(1)" v-if="whiteList.length>0">清空</span>
+        <span @click="uptRosterAll" v-if="whiteList.length>0">全部下移</span>
       </Col>
     </Row>
     <Row class="list-head" type="flex" justify="space-between" align="top" style="margin-top: 20px;">
@@ -74,7 +75,8 @@
       <Col>
       </Col>
       <Col class="btn-group">
-        <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空列表</span>
+        <span @click="addLiveModel = true">添加</span>
+        <span @click="removeAll(0)" v-if="whiteAutoList.length>0">清空</span>
       </Col>
     </Row>
     <Modal v-model="addWhiteModel" width="360">
@@ -148,7 +150,7 @@
     <!--撤回固定ip-->
     <Modal v-model="reBackIpModel" width="360">
       <p slot="header" style="color:#333;text-align:center">
-        <span>Ip地址</span>
+        <span>IP地址</span>
       </p>
       <div style="text-align:center">
         <Form :model="editIpForm"  label-position="left" ref="editIpForm" :rules="editIpFormRules">
@@ -159,6 +161,22 @@
       </div>
       <div slot="footer">
         <Button type="info" size="large" long  @click="reBackIP">确认</Button>
+      </div>
+    </Modal>
+    <!--添加动态名单-->
+    <Modal v-model="addLiveModel" width="360">
+      <p slot="header" style="color:#333;text-align:center">
+        <span>添加动态名单</span>
+      </p>
+      <div style="text-align:center">
+        <Form :model="addLiveListForm" ref="addLiveList" :rules="addLiveListRules">
+          <FormItem label="MAC地址" prop="macAddress">
+            <Input v-model.trim="addLiveListForm.macAddress" placeholder="请输入MAC地址"></Input>
+          </FormItem>
+        </Form>
+      </div>
+      <div slot="footer">
+        <Button type="info" size="large" long @click="addLiveListCheck('addLiveList')">确认</Button>
       </div>
     </Modal>
   </div>
@@ -173,7 +191,8 @@ import {
   updNameListById
 } from '../../../api/nbConfig'
 import {
-  uptRosterTemp
+  uptRosterTemp,
+  uptRosterAll
 } from '../../../api/ipManage'
 
 import { uploadFile } from '../../../api/upload'
@@ -194,6 +213,16 @@ export default {
         callback(new Error('请填写MAC地址或者导入excel表格批量处理！'))
       } else if (this.file && !value) {
         callback()
+      }
+    }
+    const macAddress = (rule, value, callback) => {
+      if (value) {
+        let reg = /^[a-fA-F0-9]{2}([:-][a-fA-F0-9]{2}){5}$/
+        if (!reg.test(value)) {
+          callback(new Error('请检查MAC地址格式！'))
+        } else {
+          callback()
+        }
       }
     }
     const ipAddress = (rule, value, callback) => {
@@ -285,6 +314,13 @@ export default {
       editIpFormRules: {
         ipAddress: [
           { validator: ipaddressRules, trigger: 'blur' }
+        ]
+      },
+      addLiveModel: false,
+      addLiveListForm: {},
+      addLiveListRules: {
+        macAddress: [
+          { required: true, message: '请输入MAC地址！', validator: macAddress, trigger: 'blur' }
         ]
       }
     }
@@ -422,6 +458,24 @@ export default {
         }
       })
     },
+    /* 批量将固定名单添加到动态名单 */
+    uptRosterAll () {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>确定把当前固定白名单全部修改成动态名单吗？</p>',
+        loading: true,
+        onOk: async () => {
+          let res = await uptRosterAll({ nbCode: this.nbCode })
+          this.$Modal.remove()
+          if (res.data.code === 'success') {
+            this.$Message.info('操作成功！')
+            this.getDefaultList()
+          } else {
+            this.$Message.error(res.data.result)
+          }
+         }
+      })
+    },
     // 修改别名
     async updNameListById () {
       let res = await updNameListById({ ...this.editNameForm })
@@ -468,12 +522,37 @@ export default {
       }
       this.upload(type)
     },
+
+    /* 添加动态名单 */
+    addLiveListCheck (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.addLiveList()
+        } else {
+          this.$Message.error('请输入名单信息或者上传文件!')
+        }
+      })
+    },
+    async addLiveList () {
+      let json = {
+        macAddress: this.addLiveListForm.macAddress,
+        nbCode: this.nbCode
+      }
+      let res = await uptRosterTemp(json)
+      if (res.data.code === 'success') {
+        this.$Message.success('添加成功！')
+        this.addLiveModel = false
+        this.getDefaultList()
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.addIp()
         } else {
-          // this.$Message.error('请输入名单信息或者上传文件!')
+          this.$Message.error('请输入名单信息或者上传文件!')
         }
       })
     },
@@ -481,7 +560,7 @@ export default {
     changeIpStatus (item, index) {
       this.$Modal.confirm({
         title: '提示',
-        content: '<p>确定要把此MAC地址修改位动态分配吗？</p>',
+        content: '<p>确定要把此MAC地址修改为动态分配吗？</p>',
         loading: true,
         onOk: async () => {
           let json = {

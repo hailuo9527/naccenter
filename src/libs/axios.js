@@ -1,6 +1,5 @@
 import axios from 'axios'
-import store from '@/store'
-import config from '@/config'
+
 import { getToken, removeToken } from './util'
 // import { Spin } from 'iview'
 axios.defaults.withCredentials = true
@@ -17,6 +16,7 @@ class HttpRequest {
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         AUTHORIZATION: getToken()
+
         // 'Accept-Encoding': 'gzip'
       }
     }

@@ -8,14 +8,16 @@
       <Row :gutter="30">
         <Col span="12">
           <div class="form-item">
-           系统状态:
+           DHCP状态:
            <!-- <i-switch v-model="statusList.dhcp"/>-->
             <span class="ivu-switch ivu-switch-default" v-if="statusList.dhcp == 'off'"></span>
             <span class="ivu-switch ivu-switch-checked ivu-switch-default" v-else-if="statusList.dhcp == 'on'"></span>
           </div>
         </Col>
         <Col span="12">
-
+          <div class="form-item">
+            租约时长: <span>{{statusList.dhcpDuration != null ? statusList.dhcpDuration:'unknow'}}</span>
+          </div>
         </Col>
       </Row>
       <Row :gutter="30">

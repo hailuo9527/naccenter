@@ -4,7 +4,10 @@
     <div style="display: flex; justify-content: center">
       <div class="add-list" @click="addNbModel = true">
         <!--      <span>添加</span>-->
-        <Icon type="md-add" color="#fff" :size="25"/>
+        <Tooltip content="点击添加NB机器" placement="top" max-width="200" theme="light" >
+          <Icon type="md-add" color="#fff" :size="25"/>
+        </Tooltip>
+        <!--<Icon type="md-add" color="#fff" :size="25"/>-->
       </div>
     </div>
 
@@ -38,6 +41,7 @@
         </div>
         <div class="info">{{i.nbCode}}</div>
         <Icon type="ios-close-circle" title="删除此项" class="delete" size="18" color="#555" @click="removeNb(i.nbCode)"/>
+        <Icon type="md-sync"  title="替换" class="replace" color='#555' :size="18" @click="replaceNb(i.nbCode) "/>
       </div>
       <div style="text-align: center" v-if="asideList.length === 0">暂无数据</div>
     </div>
@@ -81,10 +85,20 @@
       </div>
     </Modal>
 
+    <Modal
+        width="360"
+        v-model="modal1"
+        title="替换NB机器"
+        @on-ok="ok (model1, replaceCode)">
+        <Select v-model="model1" style="width:100%">
+        <Option v-for="(i,index) in asideList" :key="index" :value="i.nbCode" v-if="i.nbCode !== replaceCode">{{ i.nbName }}</Option>
+    </Select>
+    </Modal>
+
   </div>
 </template>
 <script>
-import { addNb, findNb, delNb } from '../../../../api/config'
+import { addNb, findNb, delNb, repNb } from '../../../../api/config'
 import { userApplyBind } from '../../../../api/userBind'
 import { uptHostManageReload } from '../../../../api/chart'
 import { mapMutations, mapState, mapActions } from 'vuex'
@@ -92,6 +106,8 @@ export default {
   name: 'MyAside',
   data () {
     return {
+      model1: '',
+      modal1: false,
       timer: '',
       isActive: 0,
       addNbModel: false, // 添加nb 弹窗
@@ -117,9 +133,10 @@ export default {
       applyRules: {
         nbCode: [
           { required: true, message: 'nbCode不能为空', trigger: 'blur' }
-        ],
+        ]
       },
-      activeGroup: ''
+      activeGroup: '',
+      replaceCode: ''
     }
   },
   computed: {
@@ -129,6 +146,30 @@ export default {
     })
   },
   methods: {
+    async ok (newNbCode, oldNbCode) {
+      console.log(oldNbCode)
+      let res = await repNb({ newNbCode, oldNbCode })
+      console.log(res)
+      if (res.data.code === 'success') {
+        this.$Message.success('切换成功！')
+        this.getAllNbList(true)
+      } else {
+        this.$Message.error(res.data.result)
+      }
+    },
+    // 点击备份
+    replaceNb (code) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>您确定要移植此机器配置到其他目标机器上吗？确定后目标机器将抛弃自身配置继承源机器所有配置，源机器将被初始化！</p>',
+        onOk: () => {
+          this.modal1 = true
+          this.replaceCode = code
+          this.$Modal.remove()
+        }
+      })
+
+    },
     ...mapMutations([
       'setAsideList',
       'setActiveNb'
@@ -145,7 +186,11 @@ export default {
       this.$router.push({ path: this.$route.path, query: { nbCode: this.activeNb.nbCode } })
     },
     getAllNbList (refresh) {
-      this.getAsideList(refresh)
+      this.getAsideList(refresh).then((res) => {
+        if (this.asideList.length === 1) {
+          this.changeActive(0,this.asideList[0])
+        }
+      })
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
@@ -177,7 +222,6 @@ export default {
     async addNb (nbCode, nbName) {
       this.modal_loading = true
       let res = await addNb({ nbCode: nbCode, nbName: nbName })
-      console.log(res)
       this.modal_loading = false
       if (res.data.code === 'success') {
         this.addNbModel = false
@@ -194,7 +238,7 @@ export default {
           content: `<p>${res.data.result}</p>`,
           onOk: () => {
             this.applyModel = true
-          },
+          }
         })
       } else {
         this.$Message.error(res.data.result)
@@ -212,7 +256,6 @@ export default {
             this.$Modal.remove()
             this.$Message.info('删除成功')
             this.getAllNbList(true)
-            console.log(this.asideList)
             this.$router.push({ path: this.$route.path, query: { nbCode: this.asideList[0].nbCode } })
           } else {
             this.$Modal.remove()
@@ -221,13 +264,22 @@ export default {
         }
       })
     },
+    // async replaceNb (newNbCode, oldNbCode) {
+    //   console.log(111111)
+    //   onOk: async () => {
+    //     let res = await repNb(newNbCode, oldNbCode)
+    //     if (res.data.code === 'success') {
+    //       console.log(res.data)
+    //     }
+    //   }
+    // },
     async search (nbName) {
-     // console.log(nbName)
+      // console.log(nbName)
       let res = await findNb(nbName)
-    //  console.log(res)
+      //  console.log(res)
       if (res.data.code === 'success' && res.data.result.length) {
         // 分组
-       /*
+        /*
         let arr = []
        if (!res.data.result.groupId) {
           arr = [{
@@ -247,7 +299,6 @@ export default {
         this.setAsideList(arr)
         this.changeActive(null, arr[0])
 
-        console.log(this.asideList)
       } else {
         this.$Message.error('没有找到，请检查输入的nbCode是否正确')
       }
@@ -260,7 +311,7 @@ export default {
         loading: true,
         onOk: async () => {
           let res = await uptHostManageReload({ nbCode: nbCode })
-          //console.log(res)
+          // console.log(res)
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info('重启成功')
@@ -274,7 +325,7 @@ export default {
   },
   mounted () {
     this.getAllNbList(true)
-    //this.activeGroup = this.asideList[0].groupName
+    // this.activeGroup = this.asideList[0].groupName
     this.timer = setInterval(() => {
       this.getAllNbList()
     }, 1000 * 60)

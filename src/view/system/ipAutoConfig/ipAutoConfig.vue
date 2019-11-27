@@ -18,7 +18,7 @@
           <FormItem label="子网掩码" prop="mask">
             <Input v-model.trim="ipForm.mask" placeholder="请输入子网掩码"></Input>
           </FormItem>
-          <FormItem label="选择分组" prop="groupId">
+          <FormItem label="选择分组" >
             <Select v-model="ipForm.groupId">
               <Option :value="item.groupId" v-for="(item, index) in groupList">{{item.groupName}}</Option>
             </Select>
@@ -40,7 +40,8 @@ export default {
   data () {
     const ipSubRules = (rule, value, callback) => {
       if (!value) callback(new Error('请输入子网掩码！'))
-      let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/
+      // let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/  // 255.2.2.2
+      let reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}(\/([1][6-9]|[2][0-9]|[3][0]))$/ // 192.168.0.1/16
       if (!reg.test(value)) {
         callback(new Error('请检查子网掩码格式！'))
       }
@@ -73,9 +74,9 @@ export default {
         mask: [
           { required: true, validator: ipSubRules, trigger: 'blur' }
         ],
-        groupId: [
-          { required: true, message: '请选择分组!', trigger: 'change', type: 'numbe  r' }
-        ]
+        /*groupId: [
+          { required: true, message: '请选择分组!', trigger: 'change', type: 'number' }
+        ]*/
       },
       groupList: [],
       modal: false,
@@ -110,7 +111,6 @@ export default {
     /* 获取所有分组 */
     async getAllGroup () {
       let res = await getAllGroup()
-      console.log(res)
       if (res.data.code === 'success') {
         this.groupList = res.data.result
       } else {

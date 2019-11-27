@@ -212,6 +212,15 @@ export const systemChild = [
       title: '修改个人信息'
     },
     component: () => import('@/view/system/userInfo/userInfo.vue')
+  },
+  {
+    path: 'update',
+    name: 'update',
+    meta: {
+      icon: 'md-alert',
+      title: '系统更新'
+    },
+    component: () => import('@/view/system/update/update.vue')
   }
 ]
 let accessRouters = [

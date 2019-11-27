@@ -1,10 +1,13 @@
 import { getAllNbList } from '../../api/config'
 import { selNewMessage } from '../../api/userBind'
+import { checkVersion } from "../../api/update";
+
 export default {
   state: {
     activeNb: null,
     asideList: [],
     applyCount: 0,
+    updateMsg: 0
   },
   getters: {},
   mutations: {
@@ -16,6 +19,9 @@ export default {
     },
     setApplyCount (state, count) {
       state.applyCount = count
+    },
+    setUpdateMsg (state, count) {
+      state.updateMsg = count
     }
   },
   actions: {
@@ -69,6 +75,22 @@ export default {
         selNewMessage().then((res) => {
           if (res.data.code === 'success') {
             commit('setApplyCount', res.data.result)
+          }
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    getUpdateMsg ({ commit }) {
+      return new Promise((resolve, reject) => {
+        checkVersion().then((res) => {
+          if (res.data.code === 'success') {
+            if (res.data.result.length !== 0) {
+              commit('setUpdateMsg', 1)
+            } else {
+              commit('setUpdateMsg', 0)
+            }
           }
           resolve(res)
         }).catch(err => {

@@ -30,10 +30,10 @@
                 <FormItem label="" prop="code">
                   <!-- <div style="display: flex; align-items: center;justify-content: center"> -->
                   验证码：
-                  <div>
-                    <Input v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
+                  <div class="clearfix">
+                    <Input class="fl" v-model="formValidate.code" placeholder="请输入验证码" style="width: 50%;">
                     </Input>
-                    <Button style="flex: 1;margin-left: 70px;" @click="getCode" >{{this.content}}</Button>
+                    <Button class="fr" @click="getCode" >{{this.content}}</Button>
                   </div>
                 </FormItem>
                 <FormItem>

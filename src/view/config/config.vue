@@ -15,14 +15,18 @@
           <Row :gutter="30">
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">btime:</label>
+                <label for="" class="my-label">
+                  btime
+                  <pop-tip content="阻挡入侵时间(单位：秒)，发现终端入侵（不在名单配置中）最小的阻拦时间。系统默认30秒"/>
+                 :
+                </label>
                 <input type="text" class="my-input" @input="handleInput('btime',defaultConfig.btime)"
                        v-model.trim="defaultConfig.btime" placeholder="请输入正整数，单位秒">
               </div>
             </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">ctime:</label>
+                <label for="" class="my-label">ctime <pop-tip content="NacBox分析网络流量、以发现非法入侵的间隔时间（单位：秒），系统默认10秒"/> :</label>
                 <input type="text" class="my-input" @input="handleInput('ctime',defaultConfig.ctime)"
                        v-model.trim="defaultConfig.ctime" placeholder="请输入正整数，单位秒">
               </div>
@@ -32,7 +36,7 @@
           <Row :gutter="30">
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">ltime:</label>
+                <label for="" class="my-label">ltime <pop-tip content="学习模式开启时长（单位：秒），系统默认3600秒"/> :</label>
                 <input type="text" class="my-input" @input="handleInput('ltime',defaultConfig.ltime)"
                        v-model.trim="defaultConfig.ltime" placeholder="请输入正整数，单位秒">
               </div>
@@ -41,13 +45,13 @@
           <Row :gutter="30">
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">学习模式:</label>
+                <label for="" class="my-label">学习模式 <pop-tip content="当学习模式开启时，NacBox认为所有接入到该网络的终端都是合法的，学习模式结束后生成白名单由NacCenter进行管理"/> :</label>
                 <i-switch v-model="defaultConfig.learning"/>
               </div>
             </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">单向模式:</label>
+                <label for="" class="my-label">单向模式 <pop-tip content="开启时为单向阻拦"/> :</label>
                 <i-switch v-model="defaultConfig.single"/>
               </div>
             </Col>
@@ -55,7 +59,7 @@
           <Row :gutter="30">
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">访客模式:</label>
+                <label for="" class="my-label">访客模式 <pop-tip content="是否允许访客通过微信扫码接入网络"/> :</label>
                 <i-switch v-model="defaultConfig.visitor"/>
               </div>
             </Col>
@@ -71,14 +75,14 @@
           <Row :gutter="30" v-if="defaultConfig.visitor">
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">访问次数:</label>
+                <label for="" class="my-label">访问次数 <pop-tip content="每天同一个访客的访问次数，系统默认为3次（当访客模式关闭时，无此项配置）"/> :</label>
                 <input type="text" class="my-input" @input="handleInput('visitCount',defaultConfig.visitCount)"
                        v-model.trim="defaultConfig.visitCount" placeholder="请输入正整数，单位次">
               </div>
             </Col>
             <Col span="16" :xl="12">
               <div class="form-item">
-                <label for="" class="my-label">访问时间:</label>
+                <label for="" class="my-label">访问时间 <pop-tip content="每次访客使用网络的时长（分钟），系统默认为180分钟（当访客模式关闭时，无此项配置）"/> :</label>
                 <input type="text" class="my-input" @input="handleInput('visitDuration',defaultConfig.visitDuration)"
                        v-model.trim="defaultConfig.visitDuration" placeholder="请输入正整数，单位时间">
               </div>
@@ -159,11 +163,11 @@
           </Col>
         </Row>
       </div>
-      <!--固定ip-->
+      <!--DHCP配置-->
       <div class="nav-content2" v-if="activeNav === 5">
         <ip-config :nb-code="activeNb.nbCode"></ip-config>
       </div>
-      <!--ip管理-->
+      <!--ip回收-->
       <div class="nav-content2" v-if="activeNav === 6">
         <ip-recovery :nb-code="activeNb.nbCode"></ip-recovery>
         <!--<ip-param :nb-code="activeNb.nbCode"></ip-param>-->
@@ -186,10 +190,11 @@ import ipConfig from '../ip-manage/component/ipConfig.vue'
 import ipRecovery from '../ip-manage/component/ipRecovery.vue'
 import whiteList from './component/whiteList'
 import ignoreList from './component/ignoreList'
+import PopTip from '@/components/pop-tip'
 export default {
   name: 'config',
   components: {
-    ipConfig, ipRecovery, whiteList, ignoreList
+    ipConfig, ipRecovery, whiteList, ignoreList, PopTip
   },
   data () {
     const ipaddressRules = (rule, value, callback) => {
@@ -233,7 +238,7 @@ export default {
         '忽略名单',
         '入侵名单',
         'DHCP配置',
-        'IP回收'
+        /*'IP回收'*/
       ],
       loading: false,
 

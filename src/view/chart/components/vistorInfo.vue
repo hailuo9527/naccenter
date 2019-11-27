@@ -46,6 +46,10 @@
           <!--   <template slot-scope="{ row }" slot="dhcpIp">
                <span style="font-size: 12px;color: #666"><span style="color: #00e9bc;">{{ row.dhcpIp }}</span></span>
              </template>-->
+          <template slot-scope="{ row, index }" slot="action">
+            <Icon type="md-add" color="#00e9bc" style="cursor: pointer" :size="24" @click="addVistorToWhiteList(row)"/>
+            <Icon type="ios-trash" size="24" style="cursor: pointer" color="#00e9bc" @click="removeList(row, index)"/>
+          </template>
         </Table>
       </Row>
     </div>
@@ -54,7 +58,8 @@
 </template>
 
 <script>
-import { getVistorInfo, getSystemStatus } from '../../../api/chart'
+// import { getVistorInfo, getSystemStatus } from '../../../api/chart'
+import { getVistorInfo, getSystemStatus, delVistorInfo, addVistorToRoster } from '../../../api/chart'
 
 export default {
   name: 'dhcpConfig',
@@ -72,6 +77,11 @@ export default {
         },
         {
           title: '微信昵称',
+          title: '微信ID/手机号',
+          key: 'openid'
+        },
+        {
+          title: '微信昵称/姓名',
           key: 'nickName'
         },
         {

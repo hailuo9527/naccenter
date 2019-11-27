@@ -2,7 +2,7 @@
     <Row class="header">
       <div class="logo">
         <div class="img">
-          <img :src="logo" alt="">
+          <!--<img :src="logo" alt="">-->
         </div>
         <div class="text">NacCenter</div>
       </div>
@@ -13,23 +13,26 @@
         <router-link :to="{path: `/management`}">资产视图</router-link>
         <!--  <router-link :to="{path: `/system`}">系统管理</router-link>-->
         <router-link :to="{path: `/warning`}">报警</router-link>
-       <!-- <router-link :to="{path: `/ipManage`}">IP管理</router-link>-->
+        <!-- <router-link :to="{path: `/ipManage`}">IP管理</router-link>-->
       </div>
       <div class="profile">
         <Dropdown style="margin-left: 20px" placement="bottom-end" trigger="click"  @on-click="dropEvent">
           <a href="javascript:void(0)"  class="trigger">
             {{userInfo.userName}}
-            <Badge :count="applyCount"></Badge>
+            <Badge :count="parseInt(applyCount+updateMsg)"></Badge>
             <Icon type="ios-arrow-down"></Icon>
           </a>
           <DropdownMenu slot="list">
             <DropdownItem name="sysControl">
-              <router-link :to="{path: `/system`}" style="color: #333">系统管理  <Badge :count="applyCount"></Badge></router-link>
+              <router-link :to="{path: `/system`}" style="color: #333; font-size: 14px">系统管理  <Badge :count="parseInt(applyCount+updateMsg)"></Badge></router-link>
             </DropdownItem>
-            <DropdownItem name="logout">退出</DropdownItem>
+            <DropdownItem name="logout" >
+              <span style="font-size: 14px">退出</span>
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
+
 
     </row>
 </template>
@@ -48,15 +51,16 @@ export default {
       userInfo: state => state.login.userInfo,
       activeNb: state => state.app.activeNb,
       asideList: state => state.app.asideList,
-      applyCount: state => state.app.applyCount
+      applyCount: state => state.app.applyCount,
+      updateMsg: state => state.app.updateMsg
     })
   },
   methods: {
     ...mapActions([
-      'handleLoginOut', 'getAsideList', 'getApplyCount'
+      'handleLoginOut', 'getAsideList', 'getApplyCount','getUpdateMsg'
     ]),
     ...mapMutations([
-      'setActiveNb', 'setApplyCount'
+      'setActiveNb', 'setApplyCount', 'setUpdateMsg'
     ]),
     loginOut () {
       this.handleLoginOut().then(res => {
@@ -76,6 +80,7 @@ export default {
   },
   mounted () {
     this.getApplyCount()
+    this.getUpdateMsg()
   }
 }
 </script>

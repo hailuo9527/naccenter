@@ -118,10 +118,10 @@
                     <Row class="table-container">
                       <Table :columns="white" :data="whiteList" :loading="loading"  height="300" :show-header="false" stripe
                              size="small">
-                        <template slot-scope="{ row }" slot="macAdress">
+                        <template slot-scope="{ row }" slot="macAddress">
                           <span style="font-size: 12px;color: #666">MAC地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.macAddress }}</span></span>
                         </template>
-                        <template slot-scope="{ row }" slot="ipAdress">
+                        <template slot-scope="{ row }" slot="ipAddress">
                           <span style="font-size: 12px;color: #666">IP地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.ipAddress }}</span></span>
                         </template>
                         <template slot-scope="{ row, index }" slot="action">
@@ -157,7 +157,7 @@
                     </Modal>
                   </div>
                 </TabPane>
-                <TabPane label="忽略名单" name="supTab4" tab="sub-tab">
+               <!-- <TabPane label="忽略名单" name="supTab4" tab="sub-tab">
                   <div class="nav-content2" >
                     <Row class="table-container">
                       <Table :columns="ignore" height="300" :data="ignoreList" :loading="loading" :show-header="false" stripe
@@ -165,9 +165,9 @@
                         <template slot-scope="{ row }" slot="mac">
                           <span style="font-size: 12px;color: #666">MAC地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.macAddress }}</span></span>
                         </template>
-                        <template slot-scope="{ row }" slot="ip">
+                      &lt;!&ndash;  <template slot-scope="{ row }" slot="ip">
                           <span style="font-size: 12px;color: #666">IP地址：<span style="color: #00e9bc;margin-left: 20px">{{ row.ipAddress }}</span></span>
-                        </template>
+                        </template>&ndash;&gt;
                         <template slot-scope="{ row, index }" slot="action">
                           <Icon type="ios-trash" size="24" color="#00e9bc" @click="removeList(row.id, index)"/>
                         </template>
@@ -188,12 +188,12 @@
                       </p>
                       <div style="text-align:center">
                         <Form :model="addIgnoreForm" label-position="left" ref="ignoreFormRules" :rules="ignoreFormRules">
-                          <FormItem label="mac地址" prop="macAdress">
-                            <Input v-model.trim="addIgnoreForm.macAdress" placeholder="请输入mac地址"></Input>
+                          <FormItem label="MAC地址" prop="macAdress">
+                            <Input v-model.trim="addIgnoreForm.macAdress" placeholder="请输入MAC地址"></Input>
                           </FormItem>
-                          <FormItem label="ip地址" prop="ipAdress">
-                            <Input v-model.trim="addIgnoreForm.ipAdress" placeholder="请输入ip地址"></Input>
-                          </FormItem>
+                         &lt;!&ndash; <FormItem label="IP地址" prop="ipAdress">
+                            <Input v-model.trim="addIgnoreForm.ipAdress" placeholder="请输入IP地址"></Input>
+                          </FormItem>&ndash;&gt;
                         </Form>
                       </div>
                       <div slot="footer">
@@ -201,7 +201,7 @@
                       </div>
                     </Modal>
                   </div>
-                </TabPane>
+                </TabPane>-->
 
               </Tabs>
             </div>
@@ -250,7 +250,8 @@ import {
   selNbByGroupId,
   getNbCodeInfoByGroupId,
   updateNbGroup,
-  uptGroupParam
+  uptGroupParam,
+  getGroupParam
 } from '../../../api/group.js'
 
 import { mapState } from 'vuex'
@@ -270,7 +271,7 @@ export default {
       } else {
         let reg = /[A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}[:-][A-F\d]{2}/
         if (!reg.test(value)) {
-          callback(new Error('请检查IP地址格式！'))
+          callback(new Error('请检查MAC地址格式！'))
         }
       }
       callback()
@@ -333,10 +334,10 @@ export default {
           title: 'Mac地址',
           slot: 'mac'
         },
-        {
+       /* {
           title: 'Ip地址',
           slot: 'ip'
-        },
+        },*/
 
         {
           title: 'Action',
@@ -377,9 +378,9 @@ export default {
         macAdress: [
           { required: true, validator: macAddressRules, trigger: 'blur' }
         ],
-        ipAdress: [
+        /*ipAdress: [
           { required: true, validator: ipAddress, trigger: 'blur' }
-        ]
+        ]*/
       }
     }
   },
@@ -471,6 +472,16 @@ export default {
         this.nbList = res.data.result
       }
     },
+    /* 获取模式参数 */
+    async getGroupParam (groupId) {
+      let res = await  getGroupParam(groupId)
+      console.log(res)
+      if (res.data.code === 'success') {
+        this.defaultConfig = res.data.result || {}
+        this.defaultConfig.learning = res.data.result.learning === 'on'
+        this.defaultConfig.single = res.data.result.single === 'on'
+      }
+    },
     /* 保存模式设置 */
     async uptGroupParam (arr) {
       let args = Object.assign({}, arr)
@@ -487,6 +498,7 @@ export default {
     /* 获取名单 */
     async getList () {
       let res = await getGroupRoster({ groupId: this.activeGroupId })
+      console.log(res)
       if (res.data.code === 'success') {
         if (res.data.result.length) {
           let arrWhite = []
@@ -605,10 +617,20 @@ export default {
     },
     // 切换tab
     changeNav (data) {
-      this.activeNav = data
-      if (data === 'supTab3') {
-        this.getList()
+      this.activeNav = data;
+      console.log(data)
+      switch (data) {
+        case 'supTab2':
+          this.getGroupParam(this.activeGroupId)
+          break
+        case 'supTab3':
+          this.getList();
+        break
+
       }
+      /*if (data === 'supTab3') {
+        this.getList()
+      }*/
     },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
