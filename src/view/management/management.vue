@@ -59,14 +59,14 @@
         width="360"
         title="修改操作"
         @on-ok="modifyConfirm">
-        <p>主机名<Input v-model ="singleRowData[0]" placeholder="主机名" clearable style="width: 100%" /></p>
-        <p>IP地址<Input v-model ="singleRowData[1]" placeholder="IP地址" disabled clearable style="width: 100%" /></p>
-        <p>主机MAC地址<Input v-model ="singleRowData[2]" placeholder="主机MAC地址" disabled clearable style="width: 100%" /></p>
-        <p>主机MAC厂商<Input v-model ="singleRowData[3]" placeholder="主机MAC厂商" clearable style="width: 100%" /></p>
-        <p>操作系统类型<Input v-model ="singleRowData[4]" placeholder="操作系统类型" clearable style="width: 100%" /></p>
-        <p>终端类型<Input v-model ="singleRowData[5]" placeholder="终端类型" clearable style="width: 100%" /></p>
-        <p>终端厂商<Input v-model ="singleRowData[6]" placeholder="终端厂商" clearable style="width: 100%" /></p>
-        <p>开启的端口<Input v-model ="singleRowData[7]" placeholder="开启的端口" disabled clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>主机名</span><Input v-model ="singleRowData[0]" placeholder="主机名" clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>IP地址</span><Input v-model ="singleRowData[1]" placeholder="IP地址" disabled clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>主机MAC地址</span><Input v-model ="singleRowData[2]" placeholder="主机MAC地址" disabled clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>主机MAC厂商</span><Input v-model ="singleRowData[3]" placeholder="主机MAC厂商" clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>操作系统类型</span><Input v-model ="singleRowData[4]" placeholder="操作系统类型" clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>终端类型</span><Input v-model ="singleRowData[5]" placeholder="终端类型" clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>终端厂商</span><Input v-model ="singleRowData[6]" placeholder="终端厂商" clearable style="width: 100%" /></p>
+        <p class="management-form-item"><span>开启的端口</span><Input v-model ="singleRowData[7]" placeholder="开启的端口" disabled clearable style="width: 100%" /></p>
     </Modal>
   </div>
 </template>
