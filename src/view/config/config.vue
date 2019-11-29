@@ -63,7 +63,7 @@
                 <i-switch v-model="defaultConfig.visitor"/>
               </div>
             </Col>
-            <Col span="16" :xl="12">
+            <Col span="16" :xl="12" v-if="defaultConfig.visitor">
               <div class="form-item">
                 <label for="" class="my-label">访问范围 <pop-tip content="允许访客访问的网络范围"/> :</label>
                 <Select v-model="defaultConfig.viRight" >

@@ -214,6 +214,15 @@ export const systemChild = [
     component: () => import('@/view/system/userInfo/userInfo.vue')
   },
   {
+    path: 'logFile',
+    name: 'logFile',
+    meta: {
+      icon: 'md-document',
+      title: '日志审计'
+    },
+    component: () => import('@/view/system/logFile/logFile.vue')
+  },
+  {
     path: 'update',
     name: 'update',
     meta: {

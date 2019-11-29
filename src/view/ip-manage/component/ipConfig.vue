@@ -37,8 +37,8 @@
                 </FormItem>
               </Col>
               <Col span="12">
-                <FormItem label="租约时长：" prop="dhcpDuration" style="position: relative">
-                  <Input type="text" v-model.trim="netConfig.dhcpDuration || 10080" placeholder="请输入租约时长">
+                <FormItem label="租约时长：" prop="dhcpDuration" style="position: relative" > 
+                  <Input type="text" v-model.trim="netConfig.dhcpDuration"  placeholder="请输入租约时长">
                     <pop-tip slot="prepend" content='租约时长为分配的IP有效时间（分钟）'/>
                   </Input>
                 </FormItem>
@@ -105,6 +105,7 @@ export default {
       callback()
     }
     return {
+      a: 10080,
       dhcp: false,
       changeDhcp: false,
       ipConfig: false,
@@ -161,9 +162,12 @@ export default {
     // 获取默认配置
     async getIpParam () {
       let res = await getIpParam({ nbCode: this.nbCode, type: 0 })
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.netConfig = res.data.result || {}
+        if(this.netConfig.dhcpDuration == null){
+           this.netConfig.dhcpDuration = 10080
+        }
         this.dhcp = res.data.result.dscp === 'on'
       }
     },
@@ -176,7 +180,7 @@ export default {
           content: '确定要关闭DHCP配置吗？',
           onOk: async () => {
             let res = await uptIpParamStatus({ nbCode: this.nbCode })
-
+            // console.log(res)
             if (res.data.code) {
               this.$Message.success('DHCP配置已关闭！')
               this.changeDhcp = false
@@ -196,13 +200,16 @@ export default {
       this.netConfig.nbCode = this.nbCode
       this.netConfig.dscp = this.dhcp ? 'on' : 'off'
       let res = await insIpParam(this.netConfig)
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.$Message.success('保存成功!')
       } else {
         this.$Message.error(res.data.result)
       }
-    }
+    },
+    // defaultDuration () {
+    //   this.netConfig.dhcpDuration === '10080';
+    // }
   },
   mounted () {
     this.getIpParam()
