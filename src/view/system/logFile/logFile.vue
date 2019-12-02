@@ -32,13 +32,13 @@
 </template>
 
 <script>
-import { selLogSubMoudle, selTsystemLog } from "../../../api/logSearch";
+import { selLogSubMoudle, selTsystemLog } from '../../../api/logSearch'
 export default {
-  data() {
+  data () {
     return {
       startTimeday: '',
       startTimehour: 'hh-mm-ss',
-      endTimeday:'',
+      endTimeday: '',
       endTimehour: 'hh-mm-ss',
       nbCode: '',
       userName: '',
@@ -53,35 +53,35 @@ export default {
       },
       tableColumns: [
         {
-          type: "index",
-          align: "center"
+          type: 'index',
+          align: 'center'
         },
         {
-          title: "用户名",
+          title: '用户名',
           key: 'userName'
         },
         {
-          title: "机器码",
+          title: '机器码',
           key: 'nbCode'
         },
         {
-          title: "一级模块",
+          title: '一级模块',
           key: 'moudle'
         },
         {
-          title: "二级模块",
+          title: '二级模块',
           key: 'submoudle'
         },
         {
-          title: "功能",
+          title: '功能',
           key: 'func'
         },
         {
-          title: "日期",
+          title: '日期',
           key: 'logTime'
         },
         {
-          title: "详明",
+          title: '详明',
           key: 'comments',
           ellipsis: true
         }
@@ -95,18 +95,18 @@ export default {
         // startTime: this.startTime,
         // endTime: this.endTime
       }
-    };
+    }
   },
   methods: {
-    //获取选择器内容
+    // 获取选择器内容
     async selLogSubMoudle () {
       let res = await selLogSubMoudle()
       console.log(res)
-      if(res.data.code == 'success'){
+      if (res.data.code == 'success') {
         this.options = res.data.result
       };
     },
-    //获取查询的日志
+    // 获取查询的日志
     async selTsystemLog () {
       this.startTime.startTimeday = this.startTimeday
       this.startTimehour.startTimehour = this.startTimehour
@@ -120,15 +120,15 @@ export default {
       console.log(this.formContent)
       let res = await selTsystemLog(this.formContent)
       console.log(res)
-      if(res.data.code == 'success'){
+      if (res.data.code == 'success') {
         this.tableList = res.data.result
       }
     }
   },
-  mounted() {
+  mounted () {
     this.selLogSubMoudle()
   }
-};
+}
 </script>
 
 <style scoped lang="less">
