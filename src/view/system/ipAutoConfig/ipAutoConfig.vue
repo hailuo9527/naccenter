@@ -87,7 +87,7 @@ export default {
     // 获取自动分配的IP段
     async getIpAutoMode () {
       let res = await getIpAutoMode()
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.tableList = res.data.result || []
       }

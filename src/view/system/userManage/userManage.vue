@@ -219,7 +219,7 @@ export default {
     async selUserInfo (userName) {
       this.tableLoad = true
       let res = await selUserInfo({ userName: userName })
-      console.log(res)
+      // console.log(res)
       this.tableLoad = false
       if (res.data.code === 'success') {
         this.userList = res.data.result
@@ -260,7 +260,7 @@ export default {
         content: '</p>确定要移除此用户吗？移除后不可恢复！</p>',
         onOk: async () => {
           let res = await userUnbind({ userId: id })
-          console.log(res)
+          // console.log(res)
           if (res.data.code === 'success') {
             this.$Message.success('操作成功！')
             this.selUserInfo()
@@ -281,7 +281,7 @@ export default {
         roleId: this.activeUserInfo.roleId,
         userId: this.activeUserInfo.userId
       }
-      console.log(json)
+      // console.log(json)
       let res = await updateUser(json)
       if (res.data.code === 'success') {
         this.$Message.success('操作成功')
@@ -303,7 +303,7 @@ export default {
     },
     /* 请求转让 */
     async roleTransfer () {
-      console.log(this.accessForm.activeUserId)
+      // console.log(this.accessForm.activeUserId)
       let res = await roleTransfer({ userId: this.accessForm.activeUserId })
       // console.log(res)
       if (res.data.code === 'success') {

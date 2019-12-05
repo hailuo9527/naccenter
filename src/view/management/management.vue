@@ -200,7 +200,7 @@ export default {
         loading: true,
         onOk: async () => {
           let res = await delHostManage({ nbCode: this.activeNb.nbCode })
-          console.log(res)
+          // console.log(res)
           if (res.data.code === 'success') {
             this.$Modal.remove()
             this.$Message.info('清除成功')

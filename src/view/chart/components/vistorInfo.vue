@@ -116,7 +116,7 @@ export default {
     async getVistorInfo () {
       this.loading = true
       let res = await getVistorInfo({ nbCode: this.nbCode })
-      console.log(res)
+      // console.log(res)
       this.loading = false
       if (res.data.code === 'success') {
         this.tableList = res.data.result || []
@@ -125,7 +125,7 @@ export default {
     // 获取系统状态
     async getSystemStatus () {
       let res = await getSystemStatus({ nbCode: this.nbCode })
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.vistorList = res.data.result || {}
       }

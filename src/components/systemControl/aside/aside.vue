@@ -35,7 +35,7 @@ export default {
     $route: {
       handler (newVal, old) {
         this.name = newVal.name
-        console.log(newVal)
+        // console.log(newVal)
         if (newVal.name === 'userConfig') {
           this.$router.replace({ name: this.menu[0].name })
         }

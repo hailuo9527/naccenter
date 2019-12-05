@@ -475,7 +475,7 @@ export default {
     /* 获取模式参数 */
     async getGroupParam (groupId) {
       let res = await getGroupParam(groupId)
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
         this.defaultConfig = res.data.result || {}
         this.defaultConfig.learning = res.data.result.learning === 'on'
@@ -498,11 +498,11 @@ export default {
     /* 获取名单 */
     async getList () {
       let res = await getGroupRoster({ groupId: this.activeGroupId })
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success') {
-        if (res.data.result.length) {
           let arrWhite = []
           let arrIgnore = []
+        if (res.data.result.length) {
           res.data.result.map((item, index) => {
             if (item.type === 4) {
               arrWhite.push(item)
@@ -510,9 +510,9 @@ export default {
               arrIgnore.push(item)
             }
           })
+        }
           this.whiteList = arrWhite
           this.ignoreList = arrIgnore
-        }
       }
     },
 
@@ -609,7 +609,9 @@ export default {
     },
     async delGroupRoster (id, groupId) {
       let res = await delGroupRoster({ id: id, groupId: groupId })
+      this.$Modal.remove()
       if (res.data.code === 'success') {
+        this.$Message.success('删除成功！')
         this.getList()
       } else {
         this.$Message.error(res.data.result)
@@ -618,7 +620,7 @@ export default {
     // 切换tab
     changeNav (data) {
       this.activeNav = data
-      console.log(data)
+      // console.log(data)
       switch (data) {
         case 'supTab2':
           this.getGroupParam(this.activeGroupId)

@@ -152,7 +152,7 @@ export default {
     saveNetInfoHandle () {
       this.$refs['netConfigForm'].validate((valid) => {
         if (valid) {
-          console.log('保存')
+          // console.log('保存')
           this.insIpParam()
         } else {
           this.$Message.error('请检查输入格式是否正确!')

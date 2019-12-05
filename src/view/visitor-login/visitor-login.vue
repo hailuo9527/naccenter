@@ -143,7 +143,7 @@ export default {
     /* weixin */
     createWxQrcode () {
       let json = this.$route.query
-      console.log(json)
+      // console.log(json)
       var obj = new WxLogin(this.$config.wxConfig)
     },
     // 验证是否扫码登录

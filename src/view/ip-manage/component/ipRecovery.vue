@@ -157,14 +157,14 @@ export default {
     // 获取回收的IP列表
     async getIpRecovery () {
       let res = await getIpRecovery({ nbCode: this.nbCode })
-      console.log(res)
+      // console.log(res)
       if (res.data.code === 'success' && res.data.result) {
         res.data.result.iplist.map((item, index) => {
           this.list.push({ ip: item })
         })
         this.list2 = res.data.result.ipSegmentList || []
       }
-      console.log(this.list)
+      // console.log(this.list)
     },
     // 添加回收的ip
     async insIpRecovery () {
