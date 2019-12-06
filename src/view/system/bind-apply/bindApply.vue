@@ -140,10 +140,10 @@ export default {
       this.changeApplyStateLoading = false
       this.changeApplySateModal = false
       if (res.data.code === 'success') {
-        this.$Message.success('审核提交成功！')
+        this.$Message.success(res.data.result)
         this.getAllUserFlow()
       } else {
-        this.$Message({duration: 2000,}).error(res.data.result)
+        this.$Message.error(res.data.result)
       }
       this.getApplyCount()
     },

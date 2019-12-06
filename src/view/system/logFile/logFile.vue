@@ -27,16 +27,16 @@
           type="datetime"
           :options="disabledstartTime"
           placeholder="Select date"
-          style="width: 150px"
+          style="width: 200px; margin-left: 10px"
           class="datePicker"
           v-model="formContent.startTime"
         ></DatePicker>
-        <span class="common">结束日期</span>
+        <span class="common text">结束日期</span>
         <DatePicker
           type="datetime"
           :options="disabledendTime"
           placeholder="Select date"
-          style="width: 150px"
+          style="width: 200px; margin-left: 14px"
           class="datePicker"
           v-model="formContent.endTime"
         ></DatePicker>
