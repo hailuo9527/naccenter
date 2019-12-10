@@ -56,7 +56,7 @@
     </div>
 
     <div class="footer">
-      <Divider>感谢使用Wingsbro Nacsys系统</Divider>
+      <Divider>感谢使用NacSYS准入系统</Divider>
     </div>
   </div>
 </template>
