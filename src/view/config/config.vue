@@ -289,14 +289,14 @@
               label-position="left"
               :rules="routeFormRules"
             >
+              <FormItem label="出口名称" prop="groupName">
+                <Input v-model.trim="addRouteForm.groupName" placeholder="请输入出口名"></Input>
+              </FormItem>
               <FormItem label="MAC地址" prop="macAddress">
                 <Input v-model.trim="addRouteForm.macAddress" placeholder="请输入MAC地址"></Input>
               </FormItem>
               <FormItem label="IP地址" prop="ipAddress">
                 <Input v-model.trim="addRouteForm.ipAddress" placeholder="请输入IP地址"></Input>
-              </FormItem>
-              <FormItem label="出口名称" prop="groupName">
-                <Input v-model.trim="addRouteForm.groupName" placeholder="请输入出口名"></Input>
               </FormItem>
             </Form>
           </div>
@@ -582,7 +582,10 @@ export default {
       },
       routeFormRules: {
         macAddress: [{ validator: macAdress, trigger: "blur" }],
-        ipAddress: [{ validator: ipAdress, trigger: "blur" }]
+        ipAddress: [{ validator: ipAdress, trigger: "blur" }],
+        groupName: [
+          { required: true, message: "出口名称不能为空", trigger: "blur" }
+        ]
       },
       addRouteLoading: false,
       multiexpoconfiggroup: [
@@ -805,7 +808,7 @@ export default {
         if (valid) {
           this.addRTRInfo();
         } else {
-          this.$Message.error("请输入正确地址!");
+          this.$Message.error("请输入正确地址或者名称!");
         }
       });
     },
@@ -833,7 +836,7 @@ export default {
         if (valid) {
           this.updRTRInfo();
         } else {
-          this.$Message.error("请输入正确地址!");
+          this.$Message.error("请输入正确地址或者名称!");
         }
       });
     },
