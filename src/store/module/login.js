@@ -41,7 +41,7 @@ export default {
     handleLoginOut ({ commit }) {
       return new Promise((resolve, reject) => {
         loginOut().then(res => {
-          console.log(res)
+          // console.log(res)
           commit('clearUserInfo')
           commit('setToken', '')
           resolve(res)
