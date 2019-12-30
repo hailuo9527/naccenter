@@ -47,7 +47,11 @@
     </Form>
     <Tabs value="tab1" name="main-tab">
       <TabPane label="日志列表" name="tab1" tab="main-tab">
-        <Table border :columns="tableColumns" :data="tableList" max-height="500"></Table>
+        <Scroll :on-reach-bottom="handleReachBottom">
+          <div class="hiddenscroll">
+            <Table border :columns="tableColumns" :data="tableList" max-height="1000"></Table>
+          </div>
+        </Scroll>
       </TabPane>
     </Tabs>
   </div>
@@ -57,7 +61,7 @@
 import { selLogSubMoudle, selTsystemLog } from "../../../api/logSearch";
 export default {
   data() {
-    //输入nbCode正则判定
+    // 输入nbCode正则判定
     const nbCodeRules = (rule, value, callback) => {
       if (!value) callback();
       let reg = /^\w{16}$/;
@@ -109,7 +113,7 @@ export default {
                 texts = texts.slice(0, 7) + "......";
               }
             }
-            //鼠标放在内容上弹出完整内容-----"Tooltip"
+            // 鼠标放在内容上弹出完整内容-----"Tooltip"
             return h("div", [
               h(
                 "Tooltip",
@@ -147,9 +151,12 @@ export default {
         userName: "",
         submoudle: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
+        pageNo: "",
+        pageSize: 20
       },
-      //结束时间限定
+      onReachBottom: false,
+      // 结束时间限定
       disabledendTime: {
         disabledDate: date => {
           let currtime = new Date();
@@ -164,7 +171,7 @@ export default {
           }
         }
       },
-      //开始时间限定
+      // 开始时间限定
       disabledstartTime: {
         disabledDate: date => {
           let currtime = new Date();
@@ -181,7 +188,7 @@ export default {
     };
   },
   methods: {
-    //格林威治时间转普通格式
+    // 格林威治时间转普通格式
     GMTToStr(time) {
       let date = new Date(time);
       let Str =
@@ -201,7 +208,6 @@ export default {
     // 获取选择器内容
     async selLogSubMoudle() {
       let res = await selLogSubMoudle();
-      //      console.log(res)
       if (res.data.code == "success") {
         this.options = res.data.result;
       }
@@ -209,10 +215,69 @@ export default {
     // 获取查询的日志
     async selTsystemLog() {
       if (this.formContent.startTime == "" && this.formContent.endTime == "") {
+        this.formContent.pageNo = 1;
+        this.onReachBottom = false;
         let res = await selTsystemLog(this.formContent);
-        // console.log(res);
-        if (res.data.code == "success") {
-          this.tableList = res.data.result;
+        if (res.data.code === "success") {
+          // console.log(res.data.result)
+          this.tableList = res.data.result.data;
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
+        }
+      } else if (
+        this.formContent.startTime == "" &&
+        this.formContent.endTime !== ""
+      ) {
+        this.formContent.endTime = this.GMTToStr(this.formContent.endTime);
+        this.formContent.pageNo = 1;
+        this.onReachBottom = false;
+        let res = await selTsystemLog(this.formContent);
+        if (res.data.code === "success") {
+          this.tableList = res.data.result.data;
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
+        }
+      } else if (
+        this.formContent.endTime == "" &&
+        this.formContent.startTime !== ""
+      ) {
+        this.formContent.startTime = this.GMTToStr(this.formContent.startTime);
+        this.formContent.pageNo = 1;
+        this.onReachBottom = false;
+        let res = await selTsystemLog(this.formContent);
+        if (res.data.code === "success") {
+          this.tableList = res.data.result.data;
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
+        }
+      } else {
+        this.formContent.startTime = this.GMTToStr(this.formContent.startTime);
+        this.formContent.endTime = this.GMTToStr(this.formContent.endTime);
+        this.formContent.pageNo = 1;
+        this.onReachBottom = false;
+        let res = await selTsystemLog(this.formContent);
+        if (res.data.code === "success") {
+          this.tableList = res.data.result.data;
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
+        }
+      }
+    },
+    // 下拉拉取数据
+    async reachBottomGetData() {
+      if (this.formContent.startTime == "" && this.formContent.endTime == "") {
+        let res = await selTsystemLog(this.formContent);
+        if (res.data.code === "success") {
+          for (let i = 0; i < res.data.result.data.length; i++) {
+            this.tableList.push(res.data.result.data[i]);
+          }
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
         }
       } else if (
         this.formContent.startTime == "" &&
@@ -220,9 +285,13 @@ export default {
       ) {
         this.formContent.endTime = this.GMTToStr(this.formContent.endTime);
         let res = await selTsystemLog(this.formContent);
-        // console.log(res);
-        if (res.data.code == "success") {
-          this.tableList = res.data.result;
+        if (res.data.code === "success") {
+          for (let i = 0; i < res.data.result.data.length; i++) {
+            this.tableList.push(res.data.result.data[i]);
+          }
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
         }
       } else if (
         this.formContent.endTime == "" &&
@@ -230,19 +299,39 @@ export default {
       ) {
         this.formContent.startTime = this.GMTToStr(this.formContent.startTime);
         let res = await selTsystemLog(this.formContent);
-        // console.log(res);
-        if (res.data.code == "success") {
-          this.tableList = res.data.result;
+        if (res.data.code === "success") {
+          for (let i = 0; i < res.data.result.data.length; i++) {
+            this.tableList.push(res.data.result.data[i]);
+          }
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
         }
       } else {
         this.formContent.startTime = this.GMTToStr(this.formContent.startTime);
         this.formContent.endTime = this.GMTToStr(this.formContent.endTime);
         let res = await selTsystemLog(this.formContent);
-        // console.log(res);
-        if (res.data.code == "success") {
-          this.tableList = res.data.result;
+        if (res.data.code === "success") {
+          for (let i = 0; i < res.data.result.data.length; i++) {
+            this.tableList.push(res.data.result.data[i]);
+          }
+          if (res.data.result.data.length < this.formContent.pageSize) {
+            this.onReachBottom = true;
+          }
         }
       }
+    },
+    // 下拉监听
+    handleReachBottom() {
+      return new Promise(resolve => {
+        if (this.onReachBottom) {
+          this.$Message.info("已经到底了");
+        } else {
+          this.formContent.pageNo += 1;
+          this.reachBottomGetData();
+        }
+        resolve();
+      });
     }
   },
   mounted() {

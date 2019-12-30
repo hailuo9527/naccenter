@@ -182,7 +182,10 @@ export default {
     changeActive (index, item) {
       this.isActive = index || 0
       this.setActiveNb(item)
-      this.$router.push({ path: this.$route.path, query: { nbCode: this.activeNb.nbCode } })
+      if(this.asideList.length > 1) {
+        this.$router.push({ path: this.$route.path, query: { nbCode: this.activeNb.nbCode } })
+      }
+
     },
     getAllNbList (refresh) {
       this.getAsideList(refresh).then((res) => {
