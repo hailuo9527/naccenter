@@ -161,7 +161,7 @@ export default {
     replaceNb (code) {
       this.$Modal.confirm({
         title: '提示',
-        content: '<p>您确定要移植此机器配置到其他目标机器上吗？确定后目标机器将抛弃自身配置继承源机器所有配置，源机器将被初始化！</p>',
+        content: '<p>您确定要移植此机器配置到其他目标机器上吗？确定后目标机器将抛弃自身配置继承源机器所有配置，源机器将被删除！</p>',
         onOk: () => {
           this.modal1 = true
           this.replaceCode = code
