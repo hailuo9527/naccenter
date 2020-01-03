@@ -721,6 +721,14 @@ export default {
         ipsubnet: this.netConfig.ipsubnet,
         gateway: this.netConfig.gateway
       };
+      if (
+        this.netConfig.ipaddress == "" &&
+        this.netConfig.dnsser == "" &&
+        this.netConfig.ipsubnet == "" &&
+        this.netConfig.gateway == ""
+      ) {
+        this.$Message.error("保存失败,参数不能为空");
+      }
       let res = await updateNetWork(json);
       if (res.data.code === "success") {
         this.$Message.success("保存成功");
