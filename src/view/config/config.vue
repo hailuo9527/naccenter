@@ -722,19 +722,20 @@ export default {
         gateway: this.netConfig.gateway
       };
       if (
-        this.netConfig.ipaddress == "" &&
-        this.netConfig.dnsser == "" &&
-        this.netConfig.ipsubnet == "" &&
-        this.netConfig.gateway == ""
+        this.netConfig.ipaddress == null &&
+        this.netConfig.dnsser == null &&
+        this.netConfig.ipsubnet == null &&
+        this.netConfig.gateway == null
       ) {
         this.$Message.error("保存失败,参数不能为空");
-      }
-      let res = await updateNetWork(json);
-      if (res.data.code === "success") {
-        this.$Message.success("保存成功");
-        this.getNetInfo();
       } else {
-        this.$Message.error(`保存失败${res.data.result}`);
+        let res = await updateNetWork(json);
+        if (res.data.code === "success") {
+          this.$Message.success("保存成功");
+          this.getNetInfo();
+        } else {
+          this.$Message.error(`保存失败${res.data.result}`);
+        }
       }
     },
     saveNetInfoHandle() {

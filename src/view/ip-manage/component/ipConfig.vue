@@ -165,13 +165,15 @@ export default {
     // 获取默认配置
     async getIpParam() {
       let res = await getIpParam({ nbCode: this.nbCode, type: 0 });
-      // console.log(res)
+      // console.log(res.data);
       if (res.data.code === "success") {
-        this.netConfig = res.data.result || {};
-        if (this.netConfig.dhcpDuration == null) {
-          this.netConfig.dhcpDuration = 10080;
+        if (res.data.result !== null) {
+          this.netConfig = res.data.result || {};
+          if (this.netConfig.dhcpDuration == null) {
+            this.netConfig.dhcpDuration = 10080;
+          }
+          this.dhcp = res.data.result.dscp === "on";
         }
-        this.dhcp = res.data.result.dscp === "on";
       }
     },
     // 修改dhcp配置
@@ -200,6 +202,18 @@ export default {
     },
     // 保存dsch配置
     async insIpParam() {
+      if (
+        this.netConfig.ipStart === undefined ||
+        this.netConfig.ipEnd === undefined
+      ) {
+        return this.$Message.error("起始IP和结束IP不能为空");
+      } else if (this.netConfig.ipStart === "" || this.netConfig.ipEnd === "") {
+        return this.$Message.error("起始IP和结束IP不能为空");
+      } else if (this.netConfig.dhcpDuration === undefined) {
+        return this.$Message.error("组约时长不能为空");
+      } else if (this.netConfig.dhcpDuration === "") {
+        return this.$Message.error("组约时长不能为空");
+      }
       this.temp1 = this.netConfig.ipStart.split(".").map(Number);
       this.temp2 = this.netConfig.ipEnd.split(".").map(Number);
       this.netConfig.nbCode = this.nbCode;
