@@ -24,9 +24,6 @@
         </div>
       </Card>
     </div>
-    <div class="footer">
-      <h3 @click="Redirect">粤ICP备17007363号-2</h3>
-    </div>
     <Modal
       v-model="qrCodeModal"
       title="请使用微信扫码登录！"
@@ -66,6 +63,9 @@
 
     </Modal>
     <Particles/>
+    <div class="footer">
+      <h3 class="footer-content" @click="Redirect">粤ICP备17007363号-2</h3>
+    </div>
   </div>
 </template>
 
@@ -139,7 +139,7 @@ export default {
         }
       }
     },
-    Redirect() {
+    Redirect () {
       window.location.href = 'http://beian.miit.gov.cn'
     }
   },
@@ -154,12 +154,17 @@ export default {
 <style>
 .footer{
   position: absolute;
-  bottom: 0;
-  right: 10px;
-  color: #000;
-  cursor: pointer;
+  width: 100%;
+  bottom: 30px;
 }
-.footer:hover{
+.footer-content{
+  width: 142px;
+  color: #000;
+  display: block;
+  margin: 0 auto;
+}
+.footer-content:hover{
+  cursor: pointer;
   color: red;
 }
 </style>
