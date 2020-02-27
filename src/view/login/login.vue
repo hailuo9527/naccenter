@@ -24,6 +24,9 @@
         </div>
       </Card>
     </div>
+    <div class="footer">
+      <h3 @click="Redirect">粤ICP备17007363号-2</h3>
+    </div>
     <Modal
       v-model="qrCodeModal"
       title="请使用微信扫码登录！"
@@ -135,6 +138,9 @@ export default {
           }
         }
       }
+    },
+    Redirect() {
+      window.location.href = 'http://beian.miit.gov.cn'
     }
   },
   mounted () {
@@ -146,5 +152,14 @@ export default {
 </script>
 
 <style>
-
+.footer{
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  color: #000;
+  cursor: pointer;
+}
+.footer:hover{
+  color: red;
+}
 </style>
