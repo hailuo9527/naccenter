@@ -53,7 +53,7 @@ export default {
       saveLoading: false,
       roleNameList: [],
       insUserForm: {
-          userNames: ''
+        userNames: ''
       },
       insUserFormValidate: {
         userNames: [
@@ -95,8 +95,8 @@ export default {
       }, */
     /* 修改用户信息 */
     async updateUser () {
-      let name =  this.insUserForm.userName
-      this.insUserForm.userName =  this.insUserForm.userNames
+      let name = this.insUserForm.userName
+      this.insUserForm.userName = this.insUserForm.userNames
       let json = {
         ...this.insUserForm
       }
@@ -111,8 +111,8 @@ export default {
           }
         })
       } else {
-           this.insUserForm.userName = name
-          this.$Message.error(res.data.result)
+        this.insUserForm.userName = name
+        this.$Message.error(res.data.result)
       }
       // console.log(res)
     },
