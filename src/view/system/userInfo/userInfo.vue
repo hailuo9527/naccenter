@@ -8,8 +8,8 @@
               <FormItem label="账号">
                 <Input v-model="insUserForm.userNo" placeholder="请输入用户账号" disabled v-if=""></Input>
               </FormItem>
-              <FormItem label="用户名" prop="userName">
-                <Input v-model="insUserForm.userName" autocomplete ="new-password" placeholder="请输入用户名"></Input>
+              <FormItem label="用户名" prop="userNames">
+                <Input v-model="insUserForm.userNames" autocomplete ="new-password" placeholder="请输入用户名"></Input>
               </FormItem>
               <FormItem label="密码" prop="password">
                 <Input v-model="insUserForm.password" autocomplete ="new-password" placeholder="请输入密码" type="password"></Input>
@@ -53,9 +53,10 @@ export default {
       saveLoading: false,
       roleNameList: [],
       insUserForm: {
+          userNames: ''
       },
       insUserFormValidate: {
-        userName: [
+        userNames: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
@@ -94,12 +95,12 @@ export default {
       }, */
     /* 修改用户信息 */
     async updateUser () {
-      // console.log({ ...this.insUserForm })
+      let name =  this.insUserForm.userName
+      this.insUserForm.userName =  this.insUserForm.userNames
       let json = {
         ...this.insUserForm
       }
       let res = await updateUser(json)
-      // console.log(res)
       if (res.data.code === 'success') {
         this.$Message.success('操作成功')
         this.handleLogin({ userNo: this.insUserForm.userNo, password: this.insUserForm.password }).then(res => {
@@ -109,6 +110,9 @@ export default {
             this.$Message.error(res.data.result)
           }
         })
+      } else {
+           this.insUserForm.userName = name
+          this.$Message.error(res.data.result)
       }
       // console.log(res)
     },
@@ -133,6 +137,7 @@ export default {
     // console.log(this.userInfo)
     this.selRoleInfo()
     this.insUserForm = this.userInfo
+    this.insUserForm.userNames = this.insUserForm.userName
     // this.selUserInfo(this.userInfo.userName)
   }
 }
