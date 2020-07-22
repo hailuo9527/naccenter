@@ -17,7 +17,7 @@ const router = new Router({
 const LOGIN_PAGE_NAME = 'login'
 // 白名单
 const whiteList = [
-  'register', 'bind', 'visitorLogin'
+  'register', 'bind', 'visitorLogin', 'download'
 ]
 router.beforeEach((to, from, next) => {
   iView.LoadingBar.start()
@@ -37,6 +37,10 @@ router.beforeEach((to, from, next) => {
     // 已登录且要跳转的页面是登录页
     next({
       name: homeName // 跳转到homeName页
+    })
+  } else if (!TOKEN && to.name === 'download') {
+    next({
+      name: 'download'
     })
   } else {
     if (store.state.login.userInfo.roleId !== 1 && store.state.login.userInfo.roleId !== 2) {

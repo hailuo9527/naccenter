@@ -262,9 +262,14 @@ let err = [
     component: () => import('@/view/error-page/404.vue')
   }
 ]
-
+let download = {
+  path: '/download',
+  name: 'download',
+  component: () => import('@/view/Download/download.vue')
+}
 export const routers = [
   ...appRouters,
   ...accessRouters,
-  ...err
+  ...err,
+  download
 ]
