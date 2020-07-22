@@ -68,95 +68,95 @@
 </template>
 
 <script>
-import { addInstallUserInfo } from "@/api/download";
+import { addInstallUserInfo } from '@/api/download'
 export default {
-  name: "register",
-  data() {
+  name: 'register',
+  data () {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("手机号不能为空"));
+        return callback(new Error('手机号不能为空'))
       } else if (!/^1[34578]\d{9}$/.test(value)) {
-        callback("手机号格式不正确");
+        callback('手机号格式不正确')
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("邮箱地址不能为空"));
+        return callback(new Error('邮箱地址不能为空'))
       } else if (
         !/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)
       ) {
-        callback("邮箱地址格式不正确");
+        callback('邮箱地址格式不正确')
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateCommon = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("值不能为空"));
+        return callback(new Error('值不能为空'))
       } else if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(value)) {
-        callback("格式不正确");
+        callback('格式不正确')
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       formValidate: {
-        user_name: "",
-        user_phone: "",
-        company_name: "",
-        company_address: "",
-        user_name: "",
-        user_phone: "",
-        user_email: "",
+        user_name: '',
+        user_phone: '',
+        company_name: '',
+        company_address: '',
+        user_name: '',
+        user_phone: '',
+        user_email: ''
       },
       ruleValidate: {
         user_name: [
-          { required: true, message: "联系人不能为空", trigger: "blur" },
+          { required: true, message: '联系人不能为空', trigger: 'blur' }
         ],
         user_phone: [{ required: true, validator: validatePhone }],
         user_email: [{ required: true, validator: validateEmail }],
         company_name: [{ required: true, validator: validateCommon }],
-        company_address: [{ required: true, validator: validateCommon }],
+        company_address: [{ required: true, validator: validateCommon }]
       },
       height: window.innerHeight,
-      submitLoading: false,
-    };
+      submitLoading: false
+    }
   },
   methods: {
-    handleSubmit(name) {
+    handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.submitLoading = true;
-          this.addInstallUserInfo();
+          this.submitLoading = true
+          this.addInstallUserInfo()
         } else {
-          this.$Message.error("请检查输入信息是否正确!");
+          this.$Message.error('请检查输入信息是否正确!')
         }
-      });
+      })
     },
-    //添加下载的用户信息
-    async addInstallUserInfo() {
+    // 添加下载的用户信息
+    async addInstallUserInfo () {
       let json = {
         company_name: this.formValidate.company_name,
         company_address: this.formValidate.company_address,
         user_name: this.formValidate.user_name,
         user_phone: this.formValidate.user_phone,
-        user_email: this.formValidate.user_email,
-      };
-      let res = await addInstallUserInfo(json);
-      this.submitLoading = false;
-      if (res.data.code === "success") {
-        window.location.href = `${res.data.result}`;
+        user_email: this.formValidate.user_email
+      }
+      let res = await addInstallUserInfo(json)
+      this.submitLoading = false
+      if (res.data.code === 'success') {
+        window.location.href = `${res.data.result}`
       } else {
         this.$Message.error({
           content: res.data.result,
-          duration: 3,
-        });
+          duration: 3
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less">
